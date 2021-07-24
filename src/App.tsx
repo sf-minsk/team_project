@@ -13,7 +13,7 @@ function App() {
                 <button><NavLink to='/'>Home</NavLink></button>
                 <button><NavLink to='/registration'>Register</NavLink></button>
                 <button><NavLink to='/login'>Login</NavLink></button>
-                <button><NavLink to='/changepassword'>Change Pasword</NavLink></button>
+                <button><NavLink to='/changepassword'>Change Password</NavLink></button>
             </div>
             <div>
                 <Switch>
