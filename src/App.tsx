@@ -1,26 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
+import {NavLink, Redirect, Route, Switch} from 'react-router-dom';
 import './App.css';
+import {Cards} from "./components/cards/Cards";
+import {Registration} from "./components/auth/registration/Registration";
+import {Login} from "./components/auth/login/Login";
+import {ChangePassword} from "./components/auth/changePassword/ChangePassword";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <>
+            <div>
+                <button><NavLink to='/'>Home</NavLink></button>
+                <button><NavLink to='/registration'>Register</NavLink></button>
+                <button><NavLink to='/login'>Login</NavLink></button>
+                <button><NavLink to='/changepassword'>Change Password</NavLink></button>
+            </div>
+            <div>
+                <Switch>
+                    <Route exact path={'/'} render={() => <Cards/>}/>
+                    <Route path={'/registration'} render={() => <Registration/>}/>
+                    <Route path={'/login'} render={() => <Login/>}/>
+                    <Route path={'/changepassword'} render={() => <ChangePassword/>}/>
+                    <Redirect from={'*'} to={'/'}/>
+                </Switch>
+            </div>
+
+        </>
+    );
 }
 
 export default App;
