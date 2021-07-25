@@ -4,6 +4,9 @@ import * as Yup from 'yup'
 import {useDispatch} from 'react-redux';
 import {setSignUpTC} from '../../../bll/register-reducer';
 import {ErrorSnackbar} from '../../ErrorSnackbar';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import {Button, FormControl, FormGroup, TextField, Typography} from '@material-ui/core';
 
 export const Registration = () => {
 
@@ -62,43 +65,60 @@ export const Registration = () => {
 
     return (
         <>
-            <form onSubmit={formik.handleSubmit}>
-                <div>
-                    <label htmlFor="email">Email</label>
-                    <input
-                        id="email"
-                        type="email"
-                        {...formik.getFieldProps('email')}
-                    />
-                    {formik.touched.email && formik.errors.email &&
-                    <div style={{color: 'red'}}>{formik.errors.email}</div>}
-                </div>
+            <Grid container justifyContent="center" style={{padding: '30px 0'}}>
+                <Grid item xs={4}>
+                    <Paper elevation={4}
+                           style={{width: '320px', padding: '15px', textAlign: 'center', backgroundColor: '#E6E7FF'}}>
+                        <form onSubmit={formik.handleSubmit}>
+                            <FormControl style={{width: '300px'}}>
+                                <Grid item>
+                                    <Typography variant={'h5'}>
+                                        Sign Up
+                                    </Typography>
+                                </Grid>
+                                <FormGroup>
+                                    <TextField
+                                        label="Email"
+                                        margin="normal"
+                                        {...formik.getFieldProps('email')}
+                                    />
+                                    {formik.touched.email && formik.errors.email &&
+                                    <div style={{color: 'red'}}>{formik.errors.email}</div>}
 
-                <div>
-                    <label htmlFor="password">Password</label>
-                    <input
-                        id="password"
-                        type="password"
-                        {...formik.getFieldProps('password')}
-                    />
-                    {formik.touched.password && formik.errors.password &&
-                    <div style={{color: 'red'}}>{formik.errors.password}</div>}
-                </div>
+                                    <TextField
+                                        type="password"
+                                        label="Password"
+                                        margin="normal"
+                                        {...formik.getFieldProps('password')}
+                                    />
+                                    {formik.touched.password && formik.errors.password &&
+                                    <div style={{color: 'red'}}>{formik.errors.password}</div>}
 
-                <div>
-                    <label htmlFor="confirmPassword">Confirm password</label>
-                    <input
-                        id="confirmPassword"
-                        type="password"
-                        {...formik.getFieldProps('confirmPassword')}
-                    />
-                    {formik.touched.confirmPassword && formik.errors.confirmPassword &&
-                    <div style={{color: 'red'}}>{formik.errors.confirmPassword}</div>}
-                </div>
+                                    <TextField
+                                        type="password"
+                                        label="Confirm password"
+                                        margin="normal"
+                                        {...formik.getFieldProps('confirmPassword')}
+                                    />
+                                    {formik.touched.confirmPassword && formik.errors.confirmPassword &&
+                                    <div style={{color: 'red'}}>{formik.errors.confirmPassword}</div>}
 
-                <button type="submit" disabled={!formik.isValid}>Submit</button>
-            </form>
-            <ErrorSnackbar/>
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={!formik.isValid}
+                                    >
+                                        Register
+                                    </Button>
+
+                                </FormGroup>
+                            </FormControl>
+                        </form>
+                        <ErrorSnackbar/>
+                    </Paper>
+                </Grid>
+            </Grid>
         </>
     )
 }

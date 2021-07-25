@@ -1,6 +1,6 @@
 import {AppThunk} from './store';
 import {registerApi, RegisterRequestDataType} from '../dal/register-api';
-import {SetAppErrorActionType} from './app-reducer';
+import {setAppErrorAC, SetAppErrorActionType} from './app-reducer';
 
 const initialState = {
     isRegistered: false,
@@ -29,12 +29,16 @@ export const setSignUpAC = (isRegistered: boolean) =>
 //thunks
 export const setSignUpTC = (data: RegisterRequestDataType): AppThunk =>
     async dispatch => {
+    debugger
         try {
             const res = await registerApi.register(data)
             debugger
             dispatch(setSignUpAC(true))
         } catch (err) {
-            console.log(err)
+            const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
+            //console.log('Error: ', {...err})
+            console.log(error)
+            dispatch(setAppErrorAC(error))
         }
     }
 
