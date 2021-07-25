@@ -9,6 +9,7 @@ import {ChangePassword} from './components/auth/changePassword/ChangePassword';
 function App() {
     return (
         <>
+
             <div>
                 <button><NavLink to='/'>Home</NavLink></button>
                 <button><NavLink to='/registration'>Register</NavLink></button>
