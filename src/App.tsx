@@ -4,7 +4,7 @@ import './App.css';
 import {Cards} from './components/cards/Cards';
 import {Registration} from './components/auth/registration/Registration';
 import {Login} from './components/auth/login/Login';
-import {ChangePassword} from './components/auth/changePassword/ChangePassword';
+import {ForgotPassword} from './components/auth/forgotPassword/ForgotPassword';
 
 function App() {
     return (
@@ -21,7 +21,7 @@ function App() {
                     <Route exact path={'/'} render={() => <Cards/>}/>
                     <Route path={'/registration'} render={() => <Registration/>}/>
                     <Route path={'/login'} render={() => <Login/>}/>
-                    <Route path={'/changepassword'} render={() => <ChangePassword/>}/>
+                    <Route path={'/changepassword'} render={() => <ForgotPassword/>}/>
                     <Redirect from={'*'} to={'/'}/>
                 </Switch>
             </div>
