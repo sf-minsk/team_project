@@ -1,19 +1,26 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useFormik} from 'formik';
 import * as Yup from 'yup'
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setSignUpTC} from '../../../bll/register-reducer';
-import {ErrorSnackbar} from '../../ErrorSnackbar';
+import {ErrorSnackbar} from '../../errors/ErrorSnackbar';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import {Button, FormControl, FormGroup, TextField, Typography} from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import {AppRootStateType} from '../../../bll/store';
+import {RequestStatusType} from '../../../bll/app-reducer';
+import {Redirect} from 'react-router-dom';
 
 export const Registration = () => {
 
     const dispatch = useDispatch()
-    useEffect(() => {
-
-    }, [])
+    const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
+    const isRegistered = useSelector<AppRootStateType, boolean>(state => state.register.isRegistered)
 
     const formik = useFormik({
         initialValues: {
@@ -33,40 +40,25 @@ export const Registration = () => {
                 .oneOf([Yup.ref('password')], 'Passwords must match')
                 .required('Password is required'),
         }),
-
-        // validate: values => {
-        //     const errors: FormikValuesType = {}
-        //
-        //     if (!values.email) {
-        //         errors.email = 'Email is required';
-        //     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {               //(!/.+@.+\..+/i.test(values.email))
-        //         errors.email = 'Invalid email address';
-        //     }
-        //
-        //     if (!values.password) {
-        //         errors.password = 'Password is required';
-        //     } else if (values.password.length < 4 || values.password.length > 12) {
-        //         errors.password = 'Must be at least 4 and no more than 12 characters';
-        //     }
-        //
-        //     if (!values.confirmPassword) {
-        //         errors.confirmPassword = 'Password is required';
-        //     } else if (values.confirmPassword.length < 4  || values.password.length > 12) {
-        //         errors.confirmPassword = 'Must be at least 4 and no more than 12 characters';
-        //     }
-        //
-        //     return errors
-        // },
         onSubmit: values => {
             dispatch(setSignUpTC(values))
-            // alert(JSON.stringify(values));
+            formik.resetForm()
         },
     })
+
+
+    if (isRegistered) {
+        return <Redirect to={'/login'}/>
+    }
 
     return (
         <>
             <Grid container justifyContent="center" style={{padding: '30px 0'}}>
-                <Grid item xs={4}>
+                {
+                    status === 'loading' &&
+                    <CircularProgress style={{position: 'fixed', top: '25%', textAlign: 'center'}}/>
+                }
+                <Grid item>
                     <Paper elevation={4}
                            style={{width: '320px', padding: '15px', textAlign: 'center', backgroundColor: '#E6E7FF'}}>
                         <form onSubmit={formik.handleSubmit}>
@@ -76,6 +68,7 @@ export const Registration = () => {
                                         Sign Up
                                     </Typography>
                                 </Grid>
+
                                 <FormGroup>
                                     <TextField
                                         label="Email"
@@ -107,11 +100,10 @@ export const Registration = () => {
                                         type="submit"
                                         variant="contained"
                                         color="primary"
-                                        disabled={!formik.isValid}
+                                        disabled={!formik.isValid || status === 'loading'}
                                     >
                                         Register
                                     </Button>
-
                                 </FormGroup>
                             </FormControl>
                         </form>
@@ -122,12 +114,4 @@ export const Registration = () => {
         </>
     )
 }
-
-
-// type FormikValuesType = {
-//     email?: string
-//     password?: string
-//     confirmPassword?: string
-// }
-
 

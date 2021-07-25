@@ -1,6 +1,6 @@
 import {AppThunk} from './store';
 import {registerApi, RegisterRequestDataType} from '../dal/register-api';
-import {setAppErrorAC, SetAppErrorActionType} from './app-reducer';
+import {setAppErrorAC, SetAppErrorActionType, setAppStatusAC} from './app-reducer';
 
 const initialState = {
     isRegistered: false,
@@ -29,22 +29,24 @@ export const setSignUpAC = (isRegistered: boolean) =>
 //thunks
 export const setSignUpTC = (data: RegisterRequestDataType): AppThunk =>
     async dispatch => {
-    debugger
         try {
-            const res = await registerApi.register(data)
-            debugger
+            dispatch(setAppStatusAC('loading'))
+            await registerApi.register(data)
             dispatch(setSignUpAC(true))
+            dispatch(setAppStatusAC('succeeded'))
         } catch (err) {
             const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
-            //console.log('Error: ', {...err})
-            console.log(error)
             dispatch(setAppErrorAC(error))
+            dispatch(setAppStatusAC('failed'))
+
+            console.log(error)
         }
     }
 
 
 //types
 export type SetSignUpActionType = ReturnType<typeof setSignUpAC>
+
 export type RegisterActionsType =
     | SetSignUpActionType
     | SetAppErrorActionType

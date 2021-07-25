@@ -1,10 +1,10 @@
 import React from 'react';
 import {NavLink, Redirect, Route, Switch} from 'react-router-dom';
 import './App.css';
-import {Cards} from "./components/cards/Cards";
-import {Registration} from "./components/auth/registration/Registration";
-import {Login} from "./components/auth/login/Login";
-import {ChangePassword} from "./components/auth/changePassword/ChangePassword";
+import {Cards} from './components/cards/Cards';
+import {Registration} from './components/auth/registration/Registration';
+import {Login} from './components/auth/login/Login';
+import {ChangePassword} from './components/auth/changePassword/ChangePassword';
 
 function App() {
     return (

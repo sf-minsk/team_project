@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from '../bll/store';
+import {AppRootStateType} from '../../bll/store';
 import React from 'react';
-import {setAppErrorAC} from '../bll/app-reducer';
+import {setAppErrorAC} from '../../bll/app-reducer';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 

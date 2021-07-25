@@ -30,6 +30,7 @@ export const setAppErrorAC = (error: string | null) =>
 export const setAppStatusAC = (status: RequestStatusType) =>
     ({type: 'SET-APP-STATUS', status} as const)
 
+
 //thunks
 
 
