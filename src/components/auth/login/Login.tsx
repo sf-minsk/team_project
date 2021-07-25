@@ -11,14 +11,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {setSignInAC} from "../../../bll/login-reducer";
 import {useFormik} from "formik";
 import {useDispatch} from "react-redux";
+import {loginTC} from "../../../bll/auth-reducer";
 
 
 
 export const Login = () => {
-
 
     let dispatch = useDispatch()
 
@@ -29,7 +28,8 @@ export const Login = () => {
             rememberMe: false,
         },
         onSubmit: values => {
-            dispatch(setSignInAC);
+            dispatch(loginTC(values));
+            formik.resetForm()
         },
     });
 
@@ -65,32 +65,32 @@ export const Login = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form onSubmit={formik.handleSubmit} className={classes.form} noValidate>
                     <TextField
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
-                        id="email"
                         label="Email Address"
-                        name="email"
                         autoComplete="email"
+                        type="email"
                         autoFocus
+                        {...formik.getFieldProps('email')}
                     />
                     <TextField
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
-                        name="password"
                         label="Password"
                         type="password"
-                        id="password"
                         autoComplete="current-password"
+                        {...formik.getFieldProps('password')}
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary"/>}
                         label="Remember me"
+                        {...formik.getFieldProps('rememberMe')}
                     />
                     <Button
                         type="submit"
