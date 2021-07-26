@@ -19,7 +19,6 @@ export const changePasswordReducer = (state: initialStateType = initialState, ac
 export const changePasswordAC = () => {
     return {
         type: "CHANGE-PASSWORD",
-        changeProcess: true,
     } as const
 }
 
