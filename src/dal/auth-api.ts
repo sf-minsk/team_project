@@ -11,8 +11,11 @@ const instance = axios.create({
 //api
 export const authApi = {
     login(data: LoginParamsType) {
-        return instance.post<ResponseType>(`auth/login`, data)
+        return instance.post<ResponseAuthType>(`auth/login`, data)
     },
+    me(){
+        return instance.post<ResponseAuthType>(`auth/me`)
+    }
 }
 
 export type LoginParamsType = {
@@ -20,16 +23,16 @@ export type LoginParamsType = {
     password: string
     rememberMe: boolean
 }
-type ResponseType = {
-    _id: string;
-    email: string;
-    name: string;
-    avatar?: string;
-    publicCardPacksCount: number;
-    created: Date;
-    updated: Date;
-    isAdmin: boolean;
-    verified: boolean;
-    rememberMe: boolean;
-    error?: string;
+export type ResponseAuthType = {
+    _id: string,
+    email: string,
+    name: string,
+    avatar?: string,
+    publicCardPacksCount: number,
+    created: Date,
+    updated: Date,
+    isAdmin: boolean,
+    verified: boolean,
+    rememberMe: boolean,
+    error?: string
 }

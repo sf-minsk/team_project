@@ -1,13 +1,31 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavLink, Redirect, Route, Switch} from 'react-router-dom';
 import './App.css';
 import {Cards} from './components/cards/Cards';
 import {Registration} from './components/auth/registration/Registration';
 import {Login} from './components/auth/login/Login';
 import {ForgotPassword} from './components/auth/forgotPassword/ForgotPassword';
+import {Profile} from "./components/profile/Profile";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "./bll/store";
+import {initializeAppTC} from "./bll/app-reducer";
+import {CircularProgress} from "@material-ui/core";
 
 function App() {
-    return (
+    let isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
+    let dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(initializeAppTC())
+    }, []);
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
+
+    return(
         <>
 
             <div>
@@ -15,6 +33,7 @@ function App() {
                 <button><NavLink to='/registration'>Register</NavLink></button>
                 <button><NavLink to='/login'>Login</NavLink></button>
                 <button><NavLink to='/changepassword'>Change Password</NavLink></button>
+                <button><NavLink to='/profile'>Profile</NavLink></button>
             </div>
             <div>
                 <Switch>
@@ -22,6 +41,7 @@ function App() {
                     <Route path={'/registration'} render={() => <Registration/>}/>
                     <Route path={'/login'} render={() => <Login/>}/>
                     <Route path={'/changepassword'} render={() => <ForgotPassword/>}/>
+                    <Route path={'/profile'} render={() => <Profile/>}/>
                     <Redirect from={'*'} to={'/'}/>
                 </Switch>
             </div>
