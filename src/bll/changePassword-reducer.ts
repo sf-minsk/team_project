@@ -1,6 +1,7 @@
 import {AppThunk} from "./store";
 import {changePasswordApi} from "../dal/changePassword-api";
 import {changePasswordModel} from "../utils/changePasswordModel-util";
+import {setAppErrorAC, setAppStatusAC} from "./app-reducer";
 
 const initialState = {
     changeProcess: false
@@ -24,12 +25,15 @@ export const changePasswordAC = () => {
 
 //THUNK creators
 export const changePasswordTC = (email: string): AppThunk => async dispatch => {
+    dispatch(setAppStatusAC('loading'))
     try {
         await changePasswordApi.changePassword(changePasswordModel(email))
         dispatch(changePasswordAC())
     } catch (e) {
-        alert(e)
+        dispatch(setAppErrorAC(e.response ? e.response.data.error : e.message))
+        dispatch(setAppStatusAC('failed'))
     } finally {
+        dispatch(setAppStatusAC('idle'))
     }
 }
 

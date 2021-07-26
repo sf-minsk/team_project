@@ -1,5 +1,4 @@
 export const changePasswordModel = (email: string) => {
-    debugger
     return {
         email: email,
         from: "Cards project <sf-minsk@outlook.com>",

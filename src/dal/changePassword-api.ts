@@ -11,7 +11,6 @@ export const changePasswordApi = {
         return instance.post<ChangePasswordResponseType>(`auth/forgot`, model)
     },
     setNewPassword(model: SetNewPasswordType) {
-        debugger
         return instance.post<SetNewPasswordResponseType>('auth/set-new-password', model)
     },
 }
