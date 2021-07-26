@@ -12,20 +12,46 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useFormik} from "formik";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {loginTC} from "../../../bll/auth-reducer";
+import {AppRootStateType} from "../../../bll/store";
+import {Redirect} from 'react-router-dom'
+import {RequestStatusType} from "../../../bll/app-reducer";
+import {CircularProgress} from "@material-ui/core";
+import s from './Login.module.css';
 
 
+type FormikErrorType = {
+    email?: string
+    password?: string
+    rememberMe?: boolean
+}
 
 export const Login = () => {
 
     let dispatch = useDispatch()
+    let isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
+    let requestStatus = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
 
     const formik = useFormik({
         initialValues: {
             email: '',
             password: '',
             rememberMe: false,
+        },
+        validate: (values) => {
+            const errors: FormikErrorType = {};
+            if (!values.email) {
+                errors.email = 'Required';
+            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+                errors.email = 'Invalid email address';
+            }
+            if (!values.password) {
+                errors.password = 'Required'
+            } else if (values.password.length < 4) {
+                errors.password = 'Your password is too short'
+            }
+            return errors;
         },
         onSubmit: values => {
             dispatch(loginTC(values));
@@ -55,6 +81,17 @@ export const Login = () => {
 
     const classes = useStyles();
 
+    if (requestStatus === 'loading') {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
+
+    if (isLoggedIn) {
+        return <Redirect to={'/profile'}/>
+    }
+
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline/>
@@ -72,11 +109,15 @@ export const Login = () => {
                         required
                         fullWidth
                         label="Email Address"
-                        autoComplete="email"
+                        // autoComplete="email"
                         type="email"
                         autoFocus
+                        error={!!formik.errors.email}
                         {...formik.getFieldProps('email')}
                     />
+                    {formik.touched.email && formik.errors.email ? (
+                        <div className={s.validationError}>{formik.errors.email}</div>
+                    ) : null}
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -84,9 +125,13 @@ export const Login = () => {
                         fullWidth
                         label="Password"
                         type="password"
-                        autoComplete="current-password"
+                        // autoComplete="current-password"
+                        error={!!formik.errors.password}
                         {...formik.getFieldProps('password')}
                     />
+                    {formik.touched.password && formik.errors.password ? (
+                        <div className={s.validationError}>{formik.errors.password}</div>
+                    ) : null}
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary"/>}
                         label="Remember me"

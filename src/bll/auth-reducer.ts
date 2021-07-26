@@ -1,8 +1,12 @@
 import {authApi, LoginParamsType} from "../dal/auth-api";
 import {Dispatch} from "redux";
+import {setProfileAC, SetProfileActionType} from "./profile-reducer";
+import {setAppErrorAC, SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from "./app-reducer";
 
 const initialState = {
     isLoggedIn: false
+    //profile
+
 }
 export type InitialStateType = typeof initialState
 
@@ -26,17 +30,28 @@ export const setSignInAC = (value: boolean) =>
 
 //thunks
 export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch<LoginActionsType>) => {
+    dispatch(setAppStatusAC('loading'))
     authApi.login(data)
         .then(res => {
-            console.log(res.data)
+            dispatch(setProfileAC(res.data))
             dispatch(setSignInAC(true))
+            dispatch((setAppStatusAC('succeeded')))
         })
-        .catch(e => {
-            console.log(e.response.data.error)
-            // e.response ? e.response.data.error : (e.message + ', more details in the console');
+        .catch((err) => {
+            const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
+            dispatch(setAppErrorAC(error))
+            dispatch(setAppStatusAC('failed'))
         })
 }
 
+
 //types
+export type AuthActionType =
+    SetSignInActionType
+    | SetProfileActionType
+    | SetAppStatusActionType
+    | SetAppErrorActionType
+
 export type SetSignInActionType = ReturnType<typeof setSignInAC>
-export type LoginActionsType = SetSignInActionType
+
+export type LoginActionsType = AuthActionType
