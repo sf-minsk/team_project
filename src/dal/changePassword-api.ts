@@ -9,7 +9,10 @@ const instance = axios.create({
 export const changePasswordApi = {
     changePassword(model: ChangePasswordModelType) {
         return instance.post<ChangePasswordResponseType>(`auth/forgot`, model)
-    }
+    },
+    setNewPassword(model: SetNewPasswordType) {
+        return instance.post<SetNewPasswordResponseType>('auth/set-new-password', model)
+    },
 }
 
 // Types
@@ -19,6 +22,14 @@ type ChangePasswordModelType = {
     message: string,
 }
 type ChangePasswordResponseType = {
+    info: string,
+    error: string,
+}
+type SetNewPasswordType = {
+    password: string,
+    resetPasswordToken: string,
+}
+type SetNewPasswordResponseType = {
     info: string,
     error: string,
 }
