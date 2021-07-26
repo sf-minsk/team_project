@@ -46,7 +46,7 @@ export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch<LoginActio
 
 
 //types
-export type AuthActionType =
+export type LoginActionsType =
     SetSignInActionType
     | SetProfileActionType
     | SetAppStatusActionType
@@ -54,4 +54,3 @@ export type AuthActionType =
 
 export type SetSignInActionType = ReturnType<typeof setSignInAC>
 
-export type LoginActionsType = AuthActionType

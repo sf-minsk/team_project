@@ -7,9 +7,14 @@ export const Profile = () => {
     let isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
 
     if (!isLoggedIn) {
+        console.log(isLoggedIn)
+        debugger
         return <Redirect to={'/login'}/>
     }
     return (
-        <div>Profile</div>
+        <div>
+            Profile
+            <button>Log out</button>
+        </div>
     )
 }
