@@ -10,6 +10,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./bll/store";
 import {initializeAppTC} from "./bll/app-reducer";
 import {CircularProgress} from "@material-ui/core";
+import {NewPassword} from "./components/auth/forgotPassword/NewPassword";
 
 function App() {
     let isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
@@ -17,7 +18,7 @@ function App() {
 
     useEffect(() => {
         dispatch(initializeAppTC())
-    }, []);
+    }, [dispatch]);
     if (!isInitialized) {
         return <div
             style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
@@ -27,7 +28,6 @@ function App() {
 
     return(
         <>
-
             <div>
                 <button><NavLink to='/'>Home</NavLink></button>
                 <button><NavLink to='/registration'>Register</NavLink></button>
@@ -40,7 +40,8 @@ function App() {
                     <Route exact path={'/'} render={() => <Cards/>}/>
                     <Route path={'/registration'} render={() => <Registration/>}/>
                     <Route path={'/login'} render={() => <Login/>}/>
-                    <Route path={'/changepassword'} render={() => <ForgotPassword/>}/>
+                    <Route exact path={'/changepassword'} render={() => <ForgotPassword/>}/>
+                    <Route path={'/changepassword/newpassword/:token?'} render={() => <NewPassword/>}/>
                     <Route path={'/profile'} render={() => <Profile/>}/>
                     <Redirect from={'*'} to={'/'}/>
                 </Switch>
