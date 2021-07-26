@@ -15,6 +15,9 @@ export const authApi = {
     },
     me(){
         return instance.post<ResponseAuthType>(`auth/me`)
+    },
+    logout(){
+        return instance.delete(`auth/me`)
     }
 }
 

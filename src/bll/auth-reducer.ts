@@ -43,6 +43,19 @@ export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch<LoginActio
             dispatch(setAppStatusAC('failed'))
         })
 }
+export const logoutTC = () => (dispatch: Dispatch<LoginActionsType>) => {
+    dispatch(setAppStatusAC('loading'))
+    authApi.logout()
+        .then(res => {
+            dispatch(setSignInAC(false))
+            dispatch((setAppStatusAC('succeeded')))
+        })
+        .catch((err) => {
+            const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
+            dispatch(setAppErrorAC(error))
+            dispatch(setAppStatusAC('failed'))
+        })
+}
 
 
 //types
