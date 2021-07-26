@@ -53,7 +53,6 @@ export const Registration: React.FC = () => {
         return <Redirect to={'/login'}/>
     }
 
-
     return (
         <>
             <Container component="main" maxWidth="xs">
