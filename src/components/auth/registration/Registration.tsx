@@ -4,20 +4,23 @@ import * as Yup from 'yup'
 import {useDispatch, useSelector} from 'react-redux';
 import {setSignUpTC} from '../../../bll/register-reducer';
 import {ErrorSnackbar} from '../../errors/ErrorSnackbar';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {AppRootStateType} from '../../../bll/store';
 import {RequestStatusType} from '../../../bll/app-reducer';
 import {Redirect} from 'react-router-dom';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Avatar from '@material-ui/core/Avatar';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
-export const Registration = () => {
 
+export const Registration: React.FC = () => {
+
+    const classes = useStyles();
     const dispatch = useDispatch()
     const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
     const isRegistered = useSelector<AppRootStateType, boolean>(state => state.register.isRegistered)
@@ -46,72 +49,101 @@ export const Registration = () => {
         },
     })
 
-
     if (isRegistered) {
         return <Redirect to={'/login'}/>
     }
 
+
     return (
         <>
-            <Grid container justifyContent="center" style={{padding: '30px 0'}}>
-                {
-                    status === 'loading' &&
-                    <CircularProgress style={{position: 'fixed', top: '25%', textAlign: 'center'}}/>
-                }
-                <Grid item>
-                    <Paper elevation={4}
-                           style={{width: '320px', padding: '15px', textAlign: 'center', backgroundColor: '#E6E7FF'}}>
-                        <form onSubmit={formik.handleSubmit}>
-                            <FormControl style={{width: '300px'}}>
-                                <Grid item>
-                                    <Typography variant={'h5'}>
-                                        Sign Up
-                                    </Typography>
-                                </Grid>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline/>
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon/>
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Sign Up
+                    </Typography>
+                    {
+                        status === 'loading' &&
+                        <CircularProgress style={{position: 'fixed', top: '40%', textAlign: 'center'}}/>
+                    }
+                    <form onSubmit={formik.handleSubmit} className={classes.form} noValidate>
 
-                                <FormGroup>
-                                    <TextField
-                                        label="Email"
-                                        margin="normal"
-                                        {...formik.getFieldProps('email')}
-                                    />
-                                    {formik.touched.email && formik.errors.email &&
-                                    <div style={{color: 'red'}}>{formik.errors.email}</div>}
+                        <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
 
-                                    <TextField
-                                        type="password"
-                                        label="Password"
-                                        margin="normal"
-                                        {...formik.getFieldProps('password')}
-                                    />
-                                    {formik.touched.password && formik.errors.password &&
-                                    <div style={{color: 'red'}}>{formik.errors.password}</div>}
+                            label="Email"
+                            margin="normal"
+                            {...formik.getFieldProps('email')}
+                        />
+                        {formik.touched.email && formik.errors.email &&
+                        <div style={{color: 'red'}}>{formik.errors.email}</div>}
 
-                                    <TextField
-                                        type="password"
-                                        label="Confirm password"
-                                        margin="normal"
-                                        {...formik.getFieldProps('confirmPassword')}
-                                    />
-                                    {formik.touched.confirmPassword && formik.errors.confirmPassword &&
-                                    <div style={{color: 'red'}}>{formik.errors.confirmPassword}</div>}
 
-                                    <Button
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary"
-                                        disabled={!formik.isValid || status === 'loading'}
-                                    >
-                                        Register
-                                    </Button>
-                                </FormGroup>
-                            </FormControl>
-                        </form>
-                        <ErrorSnackbar/>
-                    </Paper>
-                </Grid>
-            </Grid>
+                        <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
+                            type="password"
+
+                            label="Password"
+                            margin="normal"
+                            {...formik.getFieldProps('password')}
+                        />
+                        {formik.touched.password && formik.errors.password &&
+                        <div style={{color: 'red'}}>{formik.errors.password}</div>}
+
+                        <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
+
+                            type="password"
+                            label="Confirm password"
+                            margin="normal"
+                            {...formik.getFieldProps('confirmPassword')}
+                        />
+                        {formik.touched.confirmPassword && formik.errors.confirmPassword &&
+                        <div style={{color: 'red'}}>{formik.errors.confirmPassword}</div>}
+
+                        <Button
+                            fullWidth
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            disabled={!formik.isValid || status === 'loading'}
+                        >
+                            Register
+                        </Button>
+                    </form>
+                </div>
+                <ErrorSnackbar/>
+            </Container>
         </>
     )
 }
 
+const useStyles = makeStyles((theme) => ({
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+}))
