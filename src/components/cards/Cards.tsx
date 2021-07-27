@@ -6,9 +6,9 @@ import {AppRootStateType} from '../../bll/store';
 export const Cards = () => {
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
 
-    if (!isLoggedIn) {
-        return <Redirect to={'/login'}/>
-    }
+    // if (!isLoggedIn) {
+    //     return <Redirect to={'/login'}/>
+    // }
 
     return (
         <div>Cards</div>
