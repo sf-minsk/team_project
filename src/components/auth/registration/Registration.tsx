@@ -53,7 +53,6 @@ export const Registration: React.FC = () => {
         return <Redirect to={'/login'}/>
     }
 
-
     return (
         <>
             <Container component="main" maxWidth="xs">
@@ -76,39 +75,39 @@ export const Registration: React.FC = () => {
                             required
                             fullWidth
 
-                            label="Email"
+                            label="Enter your email address"
                             margin="normal"
+                            autoFocus
+                            helperText={formik.touched.email && !!formik.errors.email && formik.errors.email}
+                            error={formik.touched.email && !!formik.errors.email}
                             {...formik.getFieldProps('email')}
                         />
-                        {formik.touched.email && formik.errors.email &&
-                        <div style={{color: 'red'}}>{formik.errors.email}</div>}
-
 
                         <TextField
                             variant="outlined"
                             required
                             fullWidth
-                            type="password"
+                            type="Enter your password"
 
                             label="Password"
                             margin="normal"
+                            helperText={formik.touched.password && !!formik.errors.password && formik.errors.password}
+                            error={formik.touched.password && !!formik.errors.password}
                             {...formik.getFieldProps('password')}
                         />
-                        {formik.touched.password && formik.errors.password &&
-                        <div style={{color: 'red'}}>{formik.errors.password}</div>}
 
                         <TextField
                             variant="outlined"
                             required
                             fullWidth
 
-                            type="password"
+                            type="Enter your password"
                             label="Confirm password"
                             margin="normal"
+                            helperText={formik.touched.confirmPassword && !!formik.errors.confirmPassword && formik.errors.confirmPassword}
+                            error={formik.touched.confirmPassword && !!formik.errors.confirmPassword}
                             {...formik.getFieldProps('confirmPassword')}
                         />
-                        {formik.touched.confirmPassword && formik.errors.confirmPassword &&
-                        <div style={{color: 'red'}}>{formik.errors.confirmPassword}</div>}
 
                         <Button
                             fullWidth
@@ -140,7 +139,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width: '100%',
         marginTop: theme.spacing(1),
     },
     submit: {
