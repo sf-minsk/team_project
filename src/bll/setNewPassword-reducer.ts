@@ -1,6 +1,6 @@
-import {AppThunk} from "./store";
-import {changePasswordApi} from "../dal/changePassword-api";
-import {setAppErrorAC, setAppStatusAC} from "./app-reducer";
+import {AppThunk} from './store';
+import {changePasswordApi} from '../dal/changePassword-api';
+import {setAppErrorAC, setAppStatusAC} from './app-reducer';
 
 const initialState = {
     newPasswordSet: false
@@ -8,7 +8,7 @@ const initialState = {
 
 export const setNewPasswordReducer = (state: initialStateType = initialState, action: setNewPasswordActionTypes) => {
     switch (action.type) {
-        case 'SET-NEW-PASSWORD':
+        case 'NewPassword/SET-NEW-PASSWORD':
             return {...state, newPasswordSet: true}
         default:
             return state
@@ -18,7 +18,7 @@ export const setNewPasswordReducer = (state: initialStateType = initialState, ac
 // Action Creators
 const setNewPasswordAC = () => {
     return {
-        type: 'SET-NEW-PASSWORD',
+        type: 'NewPassword/SET-NEW-PASSWORD',
     } as const
 }
 
@@ -26,8 +26,9 @@ const setNewPasswordAC = () => {
 export const setNewPasswordTC = (password: string, token: string): AppThunk => async dispatch => {
     dispatch(setAppStatusAC('loading'))
     try {
-        await changePasswordApi.setNewPassword({password, resetPasswordToken: token})
+        const res = await changePasswordApi.setNewPassword({password, resetPasswordToken: token})
         dispatch(setNewPasswordAC())
+        dispatch(setAppErrorAC(res.data.info))
     } catch (e) {
         dispatch(setAppErrorAC(e.response ? e.response.data.error : e.message))
         dispatch(setAppStatusAC('failed'))

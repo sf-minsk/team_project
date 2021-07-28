@@ -12,25 +12,32 @@ import {initializeAppTC} from "./bll/app-reducer";
 import {CircularProgress} from "@material-ui/core";
 import {NewPassword} from "./components/auth/forgotPassword/NewPassword";
 import {logoutTC} from "./bll/auth-reducer";
+import { PrivateRoute } from './features/privateRoute/PrivateRoute';
+import {Error404} from './features/error404/Error404';
 
 function App() {
-    let isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
-    let isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
-    let isRegistered = useSelector<AppRootStateType, boolean>(state => state.register.isRegistered)
-    let dispatch = useDispatch();
+
+    const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
+    const isRegistered = useSelector<AppRootStateType, boolean>(state => state.register.isRegistered)
+    const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(initializeAppTC())
-    }, [dispatch]);
+    }, [dispatch])
+
     if (!isInitialized) {
         return <div
             style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
             <CircularProgress/>
         </div>
     }
+
     const obLogOutClick = () => {
         dispatch(logoutTC())
     }
+
+
     return (
         <>
             <div>
@@ -47,21 +54,15 @@ function App() {
 
             <div>
                 <Switch>
-                    <Route exact path="/" render={ () => (isLoggedIn
-                        ? <Route exact path={'/'} render={() => <Cards/>}/>
-                        : <Redirect to={'/login'}/>)} />
-                    <Route exact path="/profile" render={ () => (isLoggedIn
-                        ? <Route exact path={'/profile'} render={() => <Profile/>}/>
-                        : <Redirect to={'/login'}/>)} />
-                    <Route exact path="/login" render={() => (!isLoggedIn
-                        ? <Route exact path={'/login'} render={() => <Login/>}/>
-                        : <Redirect to={'/'}/>)}/>
-                    <Route exact path="/registration" render={() => (!isLoggedIn
-                        ? <Route exact path={'/registration'} render={() => <Registration/>}/>
-                        : <Redirect to={'/'}/>)}/>
+                    <PrivateRoute exact path="/" isLoggedIn={isLoggedIn} render={() => <Cards/>} redirectTo="/login"/>
+                    <PrivateRoute path="/profile" isLoggedIn={isLoggedIn} render={() => <Profile/>} redirectTo="/login"/>
+                    <PrivateRoute path="/login" isLoggedIn={!isLoggedIn} render={() => <Login/>} redirectTo="/"/>
+                    <PrivateRoute path="/registration" isLoggedIn={!isLoggedIn} render={() => <Registration/>} redirectTo="/"/>
+
                     <Route exact path={'/changepassword'} render={() => <ForgotPassword/>}/>
                     <Route path={'/changepassword/newpassword/:token?'} render={() => <NewPassword/>}/>
-                    <Redirect from={'*'} to={'/'}/>
+                    <Route path={'/404'} render={() => <Error404/>}/>
+                    <Redirect from={'*'} to={'/404'}/>
                 </Switch>
             </div>
         </>

@@ -3,7 +3,7 @@ import {useFormik} from 'formik';
 import * as Yup from 'yup'
 import {useDispatch, useSelector} from 'react-redux';
 import {setSignUpTC} from '../../../bll/register-reducer';
-import {ErrorSnackbar} from '../../errors/ErrorSnackbar';
+import {ErrorSnackbar} from '../../../features/errors/ErrorSnackbar';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
@@ -71,6 +71,7 @@ export const Registration: React.FC = () => {
                     <form onSubmit={formik.handleSubmit} className={classes.form} noValidate>
 
                         <TextField
+                            style={{height: '65px'}}
                             variant="outlined"
                             required
                             fullWidth
@@ -84,10 +85,11 @@ export const Registration: React.FC = () => {
                         />
 
                         <TextField
+                            style={{height: '65px'}}
                             variant="outlined"
                             required
                             fullWidth
-                            type="Enter your password"
+                            type="password"
 
                             label="Password"
                             margin="normal"
@@ -97,11 +99,12 @@ export const Registration: React.FC = () => {
                         />
 
                         <TextField
+                            style={{height: '65px'}}
                             variant="outlined"
                             required
                             fullWidth
 
-                            type="Enter your password"
+                            type="password"
                             label="Confirm password"
                             margin="normal"
                             helperText={formik.touched.confirmPassword && !!formik.errors.confirmPassword && formik.errors.confirmPassword}
@@ -117,7 +120,7 @@ export const Registration: React.FC = () => {
                             className={classes.submit}
                             disabled={!formik.isValid || status === 'loading'}
                         >
-                            Register
+                            Sign Up
                         </Button>
                     </form>
                 </div>
