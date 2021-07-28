@@ -1,6 +1,7 @@
 import {Dispatch} from "redux";
 import {authApi} from "../dal/auth-api";
 import {setSignInAC, SetSignInActionType} from "./auth-reducer";
+import {AppThunk} from "./store";
 
 const initialState = {
     error: null as string | null,
@@ -42,23 +43,26 @@ export const setIsInitializedAC = (value: boolean) =>
     ({type: 'app/SET-IS-INITIALIZED', value} as const)
 
 //thunks
-export const initializeAppTC = () => (dispatch: Dispatch<AppActionsType>) => {
-    ///
-    authApi.me()
-        .then(res => {
+export const initializeAppTC = (): AppThunk =>
+    async dispatch => {
+        dispatch(setAppStatusAC('loading'))
+        try {
+            debugger
+            let res = await authApi.me()
             if (res.data) {
-                console.log(res.data)
                 dispatch(setSignInAC(true))
             }
             dispatch(setIsInitializedAC(true))
-        })
-        .catch((err) => {
+        } catch (err) {
             const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
             dispatch(setAppErrorAC(error))
             dispatch(setAppStatusAC('failed'))
-        })
-        .finally(() => dispatch(setIsInitializedAC(true)))
-}
+        } finally {
+            dispatch(setIsInitializedAC(true))
+            dispatch(setAppStatusAC('succeeded'))
+        }
+    }
+
 
 //types
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'

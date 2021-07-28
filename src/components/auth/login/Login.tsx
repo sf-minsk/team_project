@@ -19,13 +19,16 @@ import {Redirect} from 'react-router-dom'
 import {RequestStatusType} from "../../../bll/app-reducer";
 import {CircularProgress} from "@material-ui/core";
 import s from './Login.module.css';
+import * as Yup from 'yup';
+import {Link as RouterLink } from "react-router-dom";
+import {ErrorSnackbar} from "../../errors/ErrorSnackbar";
 
-
-type FormikErrorType = {
-    email?: string
-    password?: string
-    rememberMe?: boolean
-}
+//
+// type FormikErrorType = {
+//     email?: string
+//     password?: string
+//     rememberMe?: boolean
+// }
 
 export const Login = () => {
 
@@ -39,20 +42,28 @@ export const Login = () => {
             password: '',
             rememberMe: false,
         },
-        validate: (values) => {
-            const errors: FormikErrorType = {};
-            if (!values.email) {
-                errors.email = 'Required';
-            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-                errors.email = 'Invalid email address';
-            }
-            if (!values.password) {
-                errors.password = 'Required'
-            } else if (values.password.length < 4) {
-                errors.password = 'Your password is too short'
-            }
-            return errors;
-        },
+        validationSchema: Yup.object({
+            email: Yup.string()
+                .email('Invalid email address')
+                .required('Email is required'),
+            password: Yup.string()
+                // .min(8, 'Your password is too short')
+                .required('Password is required')
+        }),
+        // validate: (values) => {
+        //     const errors: FormikErrorType = {};
+        //     if (!values.email) {
+        //         errors.email = 'Required';
+        //     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        //         errors.email = 'Invalid email address';
+        //     }
+        //     if (!values.password) {
+        //         errors.password = 'Required'
+        //     } else if (values.password.length < 4) {
+        //         errors.password = 'Your password is too short'
+        //     }
+        //     return errors;
+        // },
         onSubmit: values => {
             dispatch(loginTC(values));
             formik.resetForm()
@@ -111,8 +122,8 @@ export const Login = () => {
                         label="Email Address"
                         // autoComplete="email"
                         type="email"
-                        autoFocus
-                        error={!!formik.errors.email}
+                        // autoFocus
+                        // error={!!formik.errors.email}
                         {...formik.getFieldProps('email')}
                     />
                     {formik.touched.email && formik.errors.email ? (
@@ -125,8 +136,7 @@ export const Login = () => {
                         fullWidth
                         label="Password"
                         type="password"
-                        // autoComplete="current-password"
-                        error={!!formik.errors.password}
+                        // error={!!formik.errors.password}
                         {...formik.getFieldProps('password')}
                     />
                     {formik.touched.password && formik.errors.password ? (
@@ -148,18 +158,20 @@ export const Login = () => {
                     </Button>
                     <Grid container>
                         <Grid item xs>
-                            <Link href="#" variant="body2">
+                            <Link component={RouterLink} to="/changepassword" >
                                 Forgot password?
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Don't have an account? Sign Up"}
+                            <Link component={RouterLink} to="/registration" >
+                                Don't have an account? Sign Up
                             </Link>
                         </Grid>
                     </Grid>
                 </form>
             </div>
+            <ErrorSnackbar />
         </Container>
+
     )
 }

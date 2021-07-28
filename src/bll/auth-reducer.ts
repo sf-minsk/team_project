@@ -2,6 +2,7 @@ import {authApi, LoginParamsType} from "../dal/auth-api";
 import {Dispatch} from "redux";
 import {setProfileAC, SetProfileActionType} from "./profile-reducer";
 import {setAppErrorAC, SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from "./app-reducer";
+import {AppThunk} from "./store";
 
 const initialState = {
     isLoggedIn: false
@@ -29,32 +30,32 @@ export const setSignInAC = (value: boolean) =>
     ({type: 'login/SET-SIGN-IN', value} as const)
 
 //thunks
-export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch<LoginActionsType>) => {
+export const loginTC = (data: LoginParamsType): AppThunk =>
+    async dispatch => {
     dispatch(setAppStatusAC('loading'))
-    authApi.login(data)
-        .then(res => {
-            dispatch(setProfileAC(res.data))
-            dispatch(setSignInAC(true))
-            dispatch((setAppStatusAC('succeeded')))
-        })
-        .catch((err) => {
-            const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
-            dispatch(setAppErrorAC(error))
-            dispatch(setAppStatusAC('failed'))
-        })
+    try {
+        let res = await authApi.login(data)
+        dispatch(setProfileAC(res.data))
+        dispatch(setSignInAC(true))
+        dispatch((setAppStatusAC('succeeded')))
+    } catch (err) {
+        const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
+        dispatch(setAppErrorAC(error))
+        dispatch(setAppStatusAC('failed'))
+    }
+
 }
-export const logoutTC = () => (dispatch: Dispatch<LoginActionsType>) => {
+export const logoutTC = (): AppThunk => async dispatch => {
     dispatch(setAppStatusAC('loading'))
-    authApi.logout()
-        .then(res => {
-            dispatch(setSignInAC(false))
-            dispatch((setAppStatusAC('succeeded')))
-        })
-        .catch((err) => {
-            const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
-            dispatch(setAppErrorAC(error))
-            dispatch(setAppStatusAC('failed'))
-        })
+    try {
+        await authApi.logout()
+        dispatch(setSignInAC(false))
+        dispatch((setAppStatusAC('succeeded')))
+    } catch (err) {
+        const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
+        dispatch(setAppErrorAC(error))
+        dispatch(setAppStatusAC('failed'))
+    }
 }
 
 
