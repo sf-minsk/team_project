@@ -14,7 +14,7 @@ export type InitialStateType = typeof initialState
 export const authReducer = (state = initialState, action: LoginActionsType): InitialStateType => {
     switch (action.type) {
 
-        case 'Login/SET-SIGN-IN':
+        case 'login/SET-SIGN-IN':
             return {
                 ...state, isLoggedIn: action.value
             };
@@ -26,7 +26,7 @@ export const authReducer = (state = initialState, action: LoginActionsType): Ini
 
 //actions
 export const setSignInAC = (value: boolean) =>
-    ({type: 'Login/SET-SIGN-IN', value} as const)
+    ({type: 'login/SET-SIGN-IN', value} as const)
 
 //thunks
 export const loginTC = (data: LoginParamsType): AppThunk =>

@@ -79,7 +79,7 @@ export const Registration: React.FC = () => {
                             label="Enter your email address"
                             margin="normal"
                             autoFocus
-                            helperText={formik.touched.email && !!formik.errors.email && formik.errors.email}
+                            helperText={formik.touched.email && formik.errors.email}
                             error={formik.touched.email && !!formik.errors.email}
                             {...formik.getFieldProps('email')}
                         />
@@ -93,7 +93,7 @@ export const Registration: React.FC = () => {
 
                             label="Password"
                             margin="normal"
-                            helperText={formik.touched.password && !!formik.errors.password && formik.errors.password}
+                            helperText={formik.touched.password && formik.errors.password}
                             error={formik.touched.password && !!formik.errors.password}
                             {...formik.getFieldProps('password')}
                         />
@@ -107,7 +107,7 @@ export const Registration: React.FC = () => {
                             type="password"
                             label="Confirm password"
                             margin="normal"
-                            helperText={formik.touched.confirmPassword && !!formik.errors.confirmPassword && formik.errors.confirmPassword}
+                            helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
                             error={formik.touched.confirmPassword && !!formik.errors.confirmPassword}
                             {...formik.getFieldProps('confirmPassword')}
                         />

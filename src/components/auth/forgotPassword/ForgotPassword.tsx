@@ -82,7 +82,7 @@ export const ForgotPassword = () => {
                             // autoComplete="email"
                             type="email"
                             autoFocus
-                            helperText={formik.touched.email && !!formik.errors.email && formik.errors.email}
+                            helperText={formik.touched.email && formik.errors.email}
                             error={formik.touched.email && !!formik.errors.email}
                             {...formik.getFieldProps('email')}
                         />

@@ -11,7 +11,7 @@ export type InitialStateType = typeof initialState
 export const registerReducer = (state = initialState, action: RegisterActionsType): InitialStateType => {
     switch (action.type) {
 
-        case 'Registration/SET-SIGN-UP':
+        case 'register/SET-SIGN-UP':
             return {
                 ...state, isRegistered: action.isRegistered
             }
@@ -23,7 +23,7 @@ export const registerReducer = (state = initialState, action: RegisterActionsTyp
 
 //actions
 export const setSignUpAC = (isRegistered: boolean) =>
-    ({type: 'Registration/SET-SIGN-UP', isRegistered} as const)
+    ({type: 'register/SET-SIGN-UP', isRegistered} as const)
 
 
 //thunks
