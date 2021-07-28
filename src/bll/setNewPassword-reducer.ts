@@ -26,8 +26,9 @@ const setNewPasswordAC = () => {
 export const setNewPasswordTC = (password: string, token: string): AppThunk => async dispatch => {
     dispatch(setAppStatusAC('loading'))
     try {
-        await changePasswordApi.setNewPassword({password, resetPasswordToken: token})
+        const res = await changePasswordApi.setNewPassword({password, resetPasswordToken: token})
         dispatch(setNewPasswordAC())
+        dispatch(setAppErrorAC(res.data.info))
     } catch (e) {
         dispatch(setAppErrorAC(e.response ? e.response.data.error : e.message))
         dispatch(setAppStatusAC('failed'))
