@@ -11,6 +11,9 @@ export const Profile = () => {
     // }
 
     return (
-        <div>Profile</div>
+        <div>
+            Profile
+            <button>Log out</button>
+        </div>
     )
 }
