@@ -6,9 +6,9 @@ import {Redirect} from "react-router-dom";
 export const Profile = () => {
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
 
-    if (!isLoggedIn) {
-        return <Redirect to={'/login'}/>
-    }
+    // if (!isLoggedIn) {
+    //     return <Redirect to={'/login'}/>
+    // }
 
     return (
         <div>Profile</div>

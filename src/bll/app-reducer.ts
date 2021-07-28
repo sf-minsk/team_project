@@ -54,7 +54,7 @@ export const initializeAppTC = () => (dispatch: Dispatch<AppActionsType>) => {
         })
         .catch((err) => {
             const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
-            dispatch(setAppErrorAC(error))
+            // dispatch(setAppErrorAC(error))
             dispatch(setAppStatusAC('failed'))
         })
         .finally(() => dispatch(setIsInitializedAC(true)))
