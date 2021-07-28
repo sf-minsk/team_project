@@ -55,7 +55,7 @@ export const initializeAppTC = (): AppThunk =>
             dispatch(setIsInitializedAC(true))
         } catch (err) {
             const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
-            dispatch(setAppErrorAC(error))
+            // dispatch(setAppErrorAC(error))
             dispatch(setAppStatusAC('failed'))
         } finally {
             dispatch(setIsInitializedAC(true))

@@ -99,9 +99,9 @@ export const Login = () => {
         </div>
     }
 
-    if (isLoggedIn) {
-        return <Redirect to={'/profile'}/>
-    }
+    // if (isLoggedIn) {
+    //     return <Redirect to={'/profile'}/>
+    // }
 
     return (
         <Container component="main" maxWidth="xs">

@@ -4,11 +4,12 @@ import {AppRootStateType} from "../../bll/store";
 import {Redirect} from "react-router-dom";
 
 export const Profile = () => {
-    let isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
 
-    if (!isLoggedIn) {
-        return <Redirect to={'/login'}/>
-    }
+    // if (!isLoggedIn) {
+    //     return <Redirect to={'/login'}/>
+    // }
+
     return (
         <div>
             Profile

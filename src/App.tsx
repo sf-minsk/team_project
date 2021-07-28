@@ -31,7 +31,7 @@ function App() {
     const obLogOutClick = () => {
         dispatch(logoutTC())
     }
-    return(
+    return (
         <>
             <div>
                 <button><NavLink to='/'>Home</NavLink></button>
@@ -44,20 +44,33 @@ function App() {
                 <span style={{color: `${isRegistered ? 'green' : 'red'}`}}> (REGISTERED) </span>
                 <button onClick={obLogOutClick}>LOGOUT</button>
             </div>
+
             <div>
                 <Switch>
-                    <Route exact path={'/'} render={() => <Cards/>}/>
-                    <Route path={'/registration'} render={() => <Registration/>}/>
-                    <Route path={'/login'} render={() => <Login/>}/>
+                    <Route exact path="/" render={ () => (isLoggedIn
+                        ? <Route exact path={'/'} render={() => <Cards/>}/>
+                        : <Redirect to={'/login'}/>)} />
+                    <Route exact path="/profile" render={ () => (isLoggedIn
+                        ? <Route exact path={'/profile'} render={() => <Profile/>}/>
+                        : <Redirect to={'/login'}/>)} />
+                    <Route exact path="/login" render={() => (!isLoggedIn
+                        ? <Route exact path={'/login'} render={() => <Login/>}/>
+                        : <Redirect to={'/'}/>)}/>
+                    <Route exact path="/registration" render={() => (!isLoggedIn
+                        ? <Route exact path={'/registration'} render={() => <Registration/>}/>
+                        : <Redirect to={'/'}/>)}/>
                     <Route exact path={'/changepassword'} render={() => <ForgotPassword/>}/>
                     <Route path={'/changepassword/newpassword/:token?'} render={() => <NewPassword/>}/>
-                    <Route path={'/profile'} render={() => <Profile/>}/>
                     <Redirect from={'*'} to={'/'}/>
                 </Switch>
             </div>
-
         </>
     );
 }
 
 export default App;
+
+
+
+
+// <Route path="/admin" render={ () => (isAuth ? ( <> <Route path="/admin/categories" component={() => <CategoriesAdmin setStore={setStore} store={store} setAppSide={setAppSide} />} /> <Route path="/admin/words/:id" component={() => <Words setStore={setStore} store={store} setAppSide={setAppSide} />} /> </> ) : <Redirect to={'/main'}/>)} />
