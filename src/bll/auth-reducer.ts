@@ -1,8 +1,7 @@
-import {authApi, LoginParamsType} from "../dal/auth-api";
-import {Dispatch} from "redux";
-import {setProfileAC, SetProfileActionType} from "./profile-reducer";
-import {setAppErrorAC, SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from "./app-reducer";
-import {AppThunk} from "./store";
+import {authApi, LoginParamsType} from '../dal/auth-api';
+import {setProfileAC, SetProfileActionType} from './profile-reducer';
+import {setAppErrorAC, SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from './app-reducer';
+import {AppThunk} from './store';
 
 const initialState = {
     isLoggedIn: false
@@ -15,7 +14,7 @@ export type InitialStateType = typeof initialState
 export const authReducer = (state = initialState, action: LoginActionsType): InitialStateType => {
     switch (action.type) {
 
-        case 'login/SET-SIGN-IN':
+        case 'Login/SET-SIGN-IN':
             return {
                 ...state, isLoggedIn: action.value
             };
@@ -27,24 +26,24 @@ export const authReducer = (state = initialState, action: LoginActionsType): Ini
 
 //actions
 export const setSignInAC = (value: boolean) =>
-    ({type: 'login/SET-SIGN-IN', value} as const)
+    ({type: 'Login/SET-SIGN-IN', value} as const)
 
 //thunks
 export const loginTC = (data: LoginParamsType): AppThunk =>
     async dispatch => {
-    dispatch(setAppStatusAC('loading'))
-    try {
-        let res = await authApi.login(data)
-        dispatch(setProfileAC(res.data))
-        dispatch(setSignInAC(true))
-        dispatch((setAppStatusAC('succeeded')))
-    } catch (err) {
-        const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
-        dispatch(setAppErrorAC(error))
-        dispatch(setAppStatusAC('failed'))
-    }
+        dispatch(setAppStatusAC('loading'))
+        try {
+            let res = await authApi.login(data)
+            dispatch(setProfileAC(res.data))
+            dispatch(setSignInAC(true))
+            dispatch((setAppStatusAC('succeeded')))
+        } catch (err) {
+            const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
+            dispatch(setAppErrorAC(error))
+            dispatch(setAppStatusAC('failed'))
+        }
 
-}
+    }
 export const logoutTC = (): AppThunk => async dispatch => {
     dispatch(setAppStatusAC('loading'))
     try {
@@ -52,8 +51,7 @@ export const logoutTC = (): AppThunk => async dispatch => {
         dispatch(setSignInAC(false))
         dispatch((setAppStatusAC('succeeded')))
     } catch (err) {
-        const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
-        dispatch(setAppErrorAC(error))
+        // dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         dispatch(setAppStatusAC('failed'))
     }
 }
@@ -61,7 +59,7 @@ export const logoutTC = (): AppThunk => async dispatch => {
 
 //types
 export type LoginActionsType =
-    SetSignInActionType
+    | SetSignInActionType
     | SetProfileActionType
     | SetAppStatusActionType
     | SetAppErrorActionType

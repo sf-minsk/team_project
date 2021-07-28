@@ -35,11 +35,8 @@ export const setSignUpTC = (data: RegisterRequestDataType): AppThunk =>
             dispatch(setSignUpAC(true))
             dispatch(setAppStatusAC('succeeded'))
         } catch (err) {
-            const error = err.response ? err.response.data.error : err.message
-            dispatch(setAppErrorAC(error))
+            dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
             dispatch(setAppStatusAC('failed'))
-
-            console.log(error)
         }
     }
 

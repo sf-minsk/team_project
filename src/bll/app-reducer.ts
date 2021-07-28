@@ -1,7 +1,6 @@
-import {Dispatch} from "redux";
-import {authApi} from "../dal/auth-api";
-import {setSignInAC, SetSignInActionType} from "./auth-reducer";
-import {AppThunk} from "./store";
+import {authApi} from '../dal/auth-api';
+import {setSignInAC, SetSignInActionType} from './auth-reducer';
+import {AppThunk} from './store';
 
 const initialState = {
     error: null as string | null,
@@ -15,15 +14,15 @@ export const appReducer = (state = initialState, action: AppActionsType): Initia
     console.log(action)
     switch (action.type) {
 
-        case 'app/SET-APP-ERROR':
+        case 'App/SET-APP-ERROR':
             return {
                 ...state, error: action.error
             }
-        case 'app/SET-APP-STATUS':
+        case 'App/SET-APP-STATUS':
             return {
                 ...state, status: action.status
             }
-        case "app/SET-IS-INITIALIZED":
+        case 'App/SET-IS-INITIALIZED':
             return {
                 ...state, isInitialized: action.value
             }
@@ -34,28 +33,26 @@ export const appReducer = (state = initialState, action: AppActionsType): Initia
 
 //actions
 export const setAppErrorAC = (error: string | null) =>
-    ({type: 'app/SET-APP-ERROR', error} as const)
+    ({type: 'App/SET-APP-ERROR', error} as const)
 
 export const setAppStatusAC = (status: RequestStatusType) =>
-    ({type: 'app/SET-APP-STATUS', status} as const)
+    ({type: 'App/SET-APP-STATUS', status} as const)
 
 export const setIsInitializedAC = (value: boolean) =>
-    ({type: 'app/SET-IS-INITIALIZED', value} as const)
+    ({type: 'App/SET-IS-INITIALIZED', value} as const)
 
 //thunks
 export const initializeAppTC = (): AppThunk =>
     async dispatch => {
         dispatch(setAppStatusAC('loading'))
         try {
-            debugger
             let res = await authApi.me()
             if (res.data) {
                 dispatch(setSignInAC(true))
             }
             dispatch(setIsInitializedAC(true))
         } catch (err) {
-            const error = err.response ? err.response.data.error : (err.message + ', more details in the console')
-            // dispatch(setAppErrorAC(error))
+            // dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
             dispatch(setAppStatusAC('failed'))
         } finally {
             dispatch(setIsInitializedAC(true))
