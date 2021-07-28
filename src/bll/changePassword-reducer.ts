@@ -1,7 +1,7 @@
-import {AppThunk} from "./store";
-import {changePasswordApi} from "../dal/changePassword-api";
-import {changePasswordModel} from "../utils/changePasswordModel-util";
-import {setAppErrorAC, setAppStatusAC} from "./app-reducer";
+import {AppThunk} from './store';
+import {changePasswordApi} from '../dal/changePassword-api';
+import {changePasswordModel} from '../utils/changePasswordModel-util';
+import {setAppErrorAC, setAppStatusAC} from './app-reducer';
 
 const initialState = {
     changeProcess: false
@@ -9,7 +9,7 @@ const initialState = {
 
 export const changePasswordReducer = (state: initialStateType = initialState, action: ChangePasswordActionsType) => {
     switch (action.type) {
-        case "CHANGE-PASSWORD":
+        case 'ForgotPassword/CHANGE-PASSWORD':
             return {...state, changeProcess: true}
         default:
             return state
@@ -19,7 +19,7 @@ export const changePasswordReducer = (state: initialStateType = initialState, ac
 // Action creators
 export const changePasswordAC = () => {
     return {
-        type: "CHANGE-PASSWORD",
+        type: 'ForgotPassword/CHANGE-PASSWORD',
     } as const
 }
 

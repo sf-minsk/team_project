@@ -31,7 +31,7 @@ export type ProfileStateType = {
 export const profileReducer = (state = initialState, action: ProfileActionsType): ProfileStateType => {
     switch (action.type) {
 
-        case 'profile/SET-PROFILE':
+        case 'Profile/SET-PROFILE':
             return {
                 ...state,
                 ...action.payload
@@ -44,7 +44,7 @@ export const profileReducer = (state = initialState, action: ProfileActionsType)
 //actions
 
 export const setProfileAC = (data: ResponseAuthType) =>
-    ({type: 'profile/SET-PROFILE', payload: data} as const)
+    ({type: 'Profile/SET-PROFILE', payload: data} as const)
 
 
 //thunks

@@ -6,15 +6,15 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../../bll/store";
 import Container from "@material-ui/core/Container/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import {makeStyles} from "@material-ui/core/styles";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 import Avatar from "@material-ui/core/Avatar";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import LockOpenOutlinedIcon from '@material-ui/icons/LockOpenOutlined';
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import {CircularProgress} from "@material-ui/core";
-import {ErrorSnackbar} from "../../errors/ErrorSnackbar";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import {ErrorSnackbar} from "../../../features/errors/ErrorSnackbar";
 
 
 export const ForgotPassword = () => {
@@ -72,6 +72,7 @@ export const ForgotPassword = () => {
                     </Typography>
                     <form onSubmit={formik.handleSubmit} className={classes.form} noValidate>
                         <TextField
+                            style={{height: '65px'}}
                             id="email"
                             variant="outlined"
                             margin="normal"
