@@ -8,7 +8,7 @@ const initialState = {
 
 export const setNewPasswordReducer = (state: initialStateType = initialState, action: setNewPasswordActionTypes) => {
     switch (action.type) {
-        case 'NewPassword/SET-NEW-PASSWORD':
+        case 'setNewPassword/SET-NEW-PASSWORD':
             return {...state, newPasswordSet: true}
         default:
             return state
@@ -18,7 +18,7 @@ export const setNewPasswordReducer = (state: initialStateType = initialState, ac
 // Action Creators
 const setNewPasswordAC = () => {
     return {
-        type: 'NewPassword/SET-NEW-PASSWORD',
+        type: 'setNewPassword/SET-NEW-PASSWORD',
     } as const
 }
 

@@ -91,7 +91,7 @@ export const NewPassword = () => {
                         label="Password"
                         type="password"
                         autoFocus
-                        helperText={formik.touched.password && !!formik.errors.password && formik.errors.password}
+                        helperText={formik.touched.password && formik.errors.password}
                         error={formik.touched.password && !!formik.errors.password}
                         {...formik.getFieldProps('password')}
                     />
@@ -104,7 +104,7 @@ export const NewPassword = () => {
                         fullWidth
                         label="Confirm password"
                         type="password"
-                        helperText={formik.touched.confirmPassword && !!formik.errors.confirmPassword && formik.errors.confirmPassword}
+                        helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
                         error={formik.touched.confirmPassword && !!formik.errors.confirmPassword}
                         {...formik.getFieldProps('confirmPassword')}
                     />
