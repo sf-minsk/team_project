@@ -1,6 +1,7 @@
 import {authApi} from '../dal/auth-api';
 import {setSignInAC, SetSignInActionType} from './auth-reducer';
 import {AppThunk} from './store';
+import {setProfileAC} from "./profile-reducer";
 
 const initialState = {
     error: null as string | null,
@@ -49,6 +50,7 @@ export const initializeAppTC = (): AppThunk =>
             let res = await authApi.me()
             if (res.data) {
                 dispatch(setSignInAC(true))
+                dispatch(setProfileAC(res.data))
             }
             dispatch(setIsInitializedAC(true))
         } catch (err) {
