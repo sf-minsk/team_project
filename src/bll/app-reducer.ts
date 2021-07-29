@@ -15,15 +15,15 @@ export const appReducer = (state = initialState, action: AppActionsType): Initia
     console.log(action)
     switch (action.type) {
 
-        case 'App/SET-APP-ERROR':
+        case 'app/SET-APP-ERROR':
             return {
                 ...state, error: action.error
             }
-        case 'App/SET-APP-STATUS':
+        case 'app/SET-APP-STATUS':
             return {
                 ...state, status: action.status
             }
-        case 'App/SET-IS-INITIALIZED':
+        case 'app/SET-IS-INITIALIZED':
             return {
                 ...state, isInitialized: action.value
             }
@@ -34,13 +34,13 @@ export const appReducer = (state = initialState, action: AppActionsType): Initia
 
 //actions
 export const setAppErrorAC = (error: string | null) =>
-    ({type: 'App/SET-APP-ERROR', error} as const)
+    ({type: 'app/SET-APP-ERROR', error} as const)
 
 export const setAppStatusAC = (status: RequestStatusType) =>
-    ({type: 'App/SET-APP-STATUS', status} as const)
+    ({type: 'app/SET-APP-STATUS', status} as const)
 
 export const setIsInitializedAC = (value: boolean) =>
-    ({type: 'App/SET-IS-INITIALIZED', value} as const)
+    ({type: 'app/SET-IS-INITIALIZED', value} as const)
 
 //thunks
 export const initializeAppTC = (): AppThunk =>
