@@ -1,22 +1,23 @@
 {
   "files": {
-    "main.css": "/team_project/static/css/main.8c8b27cf.chunk.css",
-    "main.js": "/team_project/static/js/main.3d8a20e7.chunk.js",
-    "main.js.map": "/team_project/static/js/main.3d8a20e7.chunk.js.map",
-    "runtime-main.js": "/team_project/static/js/runtime-main.00f7df2d.js",
-    "runtime-main.js.map": "/team_project/static/js/runtime-main.00f7df2d.js.map",
-    "static/js/2.1b88d82e.chunk.js": "/team_project/static/js/2.1b88d82e.chunk.js",
-    "static/js/2.1b88d82e.chunk.js.map": "/team_project/static/js/2.1b88d82e.chunk.js.map",
-    "static/js/3.212d73f3.chunk.js": "/team_project/static/js/3.212d73f3.chunk.js",
-    "static/js/3.212d73f3.chunk.js.map": "/team_project/static/js/3.212d73f3.chunk.js.map",
-    "index.html": "/team_project/index.html",
-    "static/css/main.8c8b27cf.chunk.css.map": "/team_project/static/css/main.8c8b27cf.chunk.css.map",
-    "static/js/2.1b88d82e.chunk.js.LICENSE.txt": "/team_project/static/js/2.1b88d82e.chunk.js.LICENSE.txt"
+    "main.css": "/my_team_project/static/css/main.0f69c0fa.chunk.css",
+    "main.js": "/my_team_project/static/js/main.3658abe2.chunk.js",
+    "main.js.map": "/my_team_project/static/js/main.3658abe2.chunk.js.map",
+    "runtime-main.js": "/my_team_project/static/js/runtime-main.812ad800.js",
+    "runtime-main.js.map": "/my_team_project/static/js/runtime-main.812ad800.js.map",
+    "static/js/2.4a855b6e.chunk.js": "/my_team_project/static/js/2.4a855b6e.chunk.js",
+    "static/js/2.4a855b6e.chunk.js.map": "/my_team_project/static/js/2.4a855b6e.chunk.js.map",
+    "static/js/3.45cd7acb.chunk.js": "/my_team_project/static/js/3.45cd7acb.chunk.js",
+    "static/js/3.45cd7acb.chunk.js.map": "/my_team_project/static/js/3.45cd7acb.chunk.js.map",
+    "index.html": "/my_team_project/index.html",
+    "static/css/main.0f69c0fa.chunk.css.map": "/my_team_project/static/css/main.0f69c0fa.chunk.css.map",
+    "static/js/2.4a855b6e.chunk.js.LICENSE.txt": "/my_team_project/static/js/2.4a855b6e.chunk.js.LICENSE.txt",
+    "static/media/Error404.d9af2882.png": "/my_team_project/static/media/Error404.d9af2882.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.00f7df2d.js",
-    "static/js/2.1b88d82e.chunk.js",
-    "static/css/main.8c8b27cf.chunk.css",
-    "static/js/main.3d8a20e7.chunk.js"
+    "static/js/runtime-main.812ad800.js",
+    "static/js/2.4a855b6e.chunk.js",
+    "static/css/main.0f69c0fa.chunk.css",
+    "static/js/main.3658abe2.chunk.js"
   ]
 }
