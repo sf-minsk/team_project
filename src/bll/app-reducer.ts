@@ -1,9 +1,11 @@
 import {authApi} from '../dal/auth-api';
 import {setSignInAC, SetSignInActionType} from './auth-reducer';
 import {AppThunk} from './store';
+import {setProfileAC} from "./profile-reducer";
 
 const initialState = {
     error: null as string | null,
+    errorType: null as AppErrorType | null,
     status: 'idle' as RequestStatusType, ///
     isInitialized: false ///is necessary data for all app is requested
 }
@@ -16,7 +18,7 @@ export const appReducer = (state = initialState, action: AppActionsType): Initia
 
         case 'app/SET-APP-ERROR':
             return {
-                ...state, error: action.error
+                ...state, error: action.error, errorType: action.errorType
             }
         case 'app/SET-APP-STATUS':
             return {
@@ -32,8 +34,8 @@ export const appReducer = (state = initialState, action: AppActionsType): Initia
 }
 
 //actions
-export const setAppErrorAC = (error: string | null) =>
-    ({type: 'app/SET-APP-ERROR', error} as const)
+export const setAppErrorAC = (error: string | null, errorType: AppErrorType | null = null) =>
+    ({type: 'app/SET-APP-ERROR', error, errorType} as const)
 
 export const setAppStatusAC = (status: RequestStatusType) =>
     ({type: 'app/SET-APP-STATUS', status} as const)
@@ -49,6 +51,7 @@ export const initializeAppTC = (): AppThunk =>
             let res = await authApi.me()
             if (res.data) {
                 dispatch(setSignInAC(true))
+                dispatch(setProfileAC(res.data))
             }
             dispatch(setIsInitializedAC(true))
         } catch (err) {
@@ -72,3 +75,4 @@ export type AppActionsType =
     | SetAppStatusActionType
     | SetSignInActionType
     | ReturnType<typeof setIsInitializedAC>
+export type AppErrorType = "error" | "warning" | "info" | "success"
