@@ -16,12 +16,11 @@ export function ErrorSnackbar() {
         if (reason === 'clickaway') {
             return
         }
-        dispatch(setAppErrorAC(null))
+        dispatch(setAppErrorAC(null, errorType))
     }
-
     return (
         <Snackbar open={error !== null} autoHideDuration={4000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity={errorType ? errorType : "error"}>
+            <Alert onClose={handleClose} severity={errorType ? errorType : 'error'}>
                 {error}
             </Alert>
         </Snackbar>
