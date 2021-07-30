@@ -1,5 +1,5 @@
 import {AppThunk} from './store';
-import {registerApi, RegisterRequestDataType} from '../dal/register-api';
+import {registerApi} from '../dal/register-api';
 import {setAppErrorAC, SetAppErrorActionType, setAppStatusAC} from './app-reducer';
 
 const initialState = {
@@ -11,7 +11,7 @@ export type InitialStateType = typeof initialState
 export const registerReducer = (state = initialState, action: RegisterActionsType): InitialStateType => {
     switch (action.type) {
 
-        case 'Registration/SET-SIGN-UP':
+        case 'register/SET-SIGN-UP':
             return {
                 ...state, isRegistered: action.isRegistered
             }
@@ -23,15 +23,15 @@ export const registerReducer = (state = initialState, action: RegisterActionsTyp
 
 //actions
 export const setSignUpAC = (isRegistered: boolean) =>
-    ({type: 'Registration/SET-SIGN-UP', isRegistered} as const)
+    ({type: 'register/SET-SIGN-UP', isRegistered} as const)
 
 
 //thunks
-export const setSignUpTC = (data: RegisterRequestDataType): AppThunk =>
+export const setSignUpTC = (email: string, password: string): AppThunk =>
     async dispatch => {
         try {
             dispatch(setAppStatusAC('loading'))
-            await registerApi.register(data)
+            await registerApi.register(email, password)
             dispatch(setSignUpAC(true))
             dispatch(setAppStatusAC('succeeded'))
         } catch (err) {

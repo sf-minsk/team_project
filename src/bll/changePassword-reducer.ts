@@ -9,7 +9,7 @@ const initialState = {
 
 export const changePasswordReducer = (state: initialStateType = initialState, action: ChangePasswordActionsType) => {
     switch (action.type) {
-        case 'ForgotPassword/CHANGE-PASSWORD':
+        case 'changePassword/CHANGE-PASSWORD':
             return {...state, changeProcess: true}
         default:
             return state
@@ -19,7 +19,7 @@ export const changePasswordReducer = (state: initialStateType = initialState, ac
 // Action creators
 export const changePasswordAC = () => {
     return {
-        type: 'ForgotPassword/CHANGE-PASSWORD',
+        type: 'changePassword/CHANGE-PASSWORD',
     } as const
 }
 

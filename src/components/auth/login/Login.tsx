@@ -110,7 +110,7 @@ export const Login = () => {
                         type="email"
                         // autoFocus
                         // error={!!formik.errors.email}
-                        helperText={formik.touched.email && !!formik.errors.email && formik.errors.email}
+                        helperText={formik.touched.email && formik.errors.email}
                         error={formik.touched.email && !!formik.errors.email}
                         {...formik.getFieldProps('email')}
                     />
@@ -124,7 +124,7 @@ export const Login = () => {
                         label="Password"
                         type="password"
                         // error={!!formik.errors.password}
-                        helperText={formik.touched.password && !!formik.errors.password && formik.errors.password}
+                        helperText={formik.touched.password && formik.errors.password}
                         error={formik.touched.password && !!formik.errors.password}
                         {...formik.getFieldProps('password')}
                     />

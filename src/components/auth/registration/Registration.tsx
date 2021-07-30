@@ -37,14 +37,14 @@ export const Registration: React.FC = () => {
                 .required('Email is required'),
             password: Yup.string()
                 .min(8, 'Must be 8 characters or more')
-                .max(15, 'Must be 15 characters or less')
+                .max(20, 'Must be 20 characters or less')
                 .required('Password is required'),
             confirmPassword: Yup.string()
                 .oneOf([Yup.ref('password')], 'Passwords must match')
                 .required('Password is required'),
         }),
         onSubmit: values => {
-            dispatch(setSignUpTC(values))
+            dispatch(setSignUpTC(values.email, values.password))
             formik.resetForm()
         },
     })
@@ -79,7 +79,7 @@ export const Registration: React.FC = () => {
                             label="Enter your email address"
                             margin="normal"
                             autoFocus
-                            helperText={formik.touched.email && !!formik.errors.email && formik.errors.email}
+                            helperText={formik.touched.email && formik.errors.email}
                             error={formik.touched.email && !!formik.errors.email}
                             {...formik.getFieldProps('email')}
                         />
@@ -93,7 +93,7 @@ export const Registration: React.FC = () => {
 
                             label="Password"
                             margin="normal"
-                            helperText={formik.touched.password && !!formik.errors.password && formik.errors.password}
+                            helperText={formik.touched.password && formik.errors.password}
                             error={formik.touched.password && !!formik.errors.password}
                             {...formik.getFieldProps('password')}
                         />
@@ -107,7 +107,7 @@ export const Registration: React.FC = () => {
                             type="password"
                             label="Confirm password"
                             margin="normal"
-                            helperText={formik.touched.confirmPassword && !!formik.errors.confirmPassword && formik.errors.confirmPassword}
+                            helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
                             error={formik.touched.confirmPassword && !!formik.errors.confirmPassword}
                             {...formik.getFieldProps('confirmPassword')}
                         />

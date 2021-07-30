@@ -8,7 +8,7 @@ const initialState = {
 
 export const setNewPasswordReducer = (state: initialStateType = initialState, action: setNewPasswordActionTypes) => {
     switch (action.type) {
-        case 'NewPassword/SET-NEW-PASSWORD':
+        case 'setNewPassword/SET-NEW-PASSWORD':
             return {...state, newPasswordSet: true}
         default:
             return state
@@ -18,7 +18,7 @@ export const setNewPasswordReducer = (state: initialStateType = initialState, ac
 // Action Creators
 const setNewPasswordAC = () => {
     return {
-        type: 'NewPassword/SET-NEW-PASSWORD',
+        type: 'setNewPassword/SET-NEW-PASSWORD',
     } as const
 }
 
@@ -28,7 +28,7 @@ export const setNewPasswordTC = (password: string, token: string): AppThunk => a
     try {
         const res = await changePasswordApi.setNewPassword({password, resetPasswordToken: token})
         dispatch(setNewPasswordAC())
-        dispatch(setAppErrorAC(res.data.info))
+        dispatch(setAppErrorAC(res.data.info, 'success'))
     } catch (e) {
         dispatch(setAppErrorAC(e.response ? e.response.data.error : e.message))
         dispatch(setAppStatusAC('failed'))
