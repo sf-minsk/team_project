@@ -37,14 +37,14 @@ export const Registration: React.FC = () => {
                 .required('Email is required'),
             password: Yup.string()
                 .min(8, 'Must be 8 characters or more')
-                .max(15, 'Must be 15 characters or less')
+                .max(20, 'Must be 20 characters or less')
                 .required('Password is required'),
             confirmPassword: Yup.string()
                 .oneOf([Yup.ref('password')], 'Passwords must match')
                 .required('Password is required'),
         }),
         onSubmit: values => {
-            dispatch(setSignUpTC(values))
+            dispatch(setSignUpTC(values.email, values.password))
             formik.resetForm()
         },
     })
