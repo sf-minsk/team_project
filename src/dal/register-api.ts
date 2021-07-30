@@ -7,15 +7,15 @@ const instance = axios.create({
 
 //api
 export const registerApi = {
-    register(data: RegisterRequestDataType) {
-        return instance.post<RegisterResponseType>(`/auth/register`, data)
+    register(email: string, password: string) {
+        return instance.post<RegisterResponseType>(`/auth/register`, {email, password})
     },
 }
 
-export type RegisterRequestDataType = {
-    email: string
-    password: string
-}
+// export type RegisterRequestDataType = {
+//     email: string
+//     password: string
+// }
 export type RegisterResponseType = {
     error?: string
 }
