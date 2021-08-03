@@ -18,6 +18,7 @@ import {ErrorSnackbar} from "../../../features/errors/ErrorSnackbar";
 
 
 export const ForgotPassword = () => {
+    console.log('forgot')
     const dispatch = useDispatch()
     const status = useSelector<AppRootStateType, string>(state => state.app.status)
     const changeProcess = useSelector<AppRootStateType, boolean>(state => state.changePassword.changeProcess)

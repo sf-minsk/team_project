@@ -29,7 +29,7 @@ import {ErrorSnackbar} from '../../../features/errors/ErrorSnackbar';
 // }
 
 export const Login = () => {
-
+    console.log('login')
     const dispatch = useDispatch()
     const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
     const requestStatus = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
