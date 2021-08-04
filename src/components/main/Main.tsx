@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import {ErrorSnackbar} from "../../features/errors/ErrorSnackbar";
 import Container from "@material-ui/core/Container/Container";
 import {
@@ -21,8 +21,20 @@ import TextField from "@material-ui/core/TextField";
 import SearchIcon from "@material-ui/icons/Search";
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
 import withStyles from '@material-ui/styles/withStyles/withStyles';
+import {fetchPacksTC} from "../../bll/pack-reducer";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "../../bll/store";
+import {PacksType} from "../../dal/cardsPack-api";
 
 export const Main = () => {
+    const dispatch = useDispatch()
+    const packs = useSelector<AppRootStateType, PacksType>(state => state.packs)
+
+
+
+    useEffect(() => {
+        dispatch(fetchPacksTC({min: 0, max: 100, page: 1, pageCount: 5}))
+    }, [dispatch])
 
     let [myButtonClicked, setMyButtonClicked] = useState(true)
     const onMyButtonClick = () => {
@@ -30,6 +42,7 @@ export const Main = () => {
     }
     const onAllButtonClick = () => {
         setMyButtonClicked(false)
+        console.log(packs)
     }
 
     const classes = makeStyles(() => ({
@@ -148,23 +161,23 @@ export const Main = () => {
                             <Table className={classes.table} aria-label="customized table">
                                 <TableHead>
                                     <TableRow>
-                                        <StyledTableCell>Name</StyledTableCell>
-                                        <StyledTableCell align="right">Cards</StyledTableCell>
-                                        <StyledTableCell align="right">Last Updated</StyledTableCell>
-                                        <StyledTableCell align="right">Created By</StyledTableCell>
-                                        <StyledTableCell align="right">Actions</StyledTableCell>
+                                        <TableCell>Name</TableCell>
+                                        <TableCell align="right">Cards</TableCell>
+                                        <TableCell align="right">Last Updated</TableCell>
+                                        <TableCell align="right">Created By</TableCell>
+                                        <TableCell align="right">Actions</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {rows.map((row) => (
                                         <StyledTableRow key={row.name}>
-                                            <StyledTableCell component="th" scope="row">
+                                            <TableCell component="th" scope="row">
                                                 {row.name}
-                                            </StyledTableCell>
-                                            <StyledTableCell align="right">{row.cards}</StyledTableCell>
-                                            <StyledTableCell align="right">{row.lastUpdated}</StyledTableCell>
-                                            <StyledTableCell align="right">{row.createdBy}</StyledTableCell>
-                                            <StyledTableCell align="right">{row.actions}</StyledTableCell>
+                                            </TableCell>
+                                            <TableCell align="right">{row.cards}</TableCell>
+                                            <TableCell align="right">{row.lastUpdated}</TableCell>
+                                            <TableCell align="right">{row.createdBy}</TableCell>
+                                            <TableCell align="right">{row.actions}</TableCell>
                                         </StyledTableRow>
                                     ))}
                                 </TableBody>

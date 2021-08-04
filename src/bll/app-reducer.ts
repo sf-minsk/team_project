@@ -13,9 +13,7 @@ export type InitialStateType = typeof initialState
 
 
 export const appReducer = (state = initialState, action: AppActionsType): InitialStateType => {
-    console.log(action)
     switch (action.type) {
-
         case 'app/SET-APP-ERROR':
             return {
                 ...state, error: action.error, errorType: action.errorType

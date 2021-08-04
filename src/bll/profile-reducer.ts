@@ -52,6 +52,6 @@ export const setProfileAC = (data: ResponseAuthType) =>
 
 //types
 
-type ProfileActionsType = SetProfileActionType
+export type ProfileActionsType = SetProfileActionType
 
 export type SetProfileActionType = ReturnType<typeof setProfileAC>
