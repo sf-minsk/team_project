@@ -94,11 +94,11 @@ export const setCardsPackAC = (data: InitialStateType) =>
 
 
 //thunks
-export const setCardsPackTC = (min?: number, max?: number, page?: number, pageCount?: number): AppThunk =>
+export const setCardsPackTC = (page?: number, pageCount?: number, sortPacks?: 0 | 1, updated?: string, user_id?: string): AppThunk =>
     async dispatch => {
         dispatch(setAppStatusAC('loading'))
         try {
-            const res = await cardsPackApi.cardsPack(min, max, page, pageCount)
+            const res = await cardsPackApi.cardsPack(page, pageCount, sortPacks, updated, user_id)
             dispatch(setCardsPackAC(res.data.cardPacks))
         } catch (err) {
             // dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
