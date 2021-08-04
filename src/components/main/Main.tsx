@@ -22,9 +22,14 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import {useSelector} from 'react-redux';
+import {AppRootStateType} from '../../bll/store';
+import {CardsPackDataType} from '../../dal/cards-api';
 
 
 export const Main = () => {
+
+    const cards = useSelector<AppRootStateType, CardsPackDataType>(state => state.cards)
 
     let [myButtonClicked, setMyButtonClicked] = useState(true)
     const onMyButtonClick = () => {
@@ -85,40 +90,29 @@ export const Main = () => {
         },
     }))(TableRow)
 
-    function createData(name: string, cards: number, lastUpdated: number, createdBy: string, actions?: any) {
+    function createData(name: string, cards: number, lastUpdated: string, createdBy: string, actions?: any) {
         return {name, cards, lastUpdated, createdBy, actions}
     }
 
     const rows = [
-        createData('Pack 1', 1, 23, 'das', ''),
-        createData('Pack 2', 12, 21, 'dadas', ''),
-        createData('Pack 3', 312, 11, 'dasdas', ''),
-        createData('Pack 4', 12, 13, 'dasda', ''),
-        createData('Pack 5', 32, 2, 'gdfdg', ''),
-        createData('Pack 6', 14, 13, 'dfgdfsaf', ''),
-        createData('Pack 7', 72, 34, 'hfjhg', ''),
-        createData('Pack 8', 51, 44, 'sdfa', ''),
-        createData('Pack 9', 51, 44, 'sdfa', ''),
-        createData('Pack 10', 51, 44, 'sdfa', ''),
-        createData('Pack 11', 51, 44, 'sdfa', ''),
-        createData('Pack 12', 51, 44, 'sdfa', ''),
-        createData('Pack 13', 51, 44, 'sdfa', ''),
-        createData('Pack 14', 51, 44, 'sdfa', ''),
-        createData('Pack 15', 51, 44, 'sdfa', ''),
-        createData('Pack 16', 51, 44, 'sdfa', ''),
-        createData('Pack 17', 51, 44, 'sdfa', ''),
-        createData('Pack 18', 51, 44, 'sdfa', ''),
-        createData('Pack 19', 51, 44, 'sdfa', ''),
-        createData('Pack 20', 51, 44, 'sdfa', ''),
-        createData('Pack 21', 51, 44, 'sdfa', ''),
-        createData('Pack 22', 51, 44, 'sdfa', ''),
-        createData('Pack 23', 51, 44, 'sdfa', ''),
-        createData('Pack 24', 51, 44, 'sdfa', ''),
-        createData('Pack 25', 51, 44, 'sdfa', ''),
-        createData('Pack 26', 51, 44, 'sdfa', ''),
-        createData('Pack 27', 51, 44, 'sdfa', ''),
-        createData('Pack 28', 51, 44, 'sdfa', ''),
-        createData('Pack 29', 51, 44, 'sdfa', ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
+        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
     ]
 
     const handleChangePage = (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
