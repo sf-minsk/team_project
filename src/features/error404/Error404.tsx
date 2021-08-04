@@ -11,7 +11,7 @@ export const Error404 = () => {
 
     const onClickHandler = useCallback(() => {
         history.goBack()
-    }, [])
+    }, [history])
 
     return (
         <div className={s.container}>
