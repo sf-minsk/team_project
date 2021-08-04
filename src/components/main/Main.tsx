@@ -1,4 +1,4 @@
-import React, {ChangeEvent, MouseEvent, useState} from 'react';
+import React, {ChangeEvent, MouseEvent, useEffect, useState} from 'react';
 import {ErrorSnackbar} from '../../features/errors/ErrorSnackbar';
 import Container from '@material-ui/core/Container/Container';
 import {Button, ButtonGroup, Slider, TableHead,} from '@material-ui/core';
@@ -22,16 +22,29 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../bll/store';
 import {CardsPackDataType} from '../../dal/cards-api';
+import {setCardsPackTC} from '../../bll/cards-reducer';
 
 
 export const Main = () => {
 
-    const cards = useSelector<AppRootStateType, CardsPackDataType>(state => state.cards)
+    const dispatch = useDispatch()
+    const cards = useSelector<AppRootStateType, Array<CardsPackDataType>>(state => state.cards)
 
     let [myButtonClicked, setMyButtonClicked] = useState(true)
+    const [searchValue, setSearchValue] = useState('')
+    const [sliderValue, setSliderValue] = useState<number[]>([10, 80])
+    const [page, setPage] = useState(0)
+    const [cardsPerPage, setCardsPerPage] = useState(5)
+
+
+    useEffect(() => {
+        dispatch(setCardsPackTC(1, 5000, 1, 5000))
+    }, [dispatch])
+
+
     const onMyButtonClick = () => {
         setMyButtonClicked(true)
     }
@@ -63,11 +76,6 @@ export const Main = () => {
         },
     }))()
 
-    const [searchValue, setSearchValue] = useState('')
-    const [sliderValue, setSliderValue] = useState<number[]>([10, 80])
-    const [page, setPage] = useState(0)
-    const [cardsPerPage, setCardsPerPage] = useState(5)
-
     const changeSliderValue = (event: ChangeEvent<{}>, newValue: number | number[]) => {
         setSliderValue(newValue as number[])
     }
@@ -89,31 +97,6 @@ export const Main = () => {
             },
         },
     }))(TableRow)
-
-    function createData(name: string, cards: number, lastUpdated: string, createdBy: string, actions?: any) {
-        return {name, cards, lastUpdated, createdBy, actions}
-    }
-
-    const rows = [
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-        createData(cards.name, cards.cardsCount, cards.updated, cards.created, ''),
-    ]
 
     const handleChangePage = (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage)
@@ -190,17 +173,18 @@ export const Main = () => {
                                     <StyledTableCell align="right">Actions</StyledTableCell>
                                 </TableRow>
                             </TableHead>
+
                             <TableBody>
                                 {(cardsPerPage > 0
-                                        ? rows.slice(page * cardsPerPage, page * cardsPerPage + cardsPerPage)
-                                        : rows
-                                ).map((row) => (
-                                    <StyledTableRow key={row.name}>
-                                        <StyledTableCell component="th" scope="row">{row.name}</StyledTableCell>
-                                        <StyledTableCell align="right">{row.cards}</StyledTableCell>
-                                        <StyledTableCell align="right">{row.lastUpdated}</StyledTableCell>
-                                        <StyledTableCell align="right">{row.createdBy}</StyledTableCell>
-                                        <StyledTableCell align="right">{row.actions}</StyledTableCell>
+                                        ? cards.slice(page * cardsPerPage, page * cardsPerPage + cardsPerPage)
+                                        : cards
+                                ).map((card) => (
+                                    <StyledTableRow key={card._id}>
+                                        <StyledTableCell component="th" scope="row">{card.name}</StyledTableCell>
+                                        <StyledTableCell align="right">{card.cardsCount}</StyledTableCell>
+                                        <StyledTableCell align="right">{card.updated}</StyledTableCell>
+                                        <StyledTableCell align="right">{card.created}</StyledTableCell>
+                                        {/*<StyledTableCell align="right">{card.actions}</StyledTableCell>*/}
                                     </StyledTableRow>
                                 ))}
                             </TableBody>
@@ -210,7 +194,7 @@ export const Main = () => {
                                     <TablePagination
                                         rowsPerPageOptions={[5, 10, 25, {label: 'All', value: -1}]}
                                         colSpan={3}
-                                        count={rows.length}
+                                        count={cards.length}
                                         rowsPerPage={cardsPerPage}
                                         page={page}
                                         SelectProps={{
@@ -234,6 +218,7 @@ export const Main = () => {
     )
 }
 
+
 type TablePaginationActionsProps = {
     count: number
     page: number
@@ -251,8 +236,13 @@ const useStyles1 = makeStyles((theme: Theme) =>
 )
 
 export const TablePaginationActions = (props: TablePaginationActionsProps) => {
+
+    const dispatch = useDispatch()
+    let [currentPage, setCurrentPage] = useState(1)
+
     const classes = useStyles1()
     const theme = useTheme()
+
     const {count, page, rowsPerPage, onPageChange} = props
 
     const handleFirstPageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -263,8 +253,14 @@ export const TablePaginationActions = (props: TablePaginationActionsProps) => {
         onPageChange(event, page - 1);
     }
 
-    const handleNextButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
-        onPageChange(event, page + 1);
+    // const handleNextButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+    //     onPageChange(event, page + 1);
+    // }
+
+    const handleNextButtonClick = () => {
+        let newPage = currentPage + 1
+        setCurrentPage(newPage)
+        dispatch(setCardsPackTC(1, 5000, newPage, 5))
     }
 
     const handleLastPageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -285,7 +281,7 @@ export const TablePaginationActions = (props: TablePaginationActionsProps) => {
             </IconButton>
             <IconButton
                 onClick={handleNextButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                // disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="next page"
             >
                 {theme.direction === 'rtl' ? <KeyboardArrowLeft/> : <KeyboardArrowRight/>}

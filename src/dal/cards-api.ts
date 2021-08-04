@@ -1,15 +1,15 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: `https://neko-back.herokuapp.com/2.0`,
-    // baseURL: `http://localhost:7542/2.0`,
+    // baseURL: `https://neko-back.herokuapp.com/2.0`,
+    baseURL: `http://localhost:7542/2.0`,
     withCredentials: true,
 })
 
 
 export const cardsPackApi = {
-    cardsPack() {
-        return instance.get<CardsPackResponseType>(`/cards/pack?pageCount=1000&page=4&sortPacks=0updated`)
+    cardsPack(min?: number, max?: number, page?: number, pageCount?: number) {
+        return instance.get<CardsPackResponseType>(`/cards/pack?min=${min}&max=${max}&page=${page}&pageCount=${pageCount}&`)
     },
 }
 
