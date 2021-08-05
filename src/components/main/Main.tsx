@@ -1,76 +1,89 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
-import {ErrorSnackbar} from "../../features/errors/ErrorSnackbar";
-import Container from "@material-ui/core/Container/Container";
-import {
-    Button,
-    ButtonGroup,
-    IconButton,
-    Paper,
-    Slider,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow, Theme
-} from "@material-ui/core";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Grid from "@material-ui/core/Grid";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import TextField from "@material-ui/core/TextField";
-import SearchIcon from "@material-ui/icons/Search";
+import React, {ChangeEvent, MouseEvent, useEffect, useState} from 'react';
+import {ErrorSnackbar} from '../../features/errors/ErrorSnackbar';
+import Container from '@material-ui/core/Container/Container';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Slider from '@material-ui/core/Slider';
+import TableHead from '@material-ui/core/TableHead';
+import Grid from '@material-ui/core/Grid';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField';
+import SearchIcon from '@material-ui/icons/Search';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
 import withStyles from '@material-ui/styles/withStyles/withStyles';
-import {fetchPacksTC} from "../../bll/pack-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../bll/store";
-import {PacksType} from "../../dal/cardsPack-api";
+import createStyles from '@material-ui/core/styles/createStyles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import useTheme from '@material-ui/core/styles/useTheme';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootStateType} from '../../bll/store';
+import {CardPacksResponseType} from '../../dal/cards-api';
+import {setCardPacksTC} from '../../bll/cards-reducer';
+import Button from '@material-ui/core/Button';
+import {Theme} from '@material-ui/core/styles/createTheme';
+import {ProfileStateType} from '../../bll/profile-reducer';
 
-export const Main = () => {
+
+type SortByType = 'name' | 'cardsCount' | 'updated' | 'created'
+
+export const Main: React.FC = () => {
+
+    const classes = useStyles();
     const dispatch = useDispatch()
-    const packs = useSelector<AppRootStateType, PacksType>(state => state.packs)
+    const cards = useSelector<AppRootStateType, CardPacksResponseType>(state => state.cards)
+    const profile = useSelector<AppRootStateType, ProfileStateType>(state => state.profile)
 
+
+    const [myButtonClicked, setMyButtonClicked] = useState(true)
+    const [searchValue, setSearchValue] = useState('')
+    const [sliderValue, setSliderValue] = useState<number[]>([10, 80])
+
+    const [packName, setPackName] = useState('')
+    const [minNumOfCards, setMinNumOfCards] = useState(0)
+    const [maxNumOfCards, setMaxNumOfCards] = useState(0)
+    const [sortPacksDirection, setSortPacksDirection] = useState(0)
+    const [sortBy, setSortBy] = useState<SortByType>('updated')
+    const [page, setPage] = useState(1)
+    const [pageCount, setPageCount] = useState(5)
+    const [userId, setUserId] = useState<string | null>('')
 
 
     useEffect(() => {
-        dispatch(fetchPacksTC({min: 0, max: 100, page: 1, pageCount: 5}))
-    }, [dispatch])
+        dispatch(setCardPacksTC(setValuesInPayload()))
+    }, [dispatch, packName, minNumOfCards, maxNumOfCards, sortPacksDirection, sortBy, page, pageCount, userId])
 
-    let [myButtonClicked, setMyButtonClicked] = useState(true)
+    const setValuesInPayload = () => {
+        return {
+            packName: packName,
+            min: minNumOfCards,
+            max: maxNumOfCards,
+            sortPacks: JSON.stringify(sortPacksDirection) + sortBy,
+            page: page,
+            pageCount: pageCount,
+            user_id: userId,
+        }
+    }
+
     const onMyButtonClick = () => {
+        setUserId(profile._id)
         setMyButtonClicked(true)
     }
     const onAllButtonClick = () => {
+        setUserId('')
         setMyButtonClicked(false)
-        console.log(packs)
     }
 
-    const classes = makeStyles(() => ({
-        paper: {
-            marginTop: '20px',
-            display: 'flex',
-            flexDirection: 'row',
-            minHeight: '800px',
-            minWidth: '1000px',
-        },
-        navBar: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            width: '240px',
-            backgroundColor: 'lightblue',
-            borderRadius: '4px 0px 0px 4px',
-        },
-        body: {
-            margin: '10px 15px 10px 15px',
-        },
-        table: {
-            minWidth: 700,
-        },
-    }))();
-
-    const [searchValue, setSearchValue] = useState("")
-    const [sliderValue, setSliderValue] = useState<number[]>([10, 20])
     const changeSliderValue = (event: ChangeEvent<{}>, newValue: number | number[]) => {
         setSliderValue(newValue as number[])
     }
@@ -83,7 +96,7 @@ export const Main = () => {
         body: {
             fontSize: 14,
         },
-    }))(TableCell);
+    }))(TableCell)
 
     const StyledTableRow = withStyles((theme: Theme) => ({
         root: {
@@ -91,38 +104,42 @@ export const Main = () => {
                 // backgroundColor: theme.palette.action.hover,
             },
         },
-    }))(TableRow);
+    }))(TableRow)
 
-    function createData(name: string, cards: number, lastUpdated: number, createdBy: string, actions?: any) {
-        return {name, cards, lastUpdated, createdBy, actions};
+    const handleChangePage = (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage + 1)
     }
 
-    const rows = [
-        createData('Pack 1', 1, 23, 'das', ''),
-        createData('Pack 2', 12, 21, 'dadas', ''),
-        createData('Pack 3', 312, 11, 'dasdas', ''),
-        createData('Pack 4', 12, 13, 'dasda', ''),
-        createData('Pack 5', 32, 15, 'dsadas', ''),
-    ];
+    const handleChangePageCount = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setPageCount(parseInt(event.target.value, 10))
+    }
+
+    const onClickSortHandler = (sortValue: SortByType) => {
+        setSortBy(sortValue)
+        if (sortPacksDirection === 0) {
+            setSortPacksDirection(1)
+        } else {
+            setSortPacksDirection(0)
+        }
+    }
 
 
     return (
         <Container>
-
             <Paper className={classes.paper}>
                 <Grid className={classes.navBar}>
                     <span style={{fontSize: '20px', fontWeight: 'bold', marginTop: '10px', marginBottom: '10px'}}>Show packs cards</span>
                     <ButtonGroup variant="contained" color="primary" style={{marginTop: '20px'}}>
                         <Button onClick={onMyButtonClick}
-                                variant={myButtonClicked ? "contained" : "outlined"}>My</Button>
+                                variant={myButtonClicked ? 'contained' : 'outlined'}>My</Button>
                         <Button onClick={onAllButtonClick}
-                                variant={myButtonClicked ? "outlined" : "contained"}>All</Button>
+                                variant={myButtonClicked ? 'outlined' : 'contained'}>All</Button>
                     </ButtonGroup>
                     <Slider
                         style={{marginTop: '50px', width: '160px'}}
                         value={sliderValue}
                         onChange={changeSliderValue}
-                        valueLabelDisplay="auto"
+                        valueLabelDisplay="on"
                         aria-labelledby="range-slider"
                         // getAriaValueText={value}
                     />
@@ -132,12 +149,13 @@ export const Main = () => {
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
 
                         <TextField
+                            style={{height: '40px'}}
                             placeholder="Search"
                             type="text"
                             variant="outlined"
                             fullWidth
                             size="small"
-                            onChange={(e) => setSearchValue(e.target.value)}
+                            onChange={e => setSearchValue(e.target.value)}
                             value={searchValue}
                             InputProps={{
                                 startAdornment: (
@@ -148,51 +166,169 @@ export const Main = () => {
 
                                 endAdornment: searchValue && (
                                     <IconButton
+                                        style={{height: '40px'}}
                                         aria-label="toggle password visibility"
-                                        onClick={() => setSearchValue("")}
-                                    ><CancelRoundedIcon/></IconButton>
+                                        onClick={() => setSearchValue('')}
+                                    >
+                                        <CancelRoundedIcon/>
+                                    </IconButton>
                                 )
                             }}
                         />
                         <Button style={{width: '180px'}} variant="contained" color="primary">Add new pack</Button>
                     </div>
 
-                        <TableContainer component={Paper}>
-                            <Table className={classes.table} aria-label="customized table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Name</TableCell>
-                                        <TableCell align="right">Cards</TableCell>
-                                        <TableCell align="right">Last Updated</TableCell>
-                                        <TableCell align="right">Created By</TableCell>
-                                        <TableCell align="right">Actions</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {rows.map((row) => (
-                                        <StyledTableRow key={row.name}>
-                                            <TableCell component="th" scope="row">
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell align="right">{row.cards}</TableCell>
-                                            <TableCell align="right">{row.lastUpdated}</TableCell>
-                                            <TableCell align="right">{row.createdBy}</TableCell>
-                                            <TableCell align="right">{row.actions}</TableCell>
+                    <TableContainer component={Paper}>
+                        <Table className={classes.table} aria-label="custom pagination table">
+                            <TableHead>
+                                <TableRow>
+                                    <StyledTableCell onClick={() => onClickSortHandler('name')}>Name</StyledTableCell>
+                                    <StyledTableCell onClick={() => onClickSortHandler('cardsCount')}
+                                                     align="right">Cards</StyledTableCell>
+                                    <StyledTableCell onClick={() => onClickSortHandler('updated')} align="right">Last
+                                        Updated</StyledTableCell>
+                                    <StyledTableCell onClick={() => onClickSortHandler('created')} align="right">Created
+                                        By</StyledTableCell>
+                                    <StyledTableCell align="right">Actions</StyledTableCell>
+                                </TableRow>
+                            </TableHead>
+
+                            <TableBody>
+                                {
+                                    cards.cardPacks.map((card) => (
+                                        <StyledTableRow key={card._id}>
+                                            <StyledTableCell component="th"
+                                                             scope="row">{card.name}</StyledTableCell>
+                                            <StyledTableCell align="right">{card.cardsCount}</StyledTableCell>
+                                            <StyledTableCell align="right">{card.updated}</StyledTableCell>
+                                            <StyledTableCell align="right">{card.user_name}</StyledTableCell>
+                                            {/*<StyledTableCell align="right">{card.actions}</StyledTableCell>*/}
                                         </StyledTableRow>
                                     ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                            </TableBody>
 
+                            <TableFooter>
+                                <TableRow>
+                                    <TablePagination
+                                        rowsPerPageOptions={[5, 10, 25, {label: 'All', value: cards.cardPacksTotalCount}]}
+                                        colSpan={3}
+                                        count={cards.cardPacksTotalCount}
+                                        rowsPerPage={pageCount}
+                                        page={page - 1}
+                                        SelectProps={{
+                                            inputProps: {'aria-label': 'rows per page'},
+                                            native: true,
+                                        }}
+                                        labelRowsPerPage={'Cards per Page'}
+                                        onPageChange={handleChangePage}
+                                        onRowsPerPageChange={handleChangePageCount}
+                                        ActionsComponent={TablePaginationActions}
+                                    />
+                                </TableRow>
+                            </TableFooter>
 
-
+                        </Table>
+                    </TableContainer>
                 </Container>
-
-
             </Paper>
-
-
             <ErrorSnackbar/>
         </Container>
+    )
+}
+
+const useStyles = makeStyles(() => ({
+    paper: {
+        marginTop: '20px',
+        display: 'flex',
+        flexDirection: 'row',
+        minHeight: '800px',
+        minWidth: '1000px',
+    },
+    navBar: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '240px',
+        backgroundColor: 'lightblue',
+        borderRadius: '4px 0px 0px 4px',
+    },
+    body: {
+        margin: '10px 15px 10px 15px',
+    },
+    table: {
+        minWidth: 700,
+    },
+}))
+
+
+type TablePaginationActionsProps = {
+    count: number
+    rowsPerPage: number
+    page: number
+    onPageChange: (event: MouseEvent<HTMLButtonElement>, newPage: number) => void
+}
+
+const useStyles1 = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            flexShrink: 0,
+            marginLeft: theme.spacing(2.5),
+        },
+    }),
+)
+
+export const TablePaginationActions = (props: TablePaginationActionsProps) => {
+
+    const classes = useStyles1()
+    const theme = useTheme()
+    const {count, rowsPerPage, page, onPageChange} = props
+
+    const handleFirstPageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, 0)
+    }
+
+    const handleBackButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, page - 1)
+    }
+
+    const handleNextButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, page + 1)
+    }
+
+    const handleLastPageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1))
+    }
+
+    return (
+        <div className={classes.root}>
+            <IconButton
+                onClick={handleFirstPageButtonClick}
+                disabled={page === 0}
+                aria-label="first page"
+            >
+                {theme.direction === 'rtl' ? <LastPageIcon/> : <FirstPageIcon/>}
+            </IconButton>
+            <IconButton
+                onClick={handleBackButtonClick}
+                disabled={page === 0}
+                aria-label="previous page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowRight/> : <KeyboardArrowLeft/>}
+            </IconButton>
+            <IconButton
+                onClick={handleNextButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="next page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft/> : <KeyboardArrowRight/>}
+            </IconButton>
+            <IconButton
+                onClick={handleLastPageButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="last page"
+            >
+                {theme.direction === 'rtl' ? <FirstPageIcon/> : <LastPageIcon/>}
+            </IconButton>
+        </div>
     )
 }

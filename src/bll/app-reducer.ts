@@ -13,7 +13,9 @@ export type InitialStateType = typeof initialState
 
 
 export const appReducer = (state = initialState, action: AppActionsType): InitialStateType => {
+
     switch (action.type) {
+
         case 'app/SET-APP-ERROR':
             return {
                 ...state, error: action.error, errorType: action.errorType
@@ -64,6 +66,7 @@ export const initializeAppTC = (): AppThunk =>
 
 //types
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+export type AppErrorType = "error" | "warning" | "info" | "success"
 
 export type SetAppErrorActionType = ReturnType<typeof setAppErrorAC>
 export type SetAppStatusActionType = ReturnType<typeof setAppStatusAC>
@@ -73,4 +76,3 @@ export type AppActionsType =
     | SetAppStatusActionType
     | SetSignInActionType
     | ReturnType<typeof setIsInitializedAC>
-export type AppErrorType = "error" | "warning" | "info" | "success"

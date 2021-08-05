@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {NavLink, Redirect, Route, Switch} from 'react-router-dom';
 import './App.css';
-import {Main} from './components/main/Main';
 import {Registration} from './components/auth/registration/Registration';
 import {Login} from './components/auth/login/Login';
 import {ForgotPassword} from './components/auth/forgotPassword/ForgotPassword';
@@ -12,9 +11,10 @@ import {initializeAppTC} from "./bll/app-reducer";
 import {CircularProgress} from "@material-ui/core";
 import {NewPassword} from "./components/auth/forgotPassword/NewPassword";
 import {logoutTC} from "./bll/auth-reducer";
-import {PrivateRoute} from './features/privateRoute/PrivateRoute';
+import { PrivateRoute } from './features/privateRoute/PrivateRoute';
 import {Error404} from './features/error404/Error404';
-import {Header} from "./components/header/Header";
+import {Main} from './components/main/Main';
+import {Header} from './components/header/Header';
 
 function App() {
 
@@ -42,6 +42,7 @@ function App() {
     return (
         <>
             <div>
+                <button><NavLink to='/'>Home</NavLink></button>
                 <button><NavLink to='/'>Main</NavLink></button>
                 <button><NavLink to='/registration'>Register</NavLink></button>
                 <button><NavLink to='/login'>Login</NavLink></button>
@@ -52,15 +53,14 @@ function App() {
                 <span style={{color: `${isRegistered ? 'green' : 'red'}`}}> (REGISTERED) </span>
                 <button onClick={obLogOutClick}>LOGOUT</button>
             </div>
+
             <Header/>
             <div>
                 <Switch>
                     <PrivateRoute exact path="/" isLoggedIn={isLoggedIn} render={() => <Main/>} redirectTo="/login"/>
-                    <PrivateRoute path="/profile" isLoggedIn={isLoggedIn} render={() => <Profile/>}
-                                  redirectTo="/login"/>
+                    <PrivateRoute path="/profile" isLoggedIn={isLoggedIn} render={() => <Profile/>} redirectTo="/login"/>
                     <PrivateRoute path="/login" isLoggedIn={!isLoggedIn} render={() => <Login/>} redirectTo="/"/>
-                    <PrivateRoute path="/registration" isLoggedIn={!isLoggedIn} render={() => <Registration/>}
-                                  redirectTo="/"/>
+                    <PrivateRoute path="/registration" isLoggedIn={!isLoggedIn} render={() => <Registration/>} redirectTo="/"/>
 
                     <Route exact path={'/changepassword'} render={() => <ForgotPassword/>}/>
                     <Route path={'/changepassword/newpassword/:token?'} render={() => <NewPassword/>}/>
@@ -73,6 +73,8 @@ function App() {
 }
 
 export default App;
+
+
 
 
 // <Route path="/admin" render={ () => (isAuth ? ( <> <Route path="/admin/categories" component={() => <CategoriesAdmin setStore={setStore} store={store} setAppSide={setAppSide} />} /> <Route path="/admin/words/:id" component={() => <Words setStore={setStore} store={store} setAppSide={setAppSide} />} /> </> ) : <Redirect to={'/main'}/>)} />

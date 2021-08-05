@@ -13,7 +13,7 @@ export const registerReducer = (state = initialState, action: RegisterActionsTyp
 
         case 'register/SET-SIGN-UP':
             return {
-                ...state, isRegistered: action.isRegistered
+                ...state, isRegistered: true
             }
 
         default:
@@ -22,8 +22,8 @@ export const registerReducer = (state = initialState, action: RegisterActionsTyp
 };
 
 //actions
-export const setSignUpAC = (isRegistered: boolean) =>
-    ({type: 'register/SET-SIGN-UP', isRegistered} as const)
+export const setSignUpAC = () =>
+    ({type: 'register/SET-SIGN-UP'} as const)
 
 
 //thunks
@@ -32,7 +32,7 @@ export const setSignUpTC = (email: string, password: string): AppThunk =>
         try {
             dispatch(setAppStatusAC('loading'))
             await registerApi.register(email, password)
-            dispatch(setSignUpAC(true))
+            dispatch(setSignUpAC())
             dispatch(setAppStatusAC('succeeded'))
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
