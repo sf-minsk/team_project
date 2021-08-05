@@ -19,6 +19,7 @@ export const cardPacksApi = {
         return instance.get<PacksType>(`cards/pack${newURL}`)
     },
 }
+//test
 
 export type FetchPacksPayloadType = {
     packName?: string
