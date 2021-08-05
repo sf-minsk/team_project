@@ -1,6 +1,7 @@
 import {AppThunk} from './store';
-import {setAppStatusAC} from './app-reducer';
-import {cardsPackApi, CardsPackDataType} from '../dal/cards-api';
+import {setAppErrorAC, setAppStatusAC} from './app-reducer';
+import {cardPacksApi, CardPacksDataType, CardPacksRequestDataType, CardPacksResponseType} from '../dal/cards-api';
+
 
 // const initialState = [
 //     {
@@ -72,7 +73,11 @@ import {cardsPackApi, CardsPackDataType} from '../dal/cards-api';
 //         __v: 0 as number,
 //     },
 // ]
-const initialState: Array<CardsPackDataType> = []
+
+const initialState = {
+    cardPacks: [] as CardPacksDataType[]
+} as CardPacksResponseType
+
 export type InitialStateType = typeof initialState
 
 
@@ -80,8 +85,10 @@ export const cardsReducer = (state = initialState, action: CardsActionsType): In
 
     switch (action.type) {
 
-        case 'cards/SET-CARDS-PACK':
-            return [...action.data]
+        case 'cards/SET-CARD-PACKS':
+            return {
+                ...state, ...action.data
+            }
 
         default:
             return state;
@@ -89,19 +96,19 @@ export const cardsReducer = (state = initialState, action: CardsActionsType): In
 }
 
 //actions
-export const setCardsPackAC = (data: InitialStateType) =>
-    ({type: 'cards/SET-CARDS-PACK', data} as const)
+export const setCardPacksAC = (data: CardPacksResponseType) =>
+    ({type: 'cards/SET-CARD-PACKS', data} as const)
 
 
 //thunks
-export const setCardsPackTC = (page?: number, pageCount?: number, sortPacks?: 0 | 1, updated?: string, user_id?: string): AppThunk =>
+export const setCardPacksTC = (data?: CardPacksRequestDataType): AppThunk =>
     async dispatch => {
         dispatch(setAppStatusAC('loading'))
         try {
-            const res = await cardsPackApi.cardsPack(page, pageCount, sortPacks, updated, user_id)
-            dispatch(setCardsPackAC(res.data.cardPacks))
+            const res = await cardPacksApi.fetchPacks(data)
+            dispatch(setCardPacksAC(res.data))
         } catch (err) {
-            // dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
+            dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         } finally {
             dispatch(setAppStatusAC('succeeded'))
         }
@@ -109,8 +116,8 @@ export const setCardsPackTC = (page?: number, pageCount?: number, sortPacks?: 0 
 
 
 //types
-export type SetCardsPackActionType = ReturnType<typeof setCardsPackAC>
+export type SetCardPacksActionType = ReturnType<typeof setCardPacksAC>
 
 export type CardsActionsType =
-    | SetCardsPackActionType
+    | SetCardPacksActionType
 

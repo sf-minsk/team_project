@@ -28,36 +28,59 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../bll/store';
-import {CardsPackDataType} from '../../dal/cards-api';
-import {setCardsPackTC} from '../../bll/cards-reducer';
+import {CardPacksResponseType} from '../../dal/cards-api';
+import {setCardPacksTC} from '../../bll/cards-reducer';
 import Button from '@material-ui/core/Button';
 import {Theme} from '@material-ui/core/styles/createTheme';
+import {ProfileStateType} from '../../bll/profile-reducer';
 
 
+type SortByType = 'name' | 'cardsCount' | 'updated' | 'created'
 
 export const Main: React.FC = () => {
 
     const classes = useStyles();
     const dispatch = useDispatch()
-    const cards = useSelector<AppRootStateType, Array<CardsPackDataType>>(state => state.cards)
+    const cards = useSelector<AppRootStateType, CardPacksResponseType>(state => state.cards)
+    const profile = useSelector<AppRootStateType, ProfileStateType>(state => state.profile)
 
-    let [myButtonClicked, setMyButtonClicked] = useState(true)
+
+    const [myButtonClicked, setMyButtonClicked] = useState(true)
     const [searchValue, setSearchValue] = useState('')
     const [sliderValue, setSliderValue] = useState<number[]>([10, 80])
-    const [page, setPage] = useState(0)
-    const [cardsPerPage, setCardsPerPage] = useState(5)
-    let [sortPacks, setSortPacks] = useState<0 | 1>(0)
+
+    const [packName, setPackName] = useState('')
+    const [minNumOfCards, setMinNumOfCards] = useState(0)
+    const [maxNumOfCards, setMaxNumOfCards] = useState(0)
+    const [sortPacksDirection, setSortPacksDirection] = useState(0)
+    const [sortBy, setSortBy] = useState<SortByType>('updated')
+    const [page, setPage] = useState(1)
+    const [pageCount, setPageCount] = useState(5)
+    const [userId, setUserId] = useState<string | null>('')
 
 
     useEffect(() => {
-        dispatch(setCardsPackTC(1, 5000, 0, 'updated'))
-    }, [dispatch])
+        dispatch(setCardPacksTC(setValuesInPayload()))
+    }, [dispatch, packName, minNumOfCards, maxNumOfCards, sortPacksDirection, sortBy, page, pageCount, userId])
 
+    const setValuesInPayload = () => {
+        return {
+            packName: packName,
+            min: minNumOfCards,
+            max: maxNumOfCards,
+            sortPacks: JSON.stringify(sortPacksDirection) + sortBy,
+            page: page,
+            pageCount: pageCount,
+            user_id: userId,
+        }
+    }
 
     const onMyButtonClick = () => {
+        setUserId(profile._id)
         setMyButtonClicked(true)
     }
     const onAllButtonClick = () => {
+        setUserId('')
         setMyButtonClicked(false)
     }
 
@@ -84,26 +107,20 @@ export const Main: React.FC = () => {
     }))(TableRow)
 
     const handleChangePage = (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-        //alert('Hello')
-        //setPage(newPage)
+        setPage(newPage + 1)
     }
 
-    const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        let currentCardsPerPage = parseInt(event.target.value, 10)
-        setCardsPerPage(currentCardsPerPage)
-        dispatch(setCardsPackTC(1, currentCardsPerPage, sortPacks, 'updated')) //нужно убрать хардкод 'updated'
+    const handleChangePageCount = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setPageCount(parseInt(event.target.value, 10))
     }
 
-    const onClickSortHandler = (sortValue: string) => {
-        let value = sortPacks
-        if (sortPacks === 0) {
-            setSortPacks(1)
-            value = 1
+    const onClickSortHandler = (sortValue: SortByType) => {
+        setSortBy(sortValue)
+        if (sortPacksDirection === 0) {
+            setSortPacksDirection(1)
         } else {
-            setSortPacks(0)
-            value = 0
+            setSortPacksDirection(0)
         }
-        dispatch(setCardsPackTC(page, cardsPerPage, value, sortValue))
     }
 
 
@@ -166,7 +183,8 @@ export const Main: React.FC = () => {
                             <TableHead>
                                 <TableRow>
                                     <StyledTableCell onClick={() => onClickSortHandler('name')}>Name</StyledTableCell>
-                                    <StyledTableCell onClick={() => onClickSortHandler('cardsCount')} align="right">Cards</StyledTableCell>
+                                    <StyledTableCell onClick={() => onClickSortHandler('cardsCount')}
+                                                     align="right">Cards</StyledTableCell>
                                     <StyledTableCell onClick={() => onClickSortHandler('updated')} align="right">Last
                                         Updated</StyledTableCell>
                                     <StyledTableCell onClick={() => onClickSortHandler('created')} align="right">Created
@@ -176,37 +194,34 @@ export const Main: React.FC = () => {
                             </TableHead>
 
                             <TableBody>
-                                {(cardsPerPage > 0
-                                        ? cards.slice(page * cardsPerPage, page * cardsPerPage + cardsPerPage)
-                                        : cards
-                                ).map((card) => (
-                                    <StyledTableRow key={card._id}>
-                                        <StyledTableCell component="th" scope="row">{card.name}</StyledTableCell>
-                                        <StyledTableCell align="right">{card.cardsCount}</StyledTableCell>
-                                        <StyledTableCell align="right">{card.updated}</StyledTableCell>
-                                        <StyledTableCell align="right">{card.created}</StyledTableCell>
-                                        {/*<StyledTableCell align="right">{card.actions}</StyledTableCell>*/}
-                                    </StyledTableRow>
-                                ))}
+                                {
+                                    cards.cardPacks.map((card) => (
+                                        <StyledTableRow key={card._id}>
+                                            <StyledTableCell component="th"
+                                                             scope="row">{card.name}</StyledTableCell>
+                                            <StyledTableCell align="right">{card.cardsCount}</StyledTableCell>
+                                            <StyledTableCell align="right">{card.updated}</StyledTableCell>
+                                            <StyledTableCell align="right">{card.user_name}</StyledTableCell>
+                                            {/*<StyledTableCell align="right">{card.actions}</StyledTableCell>*/}
+                                        </StyledTableRow>
+                                    ))}
                             </TableBody>
 
                             <TableFooter>
                                 <TableRow>
                                     <TablePagination
-                                        //results={sortPacks}
-                                        //property={sortValue}
-                                        rowsPerPageOptions={[5, 10, 25, {label: 'All', value: -1}]}
+                                        rowsPerPageOptions={[5, 10, 25, {label: 'All', value: cards.cardPacksTotalCount}]}
                                         colSpan={3}
-                                        count={cards.length}
-                                        rowsPerPage={cardsPerPage}
-                                        page={page}
+                                        count={cards.cardPacksTotalCount}
+                                        rowsPerPage={pageCount}
+                                        page={page - 1}
                                         SelectProps={{
                                             inputProps: {'aria-label': 'rows per page'},
                                             native: true,
                                         }}
                                         labelRowsPerPage={'Cards per Page'}
                                         onPageChange={handleChangePage}
-                                        onRowsPerPageChange={handleChangeRowsPerPage}
+                                        onRowsPerPageChange={handleChangePageCount}
                                         ActionsComponent={TablePaginationActions}
                                     />
                                 </TableRow>
@@ -245,7 +260,6 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-type SortValueType = 'name' | 'cardsCount' | 'updated' | 'created'
 
 type TablePaginationActionsProps = {
     count: number
@@ -265,62 +279,52 @@ const useStyles1 = makeStyles((theme: Theme) =>
 
 export const TablePaginationActions = (props: TablePaginationActionsProps) => {
 
-    const dispatch = useDispatch()
-    let [currentPage, setCurrentPage] = useState(1)
-
     const classes = useStyles1()
     const theme = useTheme()
-
     const {count, rowsPerPage, page, onPageChange} = props
 
-    const handleFirstPageButtonClick = () => {
-        dispatch(setCardsPackTC(1, rowsPerPage))
+    const handleFirstPageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, 0)
     }
 
-    const handleBackButtonClick = () => {
-        let newPage = currentPage - 1
-        setCurrentPage(newPage)
-        dispatch(setCardsPackTC(newPage, rowsPerPage))
+    const handleBackButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, page - 1)
     }
 
-    const handleNextButtonClick = () => {
-        let newPage = currentPage + 1
-        setCurrentPage(newPage)
-        dispatch(setCardsPackTC(newPage, rowsPerPage))
+    const handleNextButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, page + 1)
     }
 
-    const handleLastPageButtonClick = () => {
-        let newPage = Math.max(Math.ceil(count / rowsPerPage))
-        setCurrentPage(newPage)
-        dispatch(setCardsPackTC(newPage, rowsPerPage))
+    const handleLastPageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1))
     }
 
     return (
         <div className={classes.root}>
             <IconButton
                 onClick={handleFirstPageButtonClick}
-                // disabled={currentPage === 1}
+                disabled={page === 0}
                 aria-label="first page"
             >
                 {theme.direction === 'rtl' ? <LastPageIcon/> : <FirstPageIcon/>}
             </IconButton>
             <IconButton
                 onClick={handleBackButtonClick}
-                // disabled={currentPage === 1}
+                disabled={page === 0}
                 aria-label="previous page"
             >
                 {theme.direction === 'rtl' ? <KeyboardArrowRight/> : <KeyboardArrowLeft/>}
             </IconButton>
             <IconButton
                 onClick={handleNextButtonClick}
-                // disabled={currentPage >= Math.ceil(count / rowsPerPage) -1}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="next page"
             >
                 {theme.direction === 'rtl' ? <KeyboardArrowLeft/> : <KeyboardArrowRight/>}
             </IconButton>
             <IconButton
                 onClick={handleLastPageButtonClick}
-                // disabled={currentPage >= Math.ceil(count / rowsPerPage) -1}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="last page"
             >
                 {theme.direction === 'rtl' ? <FirstPageIcon/> : <LastPageIcon/>}

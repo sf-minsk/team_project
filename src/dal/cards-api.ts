@@ -7,26 +7,39 @@ const instance = axios.create({
 })
 
 
-export const cardsPackApi = {
-    cardsPack(page?: number, pageCount?: number, sortPacks?: 0 | 1, updated?: string, user_id?: string) {
-        return instance.get<CardsPackResponseType>(
-            `/cards/pack?page=${page}&pageCount=${pageCount}&sortPacks=${sortPacks}${updated}&`
-            + (user_id ? `user_id=${user_id}` : ``))
+// export const cardsPackApi = {
+//     fetchPacks(page?: number, pageCount?: number, sortPacks?: 0 | 1, updated?: string, user_id?: string) {
+//         return instance.get<CardsPackResponseType>(
+//             `/cards/pack?page=${page}&pageCount=${pageCount}&sortPacks=${sortPacks}${updated}&`
+//             + (user_id ? `user_id=${user_id}` : ``))
+//     },
+// }
+
+export const cardPacksApi = {
+    fetchPacks(payload?: CardPacksRequestDataType) {
+        let generateURL = '?'
+        if (!!payload) {
+            Object.entries(payload).forEach(el => {
+                generateURL += el[0] + '=' + el[1] + '&'
+            })
+        }
+        const newURL = generateURL.slice(0, -1)
+        return instance.get<CardPacksResponseType>(`cards/pack${newURL}`)
     },
 }
 
-// export type CardsPackRequestDataType = {
-//     packName?: string
-//     min?: number
-//     max?: number
-//     sortPacks?: number
-//     page?: number
-//     pageCount?: number
-//     user_id?: string
-// }
+export type CardPacksRequestDataType = {
+    packName?: string
+    min?: number
+    max?: number
+    sortPacks?: string
+    page?: number
+    pageCount?: number
+    user_id?: string | null
+}
 
-export type CardsPackResponseType = {
-    cardPacks: Array<CardsPackDataType>
+export type CardPacksResponseType = {
+    cardPacks: Array<CardPacksDataType>
     cardPacksTotalCount: number
     maxCardsCount: number
     minCardsCount: number
@@ -35,7 +48,7 @@ export type CardsPackResponseType = {
     token: string
     tokenDeathTime: number
 }
-export type CardsPackDataType = {
+export type CardPacksDataType = {
     _id: string
     user_id: string
     user_name: string
