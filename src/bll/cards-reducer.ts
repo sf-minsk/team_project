@@ -78,11 +78,11 @@ import {cardPacksApi, CardPacksDataType, CardPacksRequestDataType, CardPacksResp
 //     cardPacks: [] as CardPacksDataType[],
 //     page: 1,
 //     pageCount: 5,
-//     cardPacksTotalCount: null,
+//     cardPacksTotalCount: null as string,
 //     minCardsCount: 0,
 //     maxCardsCount: 20,
-//     token: null,
-//     tokenDeathTime: null,
+//     token: null as string,
+//     tokenDeathTime: null as string,
 // }
 const initialState = {
     cardPacks: [] as CardPacksDataType[]
