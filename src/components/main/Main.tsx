@@ -108,6 +108,14 @@ export const Main: React.FC = () => {
         }
     }
 
+    const updateDate = (cardUpdateDate: string) => {
+        let formatedDate = new Date(cardUpdateDate)
+        return  formatedDate.toLocaleString('es', {
+            year: 'numeric',
+            month: '2-digit',
+            day: 'numeric',
+        })
+    }
 
     return (
         <Container>
@@ -208,7 +216,8 @@ export const Main: React.FC = () => {
                                                 <TableCell component="th"
                                                            scope="row">{card.name}</TableCell>
                                                 <TableCell align="right">{card.cardsCount}</TableCell>
-                                                <TableCell align="right">{card.updated}</TableCell>
+                                                <TableCell
+                                                    align="right">{updateDate(card.updated)}</TableCell>
                                                 <TableCell align="right">{card.user_name}</TableCell>
                                                 <TableCell align="right"><Button
                                                     variant={"outlined"}>Learn</Button></TableCell>
