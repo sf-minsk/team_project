@@ -9,7 +9,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
-import withStyles from '@material-ui/styles/withStyles/withStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
@@ -28,82 +27,85 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../bll/store';
-import {CardsPackDataType} from '../../dal/cards-api';
-import {setCardsPackTC} from '../../bll/cards-reducer';
+import {CardPacksResponseType} from '../../dal/cards-api';
+import {setCardPacksTC} from '../../bll/cards-reducer';
 import Button from '@material-ui/core/Button';
 import {Theme} from '@material-ui/core/styles/createTheme';
+import {RequestStatusType} from "../../bll/app-reducer";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-
+type SortByType = 'name' | 'cardsCount' | 'updated' | 'created'
 
 export const Main: React.FC = () => {
 
+    const requestStatus = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
     const classes = useStyles();
     const dispatch = useDispatch()
-    const cards = useSelector<AppRootStateType, Array<CardsPackDataType>>(state => state.cards)
+    const cards = useSelector<AppRootStateType, CardPacksResponseType>(state => state.cards)
+    const id = useSelector<AppRootStateType, string | null>(state => state.profile._id)
 
-    let [myButtonClicked, setMyButtonClicked] = useState(true)
+    const [packName, setPackName] = useState('')
+    const [myButtonClicked, setMyButtonClicked] = useState(false)
     const [searchValue, setSearchValue] = useState('')
+    const [page, setPage] = useState(1)
+    const [pageCount, setPageCount] = useState(5)
     const [sliderValue, setSliderValue] = useState<number[]>([10, 80])
-    const [page, setPage] = useState(0)
-    const [cardsPerPage, setCardsPerPage] = useState(5)
-    let [sortPacks, setSortPacks] = useState<0 | 1>(0)
+    const [sliderValueForPayload, setSliderValueForPayload] = useState<number[]>([sliderValue[0], sliderValue[1]])
+    const [sortPacksDirection, setSortPacksDirection] = useState(0)
+    const [sortBy, setSortBy] = useState<SortByType>('updated')
+
+
+    const [userId, setUserId] = useState<string | null>('')
 
 
     useEffect(() => {
-        dispatch(setCardsPackTC(1, 5000, 0, 'updated'))
-    }, [dispatch])
+        dispatch(setCardPacksTC(setValuesInPayload()))
+    }, [dispatch, packName, sortPacksDirection, sortBy, page, pageCount, userId, sliderValueForPayload])
 
+    const setValuesInPayload = () => {
+        return {
+            packName: packName,
+            min: sliderValue[0],
+            max: sliderValue[1],
+            sortPacks: JSON.stringify(sortPacksDirection) + sortBy,
+            page: page,
+            pageCount: pageCount,
+            user_id: userId,
+        }
+    }
 
     const onMyButtonClick = () => {
+        setUserId(id)
         setMyButtonClicked(true)
     }
     const onAllButtonClick = () => {
+        setUserId('')
         setMyButtonClicked(false)
     }
 
     const changeSliderValue = (event: ChangeEvent<{}>, newValue: number | number[]) => {
         setSliderValue(newValue as number[])
     }
+    const changeSliderValueForPayload = (event: ChangeEvent<{}>, newValue: number | number[]) => {
+        setSliderValueForPayload(newValue as number[])
+    }
 
-    const StyledTableCell = withStyles((theme: Theme) => ({
-        head: {
-            // backgroundColor: theme.palette.common.black,
-            // color: theme.palette.common.white,
-        },
-        body: {
-            fontSize: 14,
-        },
-    }))(TableCell)
-
-    const StyledTableRow = withStyles((theme: Theme) => ({
-        root: {
-            '&:nth-of-type(odd)': {
-                // backgroundColor: theme.palette.action.hover,
-            },
-        },
-    }))(TableRow)
 
     const handleChangePage = (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-        //alert('Hello')
-        //setPage(newPage)
+        setPage(newPage + 1)
     }
 
-    const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        let currentCardsPerPage = parseInt(event.target.value, 10)
-        setCardsPerPage(currentCardsPerPage)
-        dispatch(setCardsPackTC(1, currentCardsPerPage, sortPacks, 'updated')) //нужно убрать хардкод 'updated'
+    const handleChangePageCount = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setPageCount(parseInt(event.target.value, 10))
     }
 
-    const onClickSortHandler = (sortValue: string) => {
-        let value = sortPacks
-        if (sortPacks === 0) {
-            setSortPacks(1)
-            value = 1
+    const onClickSortHandler = (sortValue: SortByType) => {
+        setSortBy(sortValue)
+        if (sortPacksDirection === 0) {
+            setSortPacksDirection(1)
         } else {
-            setSortPacks(0)
-            value = 0
+            setSortPacksDirection(0)
         }
-        dispatch(setCardsPackTC(page, cardsPerPage, value, sortValue))
     }
 
 
@@ -119,9 +121,10 @@ export const Main: React.FC = () => {
                                 variant={myButtonClicked ? 'outlined' : 'contained'}>All</Button>
                     </ButtonGroup>
                     <Slider
-                        style={{marginTop: '50px', width: '160px'}}
+                        style={{marginTop: '50px', width: '150px'}}
                         value={sliderValue}
                         onChange={changeSliderValue}
+                        onChangeCommitted={changeSliderValueForPayload}
                         valueLabelDisplay="on"
                         aria-labelledby="range-slider"
                         // getAriaValueText={value}
@@ -165,53 +168,85 @@ export const Main: React.FC = () => {
                         <Table className={classes.table} aria-label="custom pagination table">
                             <TableHead>
                                 <TableRow>
-                                    <StyledTableCell onClick={() => onClickSortHandler('name')}>Name</StyledTableCell>
-                                    <StyledTableCell onClick={() => onClickSortHandler('cardsCount')} align="right">Cards</StyledTableCell>
-                                    <StyledTableCell onClick={() => onClickSortHandler('updated')} align="right">Last
-                                        Updated</StyledTableCell>
-                                    <StyledTableCell onClick={() => onClickSortHandler('created')} align="right">Created
-                                        By</StyledTableCell>
-                                    <StyledTableCell align="right">Actions</StyledTableCell>
+                                    <TableCell onClick={() => onClickSortHandler('name')}>
+                                        <Button variant={sortBy === 'name' ? "outlined" : 'text'}>
+                                            Name
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell onClick={() => onClickSortHandler('cardsCount')}
+                                               align="right">
+                                        <Button variant={sortBy === 'cardsCount' ? "outlined" : 'text'}>
+                                            Cards
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell onClick={() => onClickSortHandler('updated')} align="right">
+                                        <Button variant={sortBy === 'updated' ? "outlined" : 'text'}>
+                                            Last Updated
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell onClick={() => onClickSortHandler('created')} align="right">
+                                        <Button variant={sortBy === 'created' ? "outlined" : 'text'}>
+                                            Created By
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell align="right">Actions</TableCell>
                                 </TableRow>
                             </TableHead>
-
                             <TableBody>
-                                {(cardsPerPage > 0
-                                        ? cards.slice(page * cardsPerPage, page * cardsPerPage + cardsPerPage)
-                                        : cards
-                                ).map((card) => (
-                                    <StyledTableRow key={card._id}>
-                                        <StyledTableCell component="th" scope="row">{card.name}</StyledTableCell>
-                                        <StyledTableCell align="right">{card.cardsCount}</StyledTableCell>
-                                        <StyledTableCell align="right">{card.updated}</StyledTableCell>
-                                        <StyledTableCell align="right">{card.created}</StyledTableCell>
-                                        {/*<StyledTableCell align="right">{card.actions}</StyledTableCell>*/}
-                                    </StyledTableRow>
-                                ))}
+                                {requestStatus === 'loading' ? <div
+                                        style={{
+                                            display: 'flex',
+                                            position: 'absolute',
+                                            left: '50%',
+                                            top: '50%',
+                                            textAlign: 'center',
+                                            width: '100%'
+                                        }}>
+                                        <CircularProgress/></div> :
+                                    cards.cardPacks.map((card) => (
+                                            <TableRow key={card._id}>
+                                                <TableCell component="th"
+                                                           scope="row">{card.name}</TableCell>
+                                                <TableCell align="right">{card.cardsCount}</TableCell>
+                                                <TableCell align="right">{card.updated}</TableCell>
+                                                <TableCell align="right">{card.user_name}</TableCell>
+                                                <TableCell align="right"><Button
+                                                    variant={"outlined"}>Learn</Button></TableCell>
+                                            </TableRow>
+                                        )
+                                    )
+                                }
                             </TableBody>
-
                             <TableFooter>
                                 <TableRow>
+                                    <div style={{
+                                        display: 'flex',
+                                        height: '53px',
+                                        marginLeft: '10px',
+                                        alignItems: 'center'
+                                    }}>
+                                        Page: {page}
+                                    </div>
                                     <TablePagination
-                                        //results={sortPacks}
-                                        //property={sortValue}
-                                        rowsPerPageOptions={[5, 10, 25, {label: 'All', value: -1}]}
-                                        colSpan={3}
-                                        count={cards.length}
-                                        rowsPerPage={cardsPerPage}
-                                        page={page}
+                                        rowsPerPageOptions={[5, 10, 25, {
+                                            label: 'All',
+                                            value: cards.cardPacksTotalCount
+                                        }]}
+                                        colSpan={6}
+                                        count={cards.cardPacksTotalCount}
+                                        rowsPerPage={pageCount}
+                                        page={page - 1}
                                         SelectProps={{
                                             inputProps: {'aria-label': 'rows per page'},
                                             native: true,
                                         }}
                                         labelRowsPerPage={'Cards per Page'}
                                         onPageChange={handleChangePage}
-                                        onRowsPerPageChange={handleChangeRowsPerPage}
+                                        onRowsPerPageChange={handleChangePageCount}
                                         ActionsComponent={TablePaginationActions}
                                     />
                                 </TableRow>
                             </TableFooter>
-
                         </Table>
                     </TableContainer>
                 </Container>
@@ -245,7 +280,6 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-type SortValueType = 'name' | 'cardsCount' | 'updated' | 'created'
 
 type TablePaginationActionsProps = {
     count: number
@@ -265,62 +299,52 @@ const useStyles1 = makeStyles((theme: Theme) =>
 
 export const TablePaginationActions = (props: TablePaginationActionsProps) => {
 
-    const dispatch = useDispatch()
-    let [currentPage, setCurrentPage] = useState(1)
-
     const classes = useStyles1()
     const theme = useTheme()
-
     const {count, rowsPerPage, page, onPageChange} = props
 
-    const handleFirstPageButtonClick = () => {
-        dispatch(setCardsPackTC(1, rowsPerPage))
+    const handleFirstPageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, 0)
     }
 
-    const handleBackButtonClick = () => {
-        let newPage = currentPage - 1
-        setCurrentPage(newPage)
-        dispatch(setCardsPackTC(newPage, rowsPerPage))
+    const handleBackButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, page - 1)
     }
 
-    const handleNextButtonClick = () => {
-        let newPage = currentPage + 1
-        setCurrentPage(newPage)
-        dispatch(setCardsPackTC(newPage, rowsPerPage))
+    const handleNextButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, page + 1)
     }
 
-    const handleLastPageButtonClick = () => {
-        let newPage = Math.max(Math.ceil(count / rowsPerPage))
-        setCurrentPage(newPage)
-        dispatch(setCardsPackTC(newPage, rowsPerPage))
+    const handleLastPageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1))
     }
 
     return (
         <div className={classes.root}>
             <IconButton
                 onClick={handleFirstPageButtonClick}
-                // disabled={currentPage === 1}
+                disabled={page === 0}
                 aria-label="first page"
             >
                 {theme.direction === 'rtl' ? <LastPageIcon/> : <FirstPageIcon/>}
             </IconButton>
             <IconButton
                 onClick={handleBackButtonClick}
-                // disabled={currentPage === 1}
+                disabled={page === 0}
                 aria-label="previous page"
             >
                 {theme.direction === 'rtl' ? <KeyboardArrowRight/> : <KeyboardArrowLeft/>}
             </IconButton>
             <IconButton
                 onClick={handleNextButtonClick}
-                // disabled={currentPage >= Math.ceil(count / rowsPerPage) -1}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="next page"
             >
                 {theme.direction === 'rtl' ? <KeyboardArrowLeft/> : <KeyboardArrowRight/>}
             </IconButton>
             <IconButton
                 onClick={handleLastPageButtonClick}
-                // disabled={currentPage >= Math.ceil(count / rowsPerPage) -1}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="last page"
             >
                 {theme.direction === 'rtl' ? <FirstPageIcon/> : <LastPageIcon/>}
