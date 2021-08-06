@@ -1,5 +1,4 @@
-import React, {ChangeEvent, MouseEvent, useEffect, useState} from 'react';
-import {ErrorSnackbar} from '../../features/errors/ErrorSnackbar';
+import React, {ChangeEvent, KeyboardEvent, MouseEvent, useEffect, useState} from 'react';
 import Container from '@material-ui/core/Container/Container';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Slider from '@material-ui/core/Slider';
@@ -28,34 +27,34 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../bll/store';
 import {CardPacksResponseType} from '../../dal/cards-api';
-import {setCardPacksTC} from '../../bll/cards-reducer';
+import {createPackTC, deletePackTC, setCardPacksTC} from '../../bll/cards-reducer';
 import Button from '@material-ui/core/Button';
 import {Theme} from '@material-ui/core/styles/createTheme';
-import {RequestStatusType} from "../../bll/app-reducer";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import {RequestStatusType} from '../../bll/app-reducer';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import {ProfileStateType} from '../../bll/profile-reducer';
+import {ErrorSnackbar} from '../../features/errors/ErrorSnackbar';
 
-type SortByType = 'name' | 'cardsCount' | 'updated' | 'created'
 
 export const Main: React.FC = () => {
 
-    const requestStatus = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
     const classes = useStyles();
     const dispatch = useDispatch()
     const cards = useSelector<AppRootStateType, CardPacksResponseType>(state => state.cards)
-    const id = useSelector<AppRootStateType, string | null>(state => state.profile._id)
+    const profile = useSelector<AppRootStateType, ProfileStateType>(state => state.profile)
+    const id = useSelector<AppRootStateType, string>(state => state.profile._id)
+    const requestStatus = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
 
     const [packName, setPackName] = useState('')
     const [myButtonClicked, setMyButtonClicked] = useState(false)
     const [searchValue, setSearchValue] = useState('')
     const [page, setPage] = useState(1)
     const [pageCount, setPageCount] = useState(5)
-    const [sliderValue, setSliderValue] = useState<number[]>([10, 80])
+    const [sliderValue, setSliderValue] = useState<number[]>([0, 110])
     const [sliderValueForPayload, setSliderValueForPayload] = useState<number[]>([sliderValue[0], sliderValue[1]])
     const [sortPacksDirection, setSortPacksDirection] = useState(0)
     const [sortBy, setSortBy] = useState<SortByType>('updated')
-
-
-    const [userId, setUserId] = useState<string | null>('')
+    const [userId, setUserId] = useState<string>('')
 
 
     useEffect(() => {
@@ -65,8 +64,8 @@ export const Main: React.FC = () => {
     const setValuesInPayload = () => {
         return {
             packName: packName,
-            min: sliderValue[0],
-            max: sliderValue[1],
+            min: sliderValueForPayload[0],
+            max: sliderValueForPayload[1],
             sortPacks: JSON.stringify(sortPacksDirection) + sortBy,
             page: page,
             pageCount: pageCount,
@@ -83,20 +82,19 @@ export const Main: React.FC = () => {
         setMyButtonClicked(false)
     }
 
-    const changeSliderValue = (event: ChangeEvent<{}>, newValue: number | number[]) => {
+    const changeSliderValue = (e: ChangeEvent<{}>, newValue: number | number[]) => {
         setSliderValue(newValue as number[])
     }
-    const changeSliderValueForPayload = (event: ChangeEvent<{}>, newValue: number | number[]) => {
+    const changeSliderValueForPayload = (e: ChangeEvent<{}>, newValue: number | number[]) => {
         setSliderValueForPayload(newValue as number[])
     }
 
 
-    const handleChangePage = (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    const handleChangePage = (e: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage + 1)
     }
-
-    const handleChangePageCount = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setPageCount(parseInt(event.target.value, 10))
+    const handleChangePageCount = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setPageCount(parseInt(e.target.value, 10))
     }
 
     const onClickSortHandler = (sortValue: SortByType) => {
@@ -106,6 +104,22 @@ export const Main: React.FC = () => {
         } else {
             setSortPacksDirection(0)
         }
+    }
+
+    const onSearchButtonHandler = () => {
+        setPackName(searchValue)
+    }
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        (e.key === 'Enter') && onSearchButtonHandler()
+    }
+
+    const addNewPackHandler = () => {
+        dispatch(createPackTC({cardsPack: {name: searchValue}}))
+        setSearchValue('')
+    }
+
+    const onDeleteButtonClick = (packId: string) => {
+        dispatch(deletePackTC(packId))
     }
 
 
@@ -123,9 +137,10 @@ export const Main: React.FC = () => {
                     <Slider
                         style={{marginTop: '50px', width: '150px'}}
                         value={sliderValue}
+                        max={cards.maxCardsCount}
                         onChange={changeSliderValue}
                         onChangeCommitted={changeSliderValueForPayload}
-                        valueLabelDisplay="on"
+                        valueLabelDisplay="auto"
                         aria-labelledby="range-slider"
                         // getAriaValueText={value}
                     />
@@ -142,11 +157,14 @@ export const Main: React.FC = () => {
                             fullWidth
                             size="small"
                             onChange={e => setSearchValue(e.target.value)}
+                            onKeyPress={onKeyPressHandler}
                             value={searchValue}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
-                                        <SearchIcon/>
+                                        <Button onClick={onSearchButtonHandler}>
+                                            <SearchIcon/>
+                                        </Button>
                                     </InputAdornment>
                                 ),
 
@@ -154,14 +172,21 @@ export const Main: React.FC = () => {
                                     <IconButton
                                         style={{height: '40px'}}
                                         aria-label="toggle password visibility"
-                                        onClick={() => setSearchValue('')}
+                                        onClick={() => setPackName('')}
                                     >
                                         <CancelRoundedIcon/>
                                     </IconButton>
                                 )
                             }}
                         />
-                        <Button style={{width: '180px'}} variant="contained" color="primary">Add new pack</Button>
+                        <Button
+                            style={{width: '230px', marginLeft: '20px'}}
+                            variant="contained"
+                            color="primary"
+                            onClick={addNewPackHandler}
+                        >
+                            Add new pack
+                        </Button>
                     </div>
 
                     <TableContainer component={Paper}>
@@ -169,23 +194,23 @@ export const Main: React.FC = () => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell onClick={() => onClickSortHandler('name')}>
-                                        <Button variant={sortBy === 'name' ? "outlined" : 'text'}>
+                                        <Button variant={sortBy === 'name' ? 'outlined' : 'text'}>
                                             Name
                                         </Button>
                                     </TableCell>
                                     <TableCell onClick={() => onClickSortHandler('cardsCount')}
                                                align="right">
-                                        <Button variant={sortBy === 'cardsCount' ? "outlined" : 'text'}>
+                                        <Button variant={sortBy === 'cardsCount' ? 'outlined' : 'text'}>
                                             Cards
                                         </Button>
                                     </TableCell>
                                     <TableCell onClick={() => onClickSortHandler('updated')} align="right">
-                                        <Button variant={sortBy === 'updated' ? "outlined" : 'text'}>
+                                        <Button variant={sortBy === 'updated' ? 'outlined' : 'text'}>
                                             Last Updated
                                         </Button>
                                     </TableCell>
                                     <TableCell onClick={() => onClickSortHandler('created')} align="right">
-                                        <Button variant={sortBy === 'created' ? "outlined" : 'text'}>
+                                        <Button variant={sortBy === 'created' ? 'outlined' : 'text'}>
                                             Created By
                                         </Button>
                                     </TableCell>
@@ -193,25 +218,34 @@ export const Main: React.FC = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {requestStatus === 'loading' ? <div
-                                        style={{
-                                            display: 'flex',
-                                            position: 'absolute',
-                                            left: '50%',
-                                            top: '50%',
-                                            textAlign: 'center',
-                                            width: '100%'
-                                        }}>
-                                        <CircularProgress/></div> :
-                                    cards.cardPacks.map((card) => (
+                                {requestStatus === 'loading'
+                                    ? <div style={{
+                                        display: 'flex',
+                                        position: 'absolute',
+                                        left: '50%',
+                                        top: '50%',
+                                        textAlign: 'center',
+                                        width: '100%'
+                                    }}><CircularProgress/></div>
+                                    : cards.cardPacks.map((card) => (
                                             <TableRow key={card._id}>
                                                 <TableCell component="th"
                                                            scope="row">{card.name}</TableCell>
                                                 <TableCell align="right">{card.cardsCount}</TableCell>
                                                 <TableCell align="right">{card.updated}</TableCell>
                                                 <TableCell align="right">{card.user_name}</TableCell>
-                                                <TableCell align="right"><Button
-                                                    variant={"outlined"}>Learn</Button></TableCell>
+                                                <TableCell align="right">
+                                                    {card.user_id === id &&
+                                                    <span>
+                                                        <Button onClick={() => onDeleteButtonClick(card._id)} size={'small'} color={'secondary'}
+                                                                variant={'outlined'}>Delete</Button>
+                                                        <Button size={'small'} variant={'outlined'}
+                                                                style={{margin: '0 10px'}}>Edit</Button>
+                                                    </span>
+                                                    }
+                                                    <span><Button size={'small'}
+                                                                  variant={'outlined'}>Learn</Button></span>
+                                                </TableCell>
                                             </TableRow>
                                         )
                                     )
@@ -256,6 +290,7 @@ export const Main: React.FC = () => {
     )
 }
 
+type SortByType = 'name' | 'cardsCount' | 'updated' | 'created'
 const useStyles = makeStyles(() => ({
     paper: {
         marginTop: '20px',
@@ -285,7 +320,7 @@ type TablePaginationActionsProps = {
     count: number
     rowsPerPage: number
     page: number
-    onPageChange: (event: MouseEvent<HTMLButtonElement>, newPage: number) => void
+    onPageChange: (e: MouseEvent<HTMLButtonElement>, newPage: number) => void
 }
 
 const useStyles1 = makeStyles((theme: Theme) =>
@@ -303,20 +338,20 @@ export const TablePaginationActions = (props: TablePaginationActionsProps) => {
     const theme = useTheme()
     const {count, rowsPerPage, page, onPageChange} = props
 
-    const handleFirstPageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
-        onPageChange(event, 0)
+    const handleFirstPageButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(e, 0)
     }
 
-    const handleBackButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
-        onPageChange(event, page - 1)
+    const handleBackButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(e, page - 1)
     }
 
-    const handleNextButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
-        onPageChange(event, page + 1)
+    const handleNextButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(e, page + 1)
     }
 
-    const handleLastPageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
-        onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1))
+    const handleLastPageButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
+        onPageChange(e, Math.max(0, Math.ceil(count / rowsPerPage) - 1))
     }
 
     return (
