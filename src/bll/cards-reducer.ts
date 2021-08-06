@@ -74,10 +74,19 @@ import {cardPacksApi, CardPacksDataType, CardPacksRequestDataType, CardPacksResp
 //     },
 // ]
 
+// const initialState = {
+//     cardPacks: [] as CardPacksDataType[],
+//     page: 1,
+//     pageCount: 5,
+//     cardPacksTotalCount: null as string,
+//     minCardsCount: 0,
+//     maxCardsCount: 20,
+//     token: null as string,
+//     tokenDeathTime: null as string,
+// }
 const initialState = {
     cardPacks: [] as CardPacksDataType[]
-} as CardPacksResponseType
-
+}as CardPacksResponseType
 export type InitialStateType = typeof initialState
 
 

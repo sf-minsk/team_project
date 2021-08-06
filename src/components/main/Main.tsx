@@ -9,7 +9,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
-import withStyles from '@material-ui/styles/withStyles/withStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
@@ -32,42 +31,42 @@ import {CardPacksResponseType} from '../../dal/cards-api';
 import {setCardPacksTC} from '../../bll/cards-reducer';
 import Button from '@material-ui/core/Button';
 import {Theme} from '@material-ui/core/styles/createTheme';
-import {ProfileStateType} from '../../bll/profile-reducer';
-
+import {RequestStatusType} from "../../bll/app-reducer";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 type SortByType = 'name' | 'cardsCount' | 'updated' | 'created'
 
 export const Main: React.FC = () => {
 
+    const requestStatus = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
     const classes = useStyles();
     const dispatch = useDispatch()
     const cards = useSelector<AppRootStateType, CardPacksResponseType>(state => state.cards)
-    const profile = useSelector<AppRootStateType, ProfileStateType>(state => state.profile)
-
-
-    const [myButtonClicked, setMyButtonClicked] = useState(true)
-    const [searchValue, setSearchValue] = useState('')
-    const [sliderValue, setSliderValue] = useState<number[]>([10, 80])
+    const id = useSelector<AppRootStateType, string | null>(state => state.profile._id)
 
     const [packName, setPackName] = useState('')
-    const [minNumOfCards, setMinNumOfCards] = useState(0)
-    const [maxNumOfCards, setMaxNumOfCards] = useState(0)
-    const [sortPacksDirection, setSortPacksDirection] = useState(0)
-    const [sortBy, setSortBy] = useState<SortByType>('updated')
+    const [myButtonClicked, setMyButtonClicked] = useState(false)
+    const [searchValue, setSearchValue] = useState('')
     const [page, setPage] = useState(1)
     const [pageCount, setPageCount] = useState(5)
+    const [sliderValue, setSliderValue] = useState<number[]>([10, 80])
+    const [sliderValueForPayload, setSliderValueForPayload] = useState<number[]>([sliderValue[0], sliderValue[1]])
+    const [sortPacksDirection, setSortPacksDirection] = useState(0)
+    const [sortBy, setSortBy] = useState<SortByType>('updated')
+
+
     const [userId, setUserId] = useState<string | null>('')
 
 
     useEffect(() => {
         dispatch(setCardPacksTC(setValuesInPayload()))
-    }, [dispatch, packName, minNumOfCards, maxNumOfCards, sortPacksDirection, sortBy, page, pageCount, userId])
+    }, [dispatch, packName, sortPacksDirection, sortBy, page, pageCount, userId, sliderValueForPayload])
 
     const setValuesInPayload = () => {
         return {
             packName: packName,
-            min: minNumOfCards,
-            max: maxNumOfCards,
+            min: sliderValue[0],
+            max: sliderValue[1],
             sortPacks: JSON.stringify(sortPacksDirection) + sortBy,
             page: page,
             pageCount: pageCount,
@@ -76,7 +75,7 @@ export const Main: React.FC = () => {
     }
 
     const onMyButtonClick = () => {
-        setUserId(profile._id)
+        setUserId(id)
         setMyButtonClicked(true)
     }
     const onAllButtonClick = () => {
@@ -87,24 +86,10 @@ export const Main: React.FC = () => {
     const changeSliderValue = (event: ChangeEvent<{}>, newValue: number | number[]) => {
         setSliderValue(newValue as number[])
     }
+    const changeSliderValueForPayload = (event: ChangeEvent<{}>, newValue: number | number[]) => {
+        setSliderValueForPayload(newValue as number[])
+    }
 
-    const StyledTableCell = withStyles((theme: Theme) => ({
-        head: {
-            // backgroundColor: theme.palette.common.black,
-            // color: theme.palette.common.white,
-        },
-        body: {
-            fontSize: 14,
-        },
-    }))(TableCell)
-
-    const StyledTableRow = withStyles((theme: Theme) => ({
-        root: {
-            '&:nth-of-type(odd)': {
-                // backgroundColor: theme.palette.action.hover,
-            },
-        },
-    }))(TableRow)
 
     const handleChangePage = (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage + 1)
@@ -136,9 +121,10 @@ export const Main: React.FC = () => {
                                 variant={myButtonClicked ? 'outlined' : 'contained'}>All</Button>
                     </ButtonGroup>
                     <Slider
-                        style={{marginTop: '50px', width: '160px'}}
+                        style={{marginTop: '50px', width: '150px'}}
                         value={sliderValue}
                         onChange={changeSliderValue}
+                        onChangeCommitted={changeSliderValueForPayload}
                         valueLabelDisplay="on"
                         aria-labelledby="range-slider"
                         // getAriaValueText={value}
@@ -182,36 +168,71 @@ export const Main: React.FC = () => {
                         <Table className={classes.table} aria-label="custom pagination table">
                             <TableHead>
                                 <TableRow>
-                                    <StyledTableCell onClick={() => onClickSortHandler('name')}>Name</StyledTableCell>
-                                    <StyledTableCell onClick={() => onClickSortHandler('cardsCount')}
-                                                     align="right">Cards</StyledTableCell>
-                                    <StyledTableCell onClick={() => onClickSortHandler('updated')} align="right">Last
-                                        Updated</StyledTableCell>
-                                    <StyledTableCell onClick={() => onClickSortHandler('created')} align="right">Created
-                                        By</StyledTableCell>
-                                    <StyledTableCell align="right">Actions</StyledTableCell>
+                                    <TableCell onClick={() => onClickSortHandler('name')}>
+                                        <Button variant={sortBy === 'name' ? "outlined" : 'text'}>
+                                            Name
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell onClick={() => onClickSortHandler('cardsCount')}
+                                               align="right">
+                                        <Button variant={sortBy === 'cardsCount' ? "outlined" : 'text'}>
+                                            Cards
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell onClick={() => onClickSortHandler('updated')} align="right">
+                                        <Button variant={sortBy === 'updated' ? "outlined" : 'text'}>
+                                            Last Updated
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell onClick={() => onClickSortHandler('created')} align="right">
+                                        <Button variant={sortBy === 'created' ? "outlined" : 'text'}>
+                                            Created By
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell align="right">Actions</TableCell>
                                 </TableRow>
                             </TableHead>
-
                             <TableBody>
-                                {
+                                {requestStatus === 'loading' ? <div
+                                        style={{
+                                            display: 'flex',
+                                            position: 'absolute',
+                                            left: '50%',
+                                            top: '50%',
+                                            textAlign: 'center',
+                                            width: '100%'
+                                        }}>
+                                        <CircularProgress/></div> :
                                     cards.cardPacks.map((card) => (
-                                        <StyledTableRow key={card._id}>
-                                            <StyledTableCell component="th"
-                                                             scope="row">{card.name}</StyledTableCell>
-                                            <StyledTableCell align="right">{card.cardsCount}</StyledTableCell>
-                                            <StyledTableCell align="right">{card.updated}</StyledTableCell>
-                                            <StyledTableCell align="right">{card.user_name}</StyledTableCell>
-                                            {/*<StyledTableCell align="right">{card.actions}</StyledTableCell>*/}
-                                        </StyledTableRow>
-                                    ))}
+                                            <TableRow key={card._id}>
+                                                <TableCell component="th"
+                                                           scope="row">{card.name}</TableCell>
+                                                <TableCell align="right">{card.cardsCount}</TableCell>
+                                                <TableCell align="right">{card.updated}</TableCell>
+                                                <TableCell align="right">{card.user_name}</TableCell>
+                                                <TableCell align="right"><Button
+                                                    variant={"outlined"}>Learn</Button></TableCell>
+                                            </TableRow>
+                                        )
+                                    )
+                                }
                             </TableBody>
-
                             <TableFooter>
                                 <TableRow>
+                                    <div style={{
+                                        display: 'flex',
+                                        height: '53px',
+                                        marginLeft: '10px',
+                                        alignItems: 'center'
+                                    }}>
+                                        Page: {page}
+                                    </div>
                                     <TablePagination
-                                        rowsPerPageOptions={[5, 10, 25, {label: 'All', value: cards.cardPacksTotalCount}]}
-                                        colSpan={3}
+                                        rowsPerPageOptions={[5, 10, 25, {
+                                            label: 'All',
+                                            value: cards.cardPacksTotalCount
+                                        }]}
+                                        colSpan={6}
                                         count={cards.cardPacksTotalCount}
                                         rowsPerPage={pageCount}
                                         page={page - 1}
@@ -226,7 +247,6 @@ export const Main: React.FC = () => {
                                     />
                                 </TableRow>
                             </TableFooter>
-
                         </Table>
                     </TableContainer>
                 </Container>
