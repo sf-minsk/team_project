@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    // baseURL: `https://neko-back.herokuapp.com/2.0`,
-    baseURL: `http://localhost:7542/2.0`,
+    baseURL: `https://neko-back.herokuapp.com/2.0`,
+    // baseURL: `http://localhost:7542/2.0`,
     withCredentials: true,
 })
 
@@ -26,6 +26,12 @@ export const cardPacksApi = {
         const newURL = generateURL.slice(0, -1)
         return instance.get<CardPacksResponseType>(`cards/pack${newURL}`)
     },
+    createPack(cardsPack: CardsPackRequestType) {
+        return instance.post<CardsPackResponseType>(`cards/pack`, cardsPack)
+    },
+    deletePack(id: string) {
+        return instance.delete(`cards/pack?id=${id}`)
+    },
 }
 
 export type CardPacksRequestDataType = {
@@ -35,11 +41,10 @@ export type CardPacksRequestDataType = {
     sortPacks?: string
     page?: number
     pageCount?: number
-    user_id?: string | null
+    user_id?: string
 }
-
 export type CardPacksResponseType = {
-    cardPacks: Array<CardPacksDataType>
+    cardPacks: Array<CardPacksType>
     cardPacksTotalCount: number
     maxCardsCount: number
     minCardsCount: number
@@ -48,7 +53,7 @@ export type CardPacksResponseType = {
     token: string
     tokenDeathTime: number
 }
-export type CardPacksDataType = {
+export type CardPacksType = {
     _id: string
     user_id: string
     user_name: string
@@ -64,4 +69,23 @@ export type CardPacksDataType = {
     updated: string
     more_id: string
     __v: number
+}
+
+export type CardsPackDataType = {
+    name?: string | null
+    path?: string
+    grade?: number
+    shots?: number
+    rating?: number
+    deckCover?: string
+    private?: boolean
+    type?: string
+}
+export type CardsPackRequestType = {
+    cardsPack: CardsPackDataType
+}
+export type CardsPackResponseType = {
+    newCardsPack: CardPacksType
+    token: string
+    tokenDeathTime: number
 }
