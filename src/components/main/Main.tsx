@@ -35,6 +35,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {ProfileStateType} from '../../bll/profile-reducer';
 import {ErrorSnackbar} from '../../features/errors/ErrorSnackbar';
 import {trimmedString} from "../../utils/trimmedString-util";
+import {updateDate} from "../../utils/updateDate-util";
 
 
 export const Main: React.FC = () => {
@@ -233,7 +234,7 @@ export const Main: React.FC = () => {
                                                 <TableCell component="th"
                                                            scope="row">{trimmedString(card.name)}</TableCell>
                                                 <TableCell align="right">{card.cardsCount}</TableCell>
-                                                <TableCell align="right">{card.updated}</TableCell>
+                                                <TableCell align="right">{updateDate(card.updated)}</TableCell>
                                                 <TableCell align="right">{trimmedString(card.user_name)}</TableCell>
                                                 <TableCell align="right">
                                                     {card.user_id === id &&
