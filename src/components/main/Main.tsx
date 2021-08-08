@@ -34,6 +34,7 @@ import {RequestStatusType} from '../../bll/app-reducer';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {ProfileStateType} from '../../bll/profile-reducer';
 import {ErrorSnackbar} from '../../features/errors/ErrorSnackbar';
+import {trimmedString} from "../../utils/trimmedString-util";
 
 
 export const Main: React.FC = () => {
@@ -230,10 +231,10 @@ export const Main: React.FC = () => {
                                     : cards.cardPacks.map((card) => (
                                             <TableRow key={card._id}>
                                                 <TableCell component="th"
-                                                           scope="row">{card.name}</TableCell>
+                                                           scope="row">{trimmedString(card.name)}</TableCell>
                                                 <TableCell align="right">{card.cardsCount}</TableCell>
                                                 <TableCell align="right">{card.updated}</TableCell>
-                                                <TableCell align="right">{card.user_name}</TableCell>
+                                                <TableCell align="right">{trimmedString(card.user_name)}</TableCell>
                                                 <TableCell align="right">
                                                     {card.user_id === id &&
                                                     <span>
