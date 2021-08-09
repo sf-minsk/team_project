@@ -7,7 +7,7 @@ import {
     CardPacksType,
     CardsPackRequestType
 } from '../dal/cards-api';
-import {cardsApiModel} from "../utils/cardsApiModel-util";
+import {cardsApiModel} from '../utils/cardsApiModel-util';
 
 
 const initialState = {
@@ -16,9 +16,9 @@ const initialState = {
     page: 1,
     pageCount: 5,
     min: 0,
-    max: 100,
+    max: 110,
     minCardsCount: 0,
-    maxCardsCount: 100,
+    maxCardsCount: 110,
     sortPacksDirection: 0,
     sortBy: 'updated',
     user_id: '',
@@ -47,7 +47,7 @@ export const cardsReducer = (state = initialState, action: CardsActionsType): Ca
                 ...action.data,
                 myPacks: action.data.user_id.length > 1,
                 sortBy: action.data.sortPacks.slice(1),
-                sortPacksDirection: Number(action.data.sortPacks.substring(0,1)),
+                sortPacksDirection: Number(action.data.sortPacks.substring(0, 1)),
                 searchText: action.data.packName,
             }
         default:
@@ -89,11 +89,17 @@ export const createPackTC = (data: CardsPackRequestType): AppThunk =>
     }
 
 export const deletePackTC = (packId: string): AppThunk =>
-    async dispatch => {
+    async (dispatch, getState: () => AppRootStateType) => {
         dispatch(setAppStatusAC('loading'))
         try {
             await cardPacksApi.deletePack(packId)
-            dispatch(setCardPacksTC())
+            const cardsState = getState().cards
+            const remainPacks = cardsState.cardPacksTotalCount - (cardsState.pageCount * (cardsState.page - 1))
+            dispatch(setCardPacksTC({
+                page: remainPacks === 1
+                    ? cardsState.page === 1 ? cardsState.page : cardsState.page - 1
+                    : cardsState.page
+            }))
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         } finally {

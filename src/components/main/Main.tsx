@@ -122,7 +122,7 @@ export const Main: React.FC = React.memo(() => {
                         position: 'absolute',
                         left: '50%',
                         top: '50%',
-                        width: '100%'
+                        width: '100%',
                     }}>
                         <CircularProgress/>
                     </div>
