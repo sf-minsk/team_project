@@ -2,7 +2,6 @@ import {CardPacksRequestDataType} from "../dal/cards-api";
 import {CardsInitialStateType} from "../bll/cards-reducer";
 
 export const cardsApiModel = (cards: CardsInitialStateType, data?: CardPacksRequestDataType) => {
-    debugger
     const apiModel = {
         packName: cards.packName,
         min: cards.min,

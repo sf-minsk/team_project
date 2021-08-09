@@ -1,4 +1,4 @@
-type localStoregeStateType = {
+type localStorageStateType = {
     cards: {
         cardPacks: [],
         myPacks: boolean,
@@ -28,7 +28,7 @@ export const loadState = () => {
     }
 };
 
-export const saveState = (state: localStoregeStateType) => {
+export const saveState = (state: localStorageStateType) => {
     try {
         const serializedState = JSON.stringify(state);
         localStorage.setItem('team_project', serializedState);

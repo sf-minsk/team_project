@@ -38,11 +38,8 @@ export type CardsInitialStateType = CardPacksResponseType & {
 }
 
 export const cardsReducer = (state: CardsInitialStateType = initialState, action: CardsActionsType): CardsInitialStateType => {
-
     switch (action.type) {
-
         case 'cards/SET-CARD-PACKS':
-
             return {
                 ...state,
                 ...action.data,
@@ -64,7 +61,6 @@ export const setCardPacksAC = (data: CardPacksResponseType & NewCardsApiModelTyp
 //thunks
 export const setCardPacksTC = (data?: CardPacksRequestDataType): AppThunk =>
     async (dispatch, getState: () => AppRootStateType) => {
-        debugger
         const newCardsApiModel = cardsApiModel(getState().cards, data)
         dispatch(setAppStatusAC('loading'))
         try {
