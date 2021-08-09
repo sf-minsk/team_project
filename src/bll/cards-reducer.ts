@@ -48,7 +48,8 @@ export const cardsReducer = (state: CardsInitialStateType = initialState, action
                 ...action.data,
                 myPacks: action.data.user_id.length > 1,
                 sortBy: action.data.sortPacks.slice(1),
-                sortPacksDirection: Number(action.data.sortPacks.substring(0,1))
+                sortPacksDirection: Number(action.data.sortPacks.substring(0,1)),
+                searchText: action.data.packName,
             }
         default:
             return state;
@@ -81,7 +82,7 @@ export const createPackTC = (data: CardsPackRequestType): AppThunk =>
         dispatch(setAppStatusAC('loading'))
         try {
             await cardPacksApi.createPack(data)
-            // dispatch(setCardPacksTC())
+            dispatch(setCardPacksTC({packName: ''}))
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         } finally {
@@ -94,7 +95,7 @@ export const deletePackTC = (packId: string): AppThunk =>
         dispatch(setAppStatusAC('loading'))
         try {
             await cardPacksApi.deletePack(packId)
-            // dispatch(setCardPacksTC())
+            dispatch(setCardPacksTC())
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         } finally {

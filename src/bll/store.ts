@@ -7,6 +7,7 @@ import {AppActionsType, appReducer} from './app-reducer';
 import {profileReducer} from './profile-reducer';
 import {setNewPasswordActionTypes, setNewPasswordReducer} from './setNewPassword-reducer';
 import {CardsActionsType, cardsReducer} from './cards-reducer';
+import {loadState} from "../utils/localStorage-util";
 
 
 const rootReducers = combineReducers({
@@ -19,7 +20,7 @@ const rootReducers = combineReducers({
     cards: cardsReducer,
 });
 
-export const store = createStore(rootReducers, applyMiddleware(thunk));
+export const store = createStore(rootReducers, loadState(), applyMiddleware(thunk));
 
 export type AppRootStateType = ReturnType<typeof rootReducers>
 export type AppRootActionsType =

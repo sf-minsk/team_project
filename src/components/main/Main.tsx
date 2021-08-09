@@ -35,6 +35,7 @@ import {ErrorSnackbar} from '../../features/errors/ErrorSnackbar';
 import {trimmedString} from "../../utils/trimmedString-util";
 import {updateDate} from "../../utils/updateDate-util";
 import Modal from '@material-ui/core/Modal/Modal';
+import {saveState} from "../../utils/localStorage-util";
 
 
 export const Main: React.FC = React.memo(() => {
@@ -50,6 +51,26 @@ export const Main: React.FC = React.memo(() => {
     useEffect(() => {
         dispatch(setCardPacksTC())
     }, [dispatch])
+
+    useEffect(() => {
+        saveState({
+            cards: {
+                cardPacks: [],
+                myPacks: cards.myPacks,
+                page: cards.page,
+                pageCount: cards.pageCount,
+                min: cards.min,
+                max: cards.max,
+                minCardsCount: cards.minCardsCount,
+                maxCardsCount: cards.maxCardsCount,
+                sortPacksDirection: cards.sortPacksDirection,
+                sortBy: cards.sortBy,
+                user_id: cards.user_id,
+                packName: cards.packName,
+                searchText: cards.searchText,
+            }
+        })
+    }, [cards])
 
     const onMyButtonClick = () => {
         dispatch(setCardPacksTC({user_id: id}))
@@ -84,6 +105,7 @@ export const Main: React.FC = React.memo(() => {
     }
     const addNewPackHandler = () => {
         dispatch(createPackTC({cardsPack: {name: searchText}}))
+        setSearchText('')
     }
     const onDeleteButtonClickHandler = (packId: string) => {
         dispatch(deletePackTC(packId))
@@ -147,7 +169,10 @@ export const Main: React.FC = React.memo(() => {
                                     <IconButton
                                         style={{height: '40px'}}
                                         aria-label="toggle password visibility"
-                                        onClick={() => setSearchText('')}
+                                        onClick={() => {
+                                            dispatch(setCardPacksTC({packName: ''}))
+                                            setSearchText('')
+                                        }}
                                     >
                                         <CancelRoundedIcon/>
                                     </IconButton>
