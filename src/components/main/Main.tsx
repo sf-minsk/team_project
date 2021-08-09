@@ -68,15 +68,17 @@ export const Main: React.FC = React.memo(() => {
                 user_id: cards.user_id,
                 packName: cards.packName,
                 searchText: cards.searchText,
+                cardPacksTotalCount: cards.cardPacksTotalCount,
             }
         })
     }, [cards])
 
     const onMyButtonClick = () => {
-        dispatch(setCardPacksTC({user_id: id}))
+        dispatch(setCardPacksTC({user_id: id, min: 0, page: 1}))
+        setSliderValue([0, cards.max])
     }
     const onAllButtonClick = () => {
-        dispatch(setCardPacksTC({user_id: ''}))
+        dispatch(setCardPacksTC({user_id: '', min: sliderValue[0], max: sliderValue[1], page: 1}))
     }
     const changeSliderValue = (e: ChangeEvent<{}>, newValue: number | number[]) => {
         setSliderValue(newValue as number[])
@@ -220,28 +222,28 @@ export const Main: React.FC = React.memo(() => {
                                 {
                                     cards.cardPacks.map((card) => (
                                             <TableRow key={card._id}>
-                                                <TableCell component="th"
+                                                <TableCell component='th'
                                                 >{trimmedString(card.name)}</TableCell>
                                                 <TableCell align="right">{card.cardsCount}</TableCell>
                                                 <TableCell align="right">{updateDate(card.updated)}</TableCell>
                                                 <TableCell align="right">{trimmedString(card.user_name)}</TableCell>
                                                 <TableCell align="right" style={{width: '224px'}}>
-                                                    <div style={{
+                                                    <span style={{
                                                         display: 'flex',
                                                         width: '224px',
                                                         justifyContent: 'flex-end'
                                                     }}>
                                                         {card.user_id === id &&
-                                                        <div>
+                                                        <span>
                                                             <Button onClick={() => onDeleteButtonClickHandler(card._id)}
                                                                     size={'small'} color={'secondary'}
                                                                     variant={'outlined'}>Delete</Button>
                                                             <Button size={'small'} variant={'outlined'}
                                                                     style={{margin: '0 10px'}}>Edit</Button>
-                                                        </div>
+                                                        </span>
                                                         }
                                                         <Button size={'small'}
-                                                                variant={'outlined'}>Learn</Button></div>
+                                                                variant={'outlined'}>Learn</Button></span>
                                                 </TableCell>
                                             </TableRow>
                                         )
@@ -250,14 +252,14 @@ export const Main: React.FC = React.memo(() => {
                             </TableBody>
                             <TableFooter>
                                 <TableRow>
-                                    <div style={{
+                                    <td style={{
                                         display: 'flex',
                                         height: '53px',
                                         marginLeft: '10px',
                                         alignItems: 'center'
                                     }}>
                                         Page: {cards.page}
-                                    </div>
+                                    </td>
                                     <TablePagination
                                         rowsPerPageOptions={[5, 10, 25, {
                                             label: 'All',

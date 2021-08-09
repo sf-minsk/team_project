@@ -13,6 +13,7 @@ type localStorageStateType = {
         user_id: string,
         packName: string,
         searchText: string,
+        cardPacksTotalCount: number,
     }
 }
 

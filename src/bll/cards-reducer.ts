@@ -24,6 +24,7 @@ const initialState = {
     user_id: '',
     packName: '',
     searchText: '',
+    cardPacksTotalCount: 1,
 } as CardsInitialStateType
 
 export type CardsInitialStateType = CardPacksResponseType & {
@@ -35,9 +36,10 @@ export type CardsInitialStateType = CardPacksResponseType & {
     searchText: string
     min: number
     max: number
+    cardPacksTotalCount: number
 }
 
-export const cardsReducer = (state: CardsInitialStateType = initialState, action: CardsActionsType): CardsInitialStateType => {
+export const cardsReducer = (state = initialState, action: CardsActionsType): CardsInitialStateType => {
     switch (action.type) {
         case 'cards/SET-CARD-PACKS':
             return {
