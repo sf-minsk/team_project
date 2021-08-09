@@ -16,7 +16,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {loginTC} from '../../../bll/auth-reducer';
 import {AppRootStateType} from '../../../bll/store';
 import {Link as RouterLink} from 'react-router-dom'
-import {RequestStatusType} from '../../../bll/app-reducer';
+import {AppStatusType} from '../../../bll/app-reducer';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as Yup from 'yup';
 import {ErrorSnackbar} from '../../../features/errors/ErrorSnackbar';
@@ -31,8 +31,8 @@ import {ErrorSnackbar} from '../../../features/errors/ErrorSnackbar';
 export const Login = () => {
     console.log('login')
     const dispatch = useDispatch()
-    const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
-    const requestStatus = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
+    const status = useSelector<AppRootStateType, AppStatusType>(state => state.app.status)
+    const requestStatus = useSelector<AppRootStateType, AppStatusType>(state => state.app.status)
 
     const formik = useFormik({
         initialValues: {

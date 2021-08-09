@@ -9,7 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {AppRootStateType} from '../../../bll/store';
-import {RequestStatusType} from '../../../bll/app-reducer';
+import {AppStatusType} from '../../../bll/app-reducer';
 import {Redirect} from 'react-router-dom';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Container from '@material-ui/core/Container';
@@ -22,7 +22,7 @@ export const Registration: React.FC = () => {
     console.log('reg')
     const classes = useStyles();
     const dispatch = useDispatch()
-    const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
+    const status = useSelector<AppRootStateType, AppStatusType>(state => state.app.status)
     const isRegistered = useSelector<AppRootStateType, boolean>(state => state.register.isRegistered)
 
     const formik = useFormik({
