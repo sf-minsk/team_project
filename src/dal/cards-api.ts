@@ -10,7 +10,7 @@ const instance = axios.create({
 // export const cardsPackApi = {
 //     fetchPacks(page?: number, pageCount?: number, sortPacks?: 0 | 1, updated?: string, user_id?: string) {
 //         return instance.get<CardsPackResponseType>(
-//             `/cards/pack?page=${page}&pageCount=${pageCount}&sortPacks=${sortPacks}${updated}&`
+//             `/cards/packName?page=${page}&pageCount=${pageCount}&sortPacks=${sortPacks}${updated}&`
 //             + (user_id ? `user_id=${user_id}` : ``))
 //     },
 // }
