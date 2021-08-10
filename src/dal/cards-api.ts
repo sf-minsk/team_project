@@ -6,9 +6,9 @@ const instance = axios.create({
     withCredentials: true,
 })
 
-const createObjectForRequest = () => {
-
-}
+// const createObjectForRequest = () => {
+//
+// }
 
 
 export const cardPacksApi = {

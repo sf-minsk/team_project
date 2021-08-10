@@ -14,7 +14,7 @@ type localStorageStateType = {
         packName: string,
         searchText: string,
         cardPacksTotalCount: number,
-    }
+    },
 }
 
 export const loadState = () => {

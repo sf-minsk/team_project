@@ -18,7 +18,7 @@ const initialState = {
     max: 5,
     sortCardDirection: 0,
     sortBy: 'grade',
-    cardsPack_id: '', //611254bb97435f0004784729
+    cardsPack_id: '',
 } as PackInitialStateType
 
 export type PackInitialStateType = PackResponseType & {
@@ -56,11 +56,19 @@ export const setPackAC = (data: PackResponseType & NewPackApiModelType) =>
 //thunks
 export const setPackTC = (data: PackRequestType): AppThunk =>
     async (dispatch, getState: () => AppRootStateType) => {
-        const newPackApiModel = packApiModel(getState().pack, data)
         dispatch(setAppStatusAC('loading'))
+        const newPackApiModel = packApiModel(getState().pack, data)
+
+        const pastPageCount = getState().pack.pageCount
+        const currentPage = getState().pack.page
+        const currentPageCount = newPackApiModel.pageCount
+        const newPage = pastPageCount !== currentPageCount
+            ? Math.floor(pastPageCount * (currentPage - 1) / currentPageCount) + 1
+            : newPackApiModel.page
+
         try {
-            const res = await cardPacksApi.fetchPack(newPackApiModel)
-            dispatch(setPackAC({...res.data, ...newPackApiModel}))
+            const res = await cardPacksApi.fetchPack({...newPackApiModel, page: newPage})
+            dispatch(setPackAC({...res.data, ...newPackApiModel, page: newPage}))
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         } finally {

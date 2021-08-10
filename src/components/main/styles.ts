@@ -6,27 +6,49 @@ export const useStyles = makeStyles((theme: Theme) => ({
         flexShrink: 0,
         marginLeft: theme.spacing(2.5),
     },
+    app: {
+        position: 'static',
+        flexDirection: 'row',
+        display: 'flex',
+        height: '72px',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    tab: {},
+    typo: {
+        marginLeft: '10px',
+    },
+    logoutButton: {
+        color: 'white',
+        borderColor: 'white',
+        marginRight: '10px',
+    },
+    container: {
+        padding: '0 12px',
+    },
     paper: {
         marginTop: '20px',
         marginBottom: '60px',
         display: 'flex',
         flexDirection: 'row',
         minHeight: '800px',
-        minWidth: '1000px',
+        minWidth: '1009px',
     },
     navBar: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        width: '240px',
+        maxWidth: '200px',
+        minWidth: '200px',
         backgroundColor: 'lightblue',
         borderRadius: '4px 0px 0px 4px',
     },
     body: {
-        margin: '10px 15px 10px 15px',
+        margin: '10px 12px',
+        padding: '0 12px',
     },
     table: {
-        minWidth: 700,
+        minWidth: '700px',
     },
     showPacksCards: {
         fontSize: '20px',
@@ -43,12 +65,13 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     input: {
         height: '40px',
+        marginBottom: '10px',
     },
     addNewPackButton: {
         width: '230px',
         marginLeft: '20px',
     },
-    packsListHeading: {
+    packListHeading: {
         fontSize: '30px',
         fontWeight: 'bold',
     },

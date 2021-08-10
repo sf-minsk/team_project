@@ -66,11 +66,19 @@ export const setCardPacksAC = (data: CardPacksResponseType & NewCardsApiModelTyp
 //thunks
 export const setCardPacksTC = (data?: CardPacksRequestDataType): AppThunk =>
     async (dispatch, getState: () => AppRootStateType) => {
-        const newCardsApiModel = cardsApiModel(getState().cards, data)
         dispatch(setAppStatusAC('loading'))
+        const newCardsApiModel = cardsApiModel(getState().cards, data)
+
+        const pastPageCount = getState().cards.pageCount
+        const currentPage = getState().cards.page
+        const currentPageCount = newCardsApiModel.pageCount
+        const newPage = pastPageCount !== currentPageCount
+            ? Math.floor(pastPageCount * (currentPage - 1) / currentPageCount) + 1
+            : newCardsApiModel.page
+
         try {
-            const res = await cardPacksApi.fetchPacks(newCardsApiModel)
-            dispatch(setCardPacksAC({...res.data, ...newCardsApiModel}))
+            const res = await cardPacksApi.fetchPacks({...newCardsApiModel, page: newPage})
+            dispatch(setCardPacksAC({...res.data, ...newCardsApiModel, page: newPage}))
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         } finally {
@@ -83,7 +91,7 @@ export const createPackTC = (data: CardsPackRequestType): AppThunk =>
         dispatch(setAppStatusAC('loading'))
         try {
             await cardPacksApi.createPack(data)
-            dispatch(setCardPacksTC({packName: ''}))
+            dispatch(setCardPacksTC({packName: '', page: 1}))
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         } finally {

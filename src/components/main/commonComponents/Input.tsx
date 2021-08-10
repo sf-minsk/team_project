@@ -2,13 +2,13 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
-import {CardsInitialStateType, setCardPacksTC} from '../../../../bll/cards-reducer';
+import {CardsInitialStateType, setCardPacksTC} from '../../../bll/cards-reducer';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 import TextField from '@material-ui/core/TextField';
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useStyles} from '../../styles';
-import {AppRootStateType} from '../../../../bll/store';
+import {useStyles} from '../styles';
+import {AppRootStateType} from '../../../bll/store';
 
 
 export const Input: React.FC = React.memo(() => {
