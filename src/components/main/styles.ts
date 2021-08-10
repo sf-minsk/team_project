@@ -6,27 +6,49 @@ export const useStyles = makeStyles((theme: Theme) => ({
         flexShrink: 0,
         marginLeft: theme.spacing(2.5),
     },
+    app: {
+        position: 'static',
+        flexDirection: 'row',
+        display: 'flex',
+        height: '72px',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    tab: {},
+    typo: {
+        marginLeft: '10px',
+    },
+    logoutButton: {
+        color: 'white',
+        borderColor: 'white',
+        marginRight: '10px',
+    },
+    container: {
+        padding: '0 12px',
+    },
     paper: {
         marginTop: '20px',
         marginBottom: '60px',
         display: 'flex',
         flexDirection: 'row',
         minHeight: '800px',
-        minWidth: '1000px',
+        minWidth: '1009px',
     },
     navBar: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        width: '240px',
+        maxWidth: '200px',
+        minWidth: '200px',
         backgroundColor: 'lightblue',
         borderRadius: '4px 0px 0px 4px',
     },
     body: {
-        margin: '10px 15px 10px 15px',
+        margin: '10px 12px',
+        padding: '0 12px',
     },
     table: {
-        minWidth: 700,
+        minWidth: '700px',
     },
     showPacksCards: {
         fontSize: '20px',
@@ -35,42 +57,50 @@ export const useStyles = makeStyles((theme: Theme) => ({
         marginBottom: '10px',
     },
     MyAllButtons: {
-        marginTop: '20px'
+        marginTop: '20px',
     },
     slider: {
         marginTop: '50px',
         width: '150px',
     },
     input: {
-        height: '40px'
+        height: '40px',
+        marginBottom: '10px',
     },
     addNewPackButton: {
         width: '230px',
         marginLeft: '20px',
     },
-    packsListHeading: {
+    packListHeading: {
         fontSize: '30px',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     inputButtonSection: {
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     buttonsOfActionsSection: {
         display: 'flex',
         width: '224px',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
     },
     footerPage: {
         display: 'flex',
         height: '53px',
         marginLeft: '10px',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     modalComponentStyle: {
         position: 'absolute',
         left: '50%',
         top: '50%',
         width: '100%',
+    },
+    tableHead: {
+        backgroundColor: 'lightblue',
+    },
+    navLink: {
+        textDecoration: 'none',
+        color: 'black'
     },
 }))

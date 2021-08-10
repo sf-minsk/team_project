@@ -5,7 +5,7 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import {useStyles} from '../../styles';
+import {useStyles} from '../styles';
 
 
 export const TablePaginationActions = React.memo((props: TablePaginationActionsProps) => {

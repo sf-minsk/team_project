@@ -2,28 +2,25 @@ import {useStyles} from '../styles';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../../bll/store';
 import {CardsInitialStateType, createPackTC, setCardPacksTC} from '../../../bll/cards-reducer';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {saveState} from '../../../utils/localStorage-util';
 import Paper from '@material-ui/core/Paper';
-import {ModalComponent} from '../ModalComponent';
+import {ModalComponent} from '../commonComponents/ModalComponent';
 import {NavBar} from './packs/NavBar';
 import Container from '@material-ui/core/Container/Container';
-import {Input} from './packs/Input';
+import {Input} from '../commonComponents/Input';
 import Button from '@material-ui/core/Button';
 import TableContainer from '@material-ui/core/TableContainer';
-import Table from '@material-ui/core/Table';
-import {PacksListTableHead} from './packs/PacksListTableHead';
-import {PacksListTableBody} from './packs/PacksListTableBody';
-import {PacksListTableFooter} from './packs/PacksListTableFooter';
+import {PacksListTable} from './packs/PacksListTable';
 import {ErrorSnackbar} from '../../../features/errors/ErrorSnackbar';
 
 export const PacksList: React.FC = React.memo(() => {
+
+    //const {searchText, setSearchText} = props
     const classes = useStyles();
     const dispatch = useDispatch()
 
     const cards = useSelector<AppRootStateType, CardsInitialStateType>(state => state.cards)
-    const [searchText, setSearchText] = useState(cards.searchText)
-
 
     useEffect(() => {
         dispatch(setCardPacksTC())
@@ -51,21 +48,21 @@ export const PacksList: React.FC = React.memo(() => {
     }, [cards])
 
 
-    const addNewPackHandler = () => {
-        dispatch(createPackTC({cardsPack: {name: searchText}}))
-        setSearchText('')
-    }
+    const addNewPackHandler = useCallback(() => {
+        dispatch(createPackTC({cardsPack: {name: 'New pack'}}))
+        // setSearchText('')
+    }, [dispatch])
 
-    
-    return(
-        <Container>
+
+    return (
+        <Container className={classes.container}>
             <Paper className={classes.paper}>
                 <ModalComponent/>
                 <NavBar/>
                 <Container className={classes.body}>
-                    <div className={classes.packsListHeading}>Packs list</div>
+                    <div className={classes.packListHeading}>Packs list</div>
                     <div className={classes.inputButtonSection}>
-                        <Input searchText={searchText} setSearchText={setSearchText}/>
+                        <Input/>
                         <Button
                             className={classes.addNewPackButton}
                             variant="contained"
@@ -76,11 +73,7 @@ export const PacksList: React.FC = React.memo(() => {
                         </Button>
                     </div>
                     <TableContainer component={Paper}>
-                        <Table className={classes.table} aria-label="custom pagination table">
-                            <PacksListTableHead/>
-                            <PacksListTableBody/>
-                            <PacksListTableFooter/>
-                        </Table>
+                        <PacksListTable labelRowsPerPage={'Packs per page'}/>
                     </TableContainer>
                 </Container>
             </Paper>
@@ -88,3 +81,8 @@ export const PacksList: React.FC = React.memo(() => {
         </Container>
     )
 })
+
+// type PacksListPropsType = {
+//     searchText: string
+//     setSearchText: (searchText: string) => void
+// }

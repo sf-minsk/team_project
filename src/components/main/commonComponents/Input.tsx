@@ -2,19 +2,22 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
-import {setCardPacksTC} from '../../../../bll/cards-reducer';
+import {CardsInitialStateType, setCardPacksTC} from '../../../bll/cards-reducer';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 import TextField from '@material-ui/core/TextField';
-import React, {ChangeEvent, KeyboardEvent} from 'react';
-import {useDispatch} from 'react-redux';
-import {useStyles} from '../../styles';
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {useStyles} from '../styles';
+import {AppRootStateType} from '../../../bll/store';
 
 
-export const Input: React.FC<InputPropsType> = React.memo((props) => {
+export const Input: React.FC = React.memo(() => {
 
     const classes = useStyles();
     const dispatch = useDispatch()
-    const {searchText, setSearchText} = props
+
+    const cards = useSelector<AppRootStateType, CardsInitialStateType>(state => state.cards)
+    const [searchText, setSearchText] = useState(cards.searchText)
 
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setSearchText(e.target.value)
@@ -65,8 +68,3 @@ export const Input: React.FC<InputPropsType> = React.memo((props) => {
         />
     )
 })
-
-type InputPropsType = {
-    searchText: string
-    setSearchText: (searchText: string) => void
-}
