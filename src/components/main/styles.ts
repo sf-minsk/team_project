@@ -35,14 +35,14 @@ export const useStyles = makeStyles((theme: Theme) => ({
         marginBottom: '10px',
     },
     MyAllButtons: {
-        marginTop: '20px'
+        marginTop: '20px',
     },
     slider: {
         marginTop: '50px',
         width: '150px',
     },
     input: {
-        height: '40px'
+        height: '40px',
     },
     addNewPackButton: {
         width: '230px',
@@ -50,27 +50,34 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     packsListHeading: {
         fontSize: '30px',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     inputButtonSection: {
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     buttonsOfActionsSection: {
         display: 'flex',
         width: '224px',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
     },
     footerPage: {
         display: 'flex',
         height: '53px',
         marginLeft: '10px',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     modalComponentStyle: {
         position: 'absolute',
         left: '50%',
         top: '50%',
         width: '100%',
+    },
+    tableHead: {
+        backgroundColor: 'lightblue',
+    },
+    navLink: {
+        textDecoration: 'none',
+        color: 'black'
     },
 }))

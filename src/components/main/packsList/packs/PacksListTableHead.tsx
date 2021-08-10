@@ -10,6 +10,7 @@ import {useStyles} from '../../styles';
 
 export const PacksListTableHead: React.FC = React.memo(() => {
 
+    const classes = useStyles();
     const dispatch = useDispatch()
 
     const cards = useSelector<AppRootStateType, CardsInitialStateType>(state => state.cards)
@@ -23,7 +24,7 @@ export const PacksListTableHead: React.FC = React.memo(() => {
     }
 
     return (
-        <TableHead>
+        <TableHead className={classes.tableHead}>
             <TableRow>
                 <TableCell onClick={() => onClickSortHandler('name')}>
                     <Button variant={cards.sortBy === 'name' ? 'outlined' : 'text'}>

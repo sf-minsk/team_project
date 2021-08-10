@@ -2,18 +2,14 @@ import axios from 'axios';
 
 const instance = axios.create({
     // baseURL: `https://neko-back.herokuapp.com/2.0`,
-    baseURL: `http://localhost:7542/2.0`,
+    baseURL: `http://localhost:7542/2.0/`,
     withCredentials: true,
 })
 
+const createObjectForRequest = () => {
 
-// export const cardsPackApi = {
-//     fetchPacks(page?: number, pageCount?: number, sortPacks?: 0 | 1, updated?: string, user_id?: string) {
-//         return instance.get<CardsPackResponseType>(
-//             `/cards/packName?page=${page}&pageCount=${pageCount}&sortPacks=${sortPacks}${updated}&`
-//             + (user_id ? `user_id=${user_id}` : ``))
-//     },
-// }
+}
+
 
 export const cardPacksApi = {
     fetchPacks(payload?: CardPacksRequestDataType) {
@@ -27,11 +23,21 @@ export const cardPacksApi = {
         return instance.get<CardPacksResponseType>(`cards/pack${newURL}`)
     },
     createPack(cardsPack: CardsPackRequestType) {
-        return instance.post<CardsPackResponseType>(`cards/pack`, cardsPack)
+        return instance.post(`cards/pack`, cardsPack)
     },
     deletePack(id: string) {
         return instance.delete(`cards/pack?id=${id}`)
     },
+    fetchPack(payload: PackRequestType) {
+        let generateURL = '?'
+        if (!!payload) {
+            Object.entries(payload).forEach(el => {
+                generateURL += el[0] + '=' + el[1] + '&'
+            })
+        }
+        const newURL = generateURL.slice(0, -1)
+        return instance.get<PackResponseType>(`/cards/card${newURL}`)
+    }
 }
 
 export type CardPacksRequestDataType = {
@@ -84,8 +90,39 @@ export type CardsPackDataType = {
 export type CardsPackRequestType = {
     cardsPack: CardsPackDataType
 }
-export type CardsPackResponseType = {
-    newCardsPack: CardPacksType
-    token: string
-    tokenDeathTime: number
+
+export type PackRequestType = {
+    cardAnswer?: string
+    cardQuestion?: string
+    cardsPack_id: string
+    min?: number
+    max?: number
+    sortCards?: string
+    page?: number
+    pageCount?: number
+}
+
+export type PackResponseType = {
+    cards: Array<OnePackType>
+    cardsTotalCount: number
+    maxGrade: number
+    minGrade: number
+    page: number
+    pageCount: number
+    packUserId: string
+}
+
+export type OnePackType = {
+    answer: string
+    question: string
+    cardsPack_id: string
+    grade: number
+    rating: number
+    shots: number
+    type: string
+    user_id: string
+    created: string
+    updated: string
+    __v: number
+    _id: string
 }

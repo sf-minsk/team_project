@@ -9,7 +9,8 @@ import {useStyles} from '../../styles';
 import {trimmedString} from '../../../../utils/trimmedString-util';
 import {updateDate} from '../../../../utils/updateDate-util';
 import TableBody from '@material-ui/core/TableBody';
-import {NavLink} from 'react-router-dom'
+import {NavLink} from 'react-router-dom';
+
 
 export const PacksListTableBody: React.FC = React.memo(() => {
 
@@ -29,7 +30,11 @@ export const PacksListTableBody: React.FC = React.memo(() => {
             {
                 cards.cardPacks.map((card) => (
                         <TableRow key={card._id}>
-                            <TableCell component="th">{trimmedString(card.name)}</TableCell>
+                            <TableCell component="th">
+                                <NavLink to={`/pack/${card._id}`} className={classes.navLink}>
+                                    {trimmedString(card.name)}
+                                </NavLink>
+                            </TableCell>
                             <TableCell align="right">{card.cardsCount}</TableCell>
                             <TableCell align="right">{updateDate(card.updated)}</TableCell>
                             <TableCell align="right">{trimmedString(card.user_name)}</TableCell>
@@ -44,7 +49,8 @@ export const PacksListTableBody: React.FC = React.memo(() => {
                                                                     style={{margin: '0 10px'}}>Edit</Button>
                                                         </span>
                                                         }
-                                                        <Button size={'small'} variant={'outlined'}>Learn</Button></span>
+                                                        <Button size={'small'}
+                                                                variant={'outlined'}>Learn</Button></span>
                             </TableCell>
                         </TableRow>
                     )

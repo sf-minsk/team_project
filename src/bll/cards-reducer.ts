@@ -40,7 +40,9 @@ export type CardsInitialStateType = CardPacksResponseType & {
 }
 
 export const cardsReducer = (state = initialState, action: CardsActionsType): CardsInitialStateType => {
+
     switch (action.type) {
+
         case 'cards/SET-CARD-PACKS':
             return {
                 ...state,
@@ -50,6 +52,7 @@ export const cardsReducer = (state = initialState, action: CardsActionsType): Ca
                 sortPacksDirection: Number(action.data.sortPacks.substring(0, 1)),
                 searchText: action.data.packName,
             }
+
         default:
             return state;
     }
