@@ -14,7 +14,7 @@ import {logoutTC} from './bll/auth-reducer';
 import {PrivateRoute} from './features/privateRoute/PrivateRoute';
 import {Error404} from './features/error404/Error404';
 import {Header} from './components/header/Header';
-import {PackName} from './components/main/packName/PackName';
+import {Pack} from './components/main/pack/Pack';
 import {PacksList} from './components/main/packsList/PacksList';
 
 function App() {
@@ -61,7 +61,7 @@ function App() {
                     {/*<PrivateRoute exact path="/" isLoggedIn={isLoggedIn} render={() => <Main/>} redirectTo="/login"/>*/}
                     <PrivateRoute exact path="/" isLoggedIn={isLoggedIn} render={() => <PacksList/>}
                                   redirectTo="/login"/>
-                    <PrivateRoute exact path='/pack/:id' isLoggedIn={isLoggedIn} render={() => <PackName/>}
+                    <PrivateRoute exact path='/pack/:id' isLoggedIn={isLoggedIn} render={() => <Pack/>}
                                   redirectTo="/login"/>
                     <PrivateRoute path="/profile" isLoggedIn={isLoggedIn} render={() => <Profile/>}
                                   redirectTo="/login"/>

@@ -3,7 +3,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import TableHead from '@material-ui/core/TableHead';
 import React, {ChangeEvent, MouseEvent, useCallback} from 'react';
-import {CardsInitialStateType, deletePackTC, setCardPacksTC} from '../../../../bll/cards-reducer';
+import {CardsInitialStateType, deletePackTC, setCardPacksTC} from '../../../../bll/packs-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../../../bll/store';
 import {useStyles} from '../../styles';
@@ -21,7 +21,7 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
     const classes = useStyles();
     const dispatch = useDispatch()
 
-    const cards = useSelector<AppRootStateType, CardsInitialStateType>(state => state.cards)
+    const cards = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
     const id = useSelector<AppRootStateType, string>(state => state.profile._id)
 
     const onClickSortHandler = (sortValue: SortByType) => {
@@ -107,7 +107,7 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
             <TableFooter>
                 <TableRow>
                     <td className={classes.footerPage}>
-                        Page: {cards.page}
+                        Page: {cards.page} (Total:{Math.ceil(cards.cardPacksTotalCount / cards.pageCount)})
                     </td>
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25, {

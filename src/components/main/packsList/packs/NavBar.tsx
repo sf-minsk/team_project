@@ -4,7 +4,7 @@ import Slider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
 import React, {ChangeEvent, useState} from 'react';
 import {useStyles} from '../../styles';
-import {CardsInitialStateType, setCardPacksTC} from '../../../../bll/cards-reducer';
+import {CardsInitialStateType, setCardPacksTC} from '../../../../bll/packs-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../../../bll/store';
 
@@ -13,7 +13,7 @@ export const NavBar: React.FC = React.memo(() => {
     const classes = useStyles();
     const dispatch = useDispatch()
 
-    const cards = useSelector<AppRootStateType, CardsInitialStateType>(state => state.cards)
+    const cards = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
     const id = useSelector<AppRootStateType, string>(state => state.profile._id)
     const [sliderValue, setSliderValue] = useState<number[]>([cards.min, cards.max])
 
@@ -32,7 +32,7 @@ export const NavBar: React.FC = React.memo(() => {
     }
 
     const changeSliderValueForPayload = () => {
-        dispatch(setCardPacksTC({min: sliderValue[0], max: sliderValue[1]}))
+        dispatch(setCardPacksTC({min: sliderValue[0], max: sliderValue[1], page: 1}))
     }
 
 

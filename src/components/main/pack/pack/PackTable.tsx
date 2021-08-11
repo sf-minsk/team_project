@@ -17,7 +17,7 @@ import Table from '@material-ui/core/Table';
 import {useLocation} from 'react-router-dom';
 
 
-export const PackNameTable = React.memo((props: PackNameTableProps) => {
+export const PackTable = React.memo((props: PackNameTableProps) => {
 
     const classes = useStyles();
     const dispatch = useDispatch()
@@ -84,7 +84,7 @@ export const PackNameTable = React.memo((props: PackNameTableProps) => {
             <TableFooter>
                 <TableRow>
                     <td className={classes.footerPage}>
-                        Page: {pack.page}
+                        Page: {pack.page} (Total:{Math.ceil(pack.cardsTotalCount / pack.pageCount)})
                     </td>
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25, {

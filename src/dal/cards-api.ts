@@ -12,7 +12,7 @@ const instance = axios.create({
 
 
 export const cardPacksApi = {
-    fetchPacks(payload?: CardPacksRequestDataType) {
+    fetchPacks(payload?: PacksRequestDataType) {
         let generateURL = '?'
         if (!!payload) {
             Object.entries(payload).forEach(el => {
@@ -20,10 +20,10 @@ export const cardPacksApi = {
             })
         }
         const newURL = generateURL.slice(0, -1)
-        return instance.get<CardPacksResponseType>(`cards/pack${newURL}`)
+        return instance.get<PacksResponseType>(`cards/pack${newURL}`)
     },
-    createPack(cardsPack: CardsPackRequestType) {
-        return instance.post(`cards/pack`, cardsPack)
+    createPack(pack: CreatePackRequestType) {
+        return instance.post(`cards/pack`, pack)
     },
     deletePack(id: string) {
         return instance.delete(`cards/pack?id=${id}`)
@@ -39,8 +39,9 @@ export const cardPacksApi = {
         return instance.get<PackResponseType>(`/cards/card${newURL}`)
     }
 }
+// get packs type
 
-export type CardPacksRequestDataType = {
+export type PacksRequestDataType = {
     packName?: string
     min?: number
     max?: number
@@ -49,8 +50,8 @@ export type CardPacksRequestDataType = {
     pageCount?: number
     user_id?: string
 }
-export type CardPacksResponseType = {
-    cardPacks: Array<CardPacksType>
+export type PacksResponseType = {
+    cardPacks: Array<PacksType>
     cardPacksTotalCount: number
     maxCardsCount: number
     minCardsCount: number
@@ -59,7 +60,7 @@ export type CardPacksResponseType = {
     token: string
     tokenDeathTime: number
 }
-export type CardPacksType = {
+export type PacksType = {
     _id: string
     user_id: string
     user_name: string
@@ -77,7 +78,12 @@ export type CardPacksType = {
     __v: number
 }
 
-export type CardsPackDataType = {
+// create pack type
+
+export type CreatePackRequestType = {
+    cardsPack: PackDataType
+}
+export type PackDataType = {
     name?: string | null
     path?: string
     grade?: number
@@ -87,9 +93,8 @@ export type CardsPackDataType = {
     private?: boolean
     type?: string
 }
-export type CardsPackRequestType = {
-    cardsPack: CardsPackDataType
-}
+
+// get pack type
 
 export type PackRequestType = {
     cardAnswer?: string

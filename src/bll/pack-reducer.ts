@@ -19,6 +19,7 @@ const initialState = {
     sortCardDirection: 0,
     sortBy: 'grade',
     cardsPack_id: '',
+    currentPackName: 'Pack name',
 } as PackInitialStateType
 
 export type PackInitialStateType = PackResponseType & {
@@ -29,6 +30,7 @@ export type PackInitialStateType = PackResponseType & {
     sortCardDirection: number
     sortBy: string
     cardsPack_id: string
+    currentPackName: string
 }
 
 

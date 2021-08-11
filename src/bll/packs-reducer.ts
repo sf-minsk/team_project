@@ -2,16 +2,16 @@ import {AppRootStateType, AppThunk} from './store';
 import {setAppErrorAC, setAppStatusAC} from './app-reducer';
 import {
     cardPacksApi,
-    CardPacksRequestDataType,
-    CardPacksResponseType,
-    CardPacksType,
-    CardsPackRequestType
+    PacksRequestDataType,
+    PacksResponseType,
+    PacksType,
+    CreatePackRequestType
 } from '../dal/cards-api';
-import {cardsApiModel} from '../utils/cardsApiModel-util';
+import {packsApiModel} from '../utils/cardsApiModel-util';
 
 
 const initialState = {
-    cardPacks: [] as Array<CardPacksType>,
+    cardPacks: [] as Array<PacksType>,
     myPacks: false,
     page: 1,
     pageCount: 5,
@@ -27,7 +27,7 @@ const initialState = {
     cardPacksTotalCount: 1,
 } as CardsInitialStateType
 
-export type CardsInitialStateType = CardPacksResponseType & {
+export type CardsInitialStateType = PacksResponseType & {
     myPacks: boolean
     sortPacksDirection: number
     sortBy: string
@@ -39,7 +39,7 @@ export type CardsInitialStateType = CardPacksResponseType & {
     cardPacksTotalCount: number
 }
 
-export const cardsReducer = (state = initialState, action: CardsActionsType): CardsInitialStateType => {
+export const packsReducer = (state = initialState, action: PacksActionsType): CardsInitialStateType => {
 
     switch (action.type) {
 
@@ -59,18 +59,18 @@ export const cardsReducer = (state = initialState, action: CardsActionsType): Ca
 }
 
 //actions
-export const setCardPacksAC = (data: CardPacksResponseType & NewCardsApiModelType) =>
+export const setCardPacksAC = (data: PacksResponseType & NewCardsApiModelType) =>
     ({type: 'cards/SET-CARD-PACKS', data} as const)
 
 
 //thunks
-export const setCardPacksTC = (data?: CardPacksRequestDataType): AppThunk =>
+export const setCardPacksTC = (data?: PacksRequestDataType): AppThunk =>
     async (dispatch, getState: () => AppRootStateType) => {
         dispatch(setAppStatusAC('loading'))
-        const newCardsApiModel = cardsApiModel(getState().cards, data)
+        const newCardsApiModel = packsApiModel(getState().packs, data)
 
-        const pastPageCount = getState().cards.pageCount
-        const currentPage = getState().cards.page
+        const pastPageCount = getState().packs.pageCount
+        const currentPage = getState().packs.page
         const currentPageCount = newCardsApiModel.pageCount
         const newPage = pastPageCount !== currentPageCount
             ? Math.floor(pastPageCount * (currentPage - 1) / currentPageCount) + 1
@@ -86,7 +86,7 @@ export const setCardPacksTC = (data?: CardPacksRequestDataType): AppThunk =>
         }
     }
 
-export const createPackTC = (data: CardsPackRequestType): AppThunk =>
+export const createPackTC = (data: CreatePackRequestType): AppThunk =>
     async dispatch => {
         dispatch(setAppStatusAC('loading'))
         try {
@@ -104,7 +104,7 @@ export const deletePackTC = (packId: string): AppThunk =>
         dispatch(setAppStatusAC('loading'))
         try {
             await cardPacksApi.deletePack(packId)
-            const cardsState = getState().cards
+            const cardsState = getState().packs
             const remainPacks = cardsState.cardPacksTotalCount - (cardsState.pageCount * (cardsState.page - 1))
             dispatch(setCardPacksTC({
                 page: remainPacks === 1
@@ -132,5 +132,5 @@ type NewCardsApiModelType = {
     user_id: string
 }
 
-export type CardsActionsType =
+export type PacksActionsType =
     | SetCardPacksActionType

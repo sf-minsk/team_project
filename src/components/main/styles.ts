@@ -31,8 +31,8 @@ export const useStyles = makeStyles((theme: Theme) => ({
         marginBottom: '60px',
         display: 'flex',
         flexDirection: 'row',
-        minHeight: '800px',
-        minWidth: '1009px',
+        minHeight: '600px',
+        minWidth: '1000px',
     },
     navBar: {
         display: 'flex',
@@ -48,6 +48,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
         padding: '0 12px',
     },
     table: {
+
         minWidth: '700px',
     },
     showPacksCards: {
@@ -65,7 +66,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     input: {
         height: '40px',
-        marginBottom: '10px',
     },
     addNewPackButton: {
         width: '230px',
@@ -90,12 +90,12 @@ export const useStyles = makeStyles((theme: Theme) => ({
         marginLeft: '10px',
         alignItems: 'center',
     },
-    modalComponentStyle: {
-        position: 'absolute',
-        left: '50%',
-        top: '50%',
-        width: '100%',
-    },
+    // modalComponentStyle: {
+    //     position: 'absolute',
+    //     left: '50%',
+    //     top: '50%',
+    //     width: '100%',
+    // },
     tableHead: {
         backgroundColor: 'lightblue',
     },
