@@ -47,9 +47,8 @@ export const AddPackModal = (props: AddPackModalPropsType) => {
             zIndex: 11
         }}>
             <h2>Enter new pack name</h2>
-            <hr style={{width: '300px'}}/>
             <TextField
-                style={{margin: '50px 0 50px 0'}}
+                style={{margin: '30px 0 50px 0'}}
                 variant="outlined"
                 margin="none"
                 label="Name"
