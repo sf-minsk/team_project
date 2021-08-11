@@ -18,7 +18,7 @@ export const Header = () => {
     let location = useLocation()
 
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
-
+    let [value, setValue] = useState(0)
 
     useEffect(() => {
         if (location.pathname === '/profile') {
@@ -26,9 +26,9 @@ export const Header = () => {
         } else {
             setValue(0)
         }
-    }, [location])
+    }, [location, value])
 
-    let [value, setValue] = useState(0)
+
 
     const onPacksClickHandler = () => {
         setValue(0)
@@ -36,7 +36,7 @@ export const Header = () => {
     }
     const onProfileClickHndler = () => {
         setValue(1)
-        history.push('/Profile')
+        history.push('/profile')
     }
     const obLogOutClick = () => {
         dispatch(logoutTC())
