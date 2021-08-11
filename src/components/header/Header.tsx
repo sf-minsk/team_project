@@ -1,62 +1,49 @@
-import React, {useEffect, useState} from "react";
-
-import {AppBar, Tab, Tabs} from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography/Typography";
-import {logoutTC} from "../../bll/auth-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../bll/store";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import {AccountCircleOutlined, DynamicFeedOutlined} from "@material-ui/icons";
-import {useHistory, useLocation} from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {AppBar, Tab, Tabs} from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography/Typography';
+import {logoutTC} from '../../bll/auth-reducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootStateType} from '../../bll/store';
+import {AccountCircleOutlined, DynamicFeedOutlined} from '@material-ui/icons';
+import {useHistory, useLocation} from 'react-router-dom';
+import {useStyles} from '../main/styles';
 
 
 export const Header = () => {
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
+
+    const classes = useStyles()
     const dispatch = useDispatch()
     let history = useHistory()
     let location = useLocation()
-    useEffect(() => {
-        if (location.pathname === '/') {
-            setValue(0)
-        } else {
-            setValue(1)
-        }
-    }, [location])
+
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
     let [value, setValue] = useState(0)
+
+    useEffect(() => {
+        if (location.pathname === '/profile') {
+            setValue(1)
+        } else {
+            setValue(0)
+        }
+    }, [location, value])
+
+
+
     const onPacksClickHandler = () => {
         setValue(0)
         history.push('/')
     }
     const onProfileClickHndler = () => {
         setValue(1)
-        history.push('/Profile')
+        history.push('/profile')
     }
     const obLogOutClick = () => {
         dispatch(logoutTC())
     }
 
-    const classes = makeStyles(() => ({
-        app: {
-            flexDirection: 'row',
-            display: 'flex',
-            height: '72px',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-        },
-        tab: {},
-        typo: {
-            marginLeft: '10px',
-        },
-        button: {
-            color: 'white',
-            borderColor: 'white',
-            marginRight: '10px',
-        },
-    }))();
-
     return <>
-        <AppBar className={classes.app} position="static">
+        <AppBar className={classes.app}>
 
             <Typography className={classes.typo} variant={"h6"}>
                 CARDS
@@ -70,7 +57,7 @@ export const Header = () => {
                         <Tab onClick={onPacksClickHandler} label={'Packs List'} icon={<DynamicFeedOutlined/>}/>
                         <Tab onClick={onProfileClickHndler} label={'Profile'} icon={<AccountCircleOutlined/>}/>
                     </Tabs>
-                    <Button className={classes.button} onClick={obLogOutClick}
+                    <Button className={classes.logoutButton} onClick={obLogOutClick}
                             variant="outlined"
                     >
                         LOGOUT

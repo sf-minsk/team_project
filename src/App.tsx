@@ -4,17 +4,18 @@ import './App.css';
 import {Registration} from './components/auth/registration/Registration';
 import {Login} from './components/auth/login/Login';
 import {ForgotPassword} from './components/auth/forgotPassword/ForgotPassword';
-import {Profile} from "./components/profile/Profile";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./bll/store";
-import {initializeAppTC} from "./bll/app-reducer";
-import {CircularProgress} from "@material-ui/core";
-import {NewPassword} from "./components/auth/forgotPassword/NewPassword";
-import {logoutTC} from "./bll/auth-reducer";
-import { PrivateRoute } from './features/privateRoute/PrivateRoute';
+import {Profile} from './components/profile/Profile';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootStateType} from './bll/store';
+import {initializeAppTC} from './bll/app-reducer';
+import {CircularProgress} from '@material-ui/core';
+import {NewPassword} from './components/auth/forgotPassword/NewPassword';
+import {logoutTC} from './bll/auth-reducer';
+import {PrivateRoute} from './features/privateRoute/PrivateRoute';
 import {Error404} from './features/error404/Error404';
-import {Main} from './components/main/Main';
 import {Header} from './components/header/Header';
+import {Pack} from './components/main/pack/Pack';
+import {PacksList} from './components/main/packsList/PacksList';
 
 function App() {
 
@@ -42,12 +43,12 @@ function App() {
     return (
         <>
             <div>
-                <button><NavLink to='/'>Home</NavLink></button>
-                <button><NavLink to='/'>Main</NavLink></button>
-                <button><NavLink to='/registration'>Register</NavLink></button>
-                <button><NavLink to='/login'>Login</NavLink></button>
-                <button><NavLink to='/changepassword'>Change Password</NavLink></button>
-                <button><NavLink to='/profile'>Profile</NavLink></button>
+                <button><NavLink to="/">Home</NavLink></button>
+                <button><NavLink to="/">Main</NavLink></button>
+                <button><NavLink to="/registration">Register</NavLink></button>
+                <button><NavLink to="/login">Login</NavLink></button>
+                <button><NavLink to="/changepassword">Change Password</NavLink></button>
+                <button><NavLink to="/profile">Profile</NavLink></button>
                 <span style={{color: `${isInitialized ? 'green' : 'red'}`}}> (INITIALIZED) </span>
                 <span style={{color: `${isLoggedIn ? 'green' : 'red'}`}}> (LOGIN) </span>
                 <span style={{color: `${isRegistered ? 'green' : 'red'}`}}> (REGISTERED) </span>
@@ -57,10 +58,16 @@ function App() {
             <Header/>
             <div>
                 <Switch>
-                    <PrivateRoute exact path="/" isLoggedIn={isLoggedIn} render={() => <Main/>} redirectTo="/login"/>
-                    <PrivateRoute path="/profile" isLoggedIn={isLoggedIn} render={() => <Profile/>} redirectTo="/login"/>
+                    {/*<PrivateRoute exact path="/" isLoggedIn={isLoggedIn} render={() => <Main/>} redirectTo="/login"/>*/}
+                    <PrivateRoute exact path="/" isLoggedIn={isLoggedIn} render={() => <PacksList/>}
+                                  redirectTo="/login"/>
+                    <PrivateRoute exact path='/pack/:id' isLoggedIn={isLoggedIn} render={() => <Pack/>}
+                                  redirectTo="/login"/>
+                    <PrivateRoute path="/profile" isLoggedIn={isLoggedIn} render={() => <Profile/>}
+                                  redirectTo="/login"/>
                     <PrivateRoute path="/login" isLoggedIn={!isLoggedIn} render={() => <Login/>} redirectTo="/"/>
-                    <PrivateRoute path="/registration" isLoggedIn={!isLoggedIn} render={() => <Registration/>} redirectTo="/"/>
+                    <PrivateRoute path="/registration" isLoggedIn={!isLoggedIn} render={() => <Registration/>}
+                                  redirectTo="/"/>
 
                     <Route exact path={'/changepassword'} render={() => <ForgotPassword/>}/>
                     <Route path={'/changepassword/newpassword/:token?'} render={() => <NewPassword/>}/>
@@ -73,8 +80,6 @@ function App() {
 }
 
 export default App;
-
-
 
 
 // <Route path="/admin" render={ () => (isAuth ? ( <> <Route path="/admin/categories" component={() => <CategoriesAdmin setStore={setStore} store={store} setAppSide={setAppSide} />} /> <Route path="/admin/words/:id" component={() => <Words setStore={setStore} store={store} setAppSide={setAppSide} />} /> </> ) : <Redirect to={'/main'}/>)} />

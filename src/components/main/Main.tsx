@@ -113,14 +113,7 @@ export const Main: React.FC = React.memo(() => {
         dispatch(deletePackTC(packId))
     }
 
-    const updateDate = (cardUpdateDate: string) => {
-        let formatedDate = new Date(cardUpdateDate)
-        return  formatedDate.toLocaleString('es', {
-            year: 'numeric',
-            month: '2-digit',
-            day: 'numeric',
-        })
-    }
+
 
     return (
         <Container>
@@ -235,12 +228,12 @@ export const Main: React.FC = React.memo(() => {
                                                 <TableCell align="right">{card.cardsCount}</TableCell>
 {/*<<<<<<< HEAD*/}
                                                 <TableCell
-                                                    align="right">{updateDate(card.updated)}</TableCell>
+                                                    align="right">{card.updated}</TableCell>
                                                 <TableCell align="right">{card.user_name}</TableCell>
                                                 <TableCell align="right"><Button
                                                     variant={"outlined"}>Learn</Button></TableCell>
 {/*=======*/}
-                                                <TableCell align="right">{updateDate(card.updated)}</TableCell>
+                                                <TableCell align="right">{card.updated}</TableCell>
                                                 <TableCell align="right">{trimmedString(card.user_name)}</TableCell>
                                                 <TableCell align="right" style={{width: '224px'}}>
                                                     <span style={{
