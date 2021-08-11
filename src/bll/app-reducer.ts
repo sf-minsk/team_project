@@ -6,7 +6,7 @@ import {setProfileAC} from "./profile-reducer";
 const initialState = {
     error: null as string | null,
     errorType: null as AppErrorType | null,
-    status: 'idle' as RequestStatusType, ///
+    status: 'idle' as AppStatusType, ///
     isInitialized: false ///is necessary data for all app is requested
 }
 export type InitialStateType = typeof initialState
@@ -37,7 +37,7 @@ export const appReducer = (state = initialState, action: AppActionsType): Initia
 export const setAppErrorAC = (error: string | null, errorType: AppErrorType | null = null) =>
     ({type: 'app/SET-APP-ERROR', error, errorType} as const)
 
-export const setAppStatusAC = (status: RequestStatusType) =>
+export const setAppStatusAC = (status: AppStatusType) =>
     ({type: 'app/SET-APP-STATUS', status} as const)
 
 export const setIsInitializedAC = (value: boolean) =>
@@ -66,7 +66,7 @@ export const initializeAppTC = (): AppThunk =>
     }
 
 //types
-export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+export type AppStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 export type AppErrorType = "error" | "warning" | "info" | "success"
 
 export type SetAppErrorActionType = ReturnType<typeof setAppErrorAC>
