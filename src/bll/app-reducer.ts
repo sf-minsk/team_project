@@ -44,12 +44,14 @@ export const setIsInitializedAC = (value: boolean) =>
     ({type: 'app/SET-IS-INITIALIZED', value} as const)
 
 //thunks
+
 export const initializeAppTC = (): AppThunk =>
     async dispatch => {
         dispatch(setAppStatusAC('loading'))
         try {
             let res = await authApi.me()
             if (res.data) {
+                dispatch(setProfileAC(res.data))
                 dispatch(setSignInAC(true))
                 dispatch(setProfileAC(res.data))
             }
@@ -62,7 +64,6 @@ export const initializeAppTC = (): AppThunk =>
             dispatch(setAppStatusAC('succeeded'))
         }
     }
-
 
 //types
 export type AppStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'

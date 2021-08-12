@@ -6,11 +6,6 @@ const instance = axios.create({
     withCredentials: true,
 })
 
-// const createObjectForRequest = () => {
-//
-// }
-
-
 export const cardPacksApi = {
     fetchPacks(payload?: PacksRequestDataType) {
         let generateURL = '?'
@@ -38,6 +33,16 @@ export const cardPacksApi = {
         const newURL = generateURL.slice(0, -1)
         return instance.get<PackResponseType>(`/cards/card${newURL}`)
     },
+
+    createCard(data: CreateCardType) {
+        return instance.post(`cards/card`, {card: data})
+    },
+    deleteCard(id: string) {
+        return instance.delete(`cards/card?id=${id}`)
+    },
+   editCard(data: EditCardRequestType) {
+       return instance.put(`cards/card`, {card: data})
+   },
     updatedGrade(payload: GradeRequestType) {
         return instance.put<GradeResponseType>(`/cards/grade`, payload)
     },
@@ -130,6 +135,24 @@ export type OnePackType = {
     created: string
     updated: string
     __v: number
+    _id: string
+}
+
+// create card type
+export type CreateCardType = {
+    cardsPack_id: string
+    question?: string
+    answer?: string
+    grade?: number
+    shots?: number
+    rating?: number
+    answerImg?: string
+    questionImg?: string
+    questionVideo?: string
+    answerVideo?: string
+    type?: string
+}
+export type EditCardRequestType = CreateCardType & {
     _id: string
 }
 
