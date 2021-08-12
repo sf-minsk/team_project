@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Paper from '@material-ui/core/Paper';
 import {ProgressModalComponent} from '../commonComponents/modal/progressModalComponent/ProgressModalComponent';
 import Container from '@material-ui/core/Container/Container';
@@ -7,14 +7,15 @@ import TableContainer from '@material-ui/core/TableContainer';
 import {ErrorSnackbar} from '../../../features/errors/ErrorSnackbar';
 import {useStyles} from '../styles';
 import {useDispatch, useSelector} from 'react-redux';
-import {PackInitialStateType, setPackTC} from '../../../bll/pack-reducer';
+import {createCardTC, PackInitialStateType, setPackTC} from '../../../bll/pack-reducer';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import {PackTable} from './pack/PackTable';
 import {useHistory, useLocation} from 'react-router-dom';
 import {AppRootStateType} from '../../../bll/store';
 import {CardsInitialStateType, setCardPacksTC} from '../../../bll/packs-reducer';
 import {saveState} from "../../../utils/localStorage-util";
-import {OnePackType} from "../../../dal/cards-api";
+import Button from "@material-ui/core/Button";
+import {AddCardModal} from "../commonComponents/modal/addCardModal/AddCardModal";
 
 
 export const Pack: React.FC = React.memo(() => {
@@ -26,6 +27,7 @@ export const Pack: React.FC = React.memo(() => {
     const pack = useSelector<AppRootStateType, PackInitialStateType>(state => state.pack)
     const packs = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
     const packID = useLocation().pathname.substring(6)
+    const cardsPack_id = useSelector<AppRootStateType, string>(state => state.pack.cardsPack_id)
 
     let packName = pack.currentPackName
     if (packs.cardPacks.length) {
@@ -47,8 +49,24 @@ export const Pack: React.FC = React.memo(() => {
         history.goBack()
     }, [history])
 
+    const [addPackModal, setAddPackModal] = useState<boolean>(false)
+    const openAddPackModal = () => {
+        setAddPackModal(true)
+    }
+    const closeAddPackModal = () => {
+        setAddPackModal(false)
+    }
+
+    const addNewCard = (question: string, answer: string) => {
+        dispatch(createCardTC({cardsPack_id: cardsPack_id, question, answer}))
+    }
+
     return (
-        <Container>
+        <Container className={classes.container}>
+            {addPackModal && <AddCardModal
+                closeAddPackModal={closeAddPackModal}
+                addNewCard={addNewCard}
+            />}
             <Paper className={classes.paper}>
                 <ProgressModalComponent/>
                 <Container className={classes.body}>
@@ -65,8 +83,16 @@ export const Pack: React.FC = React.memo(() => {
 
                     <div className={classes.packListHeading}>{packName}</div>
                     <div className={classes.inputButtonSection}>
-                        <Input/>
-                        <Input/>
+                        <Input placeholderValue={'Search by questions'}/>
+                        <Input placeholderValue={'Search by answer'}/>
+                        <Button
+                            className={classes.addNewCardButton}
+                            variant="contained"
+                            color="primary"
+                            onClick={openAddPackModal}
+                        >
+                            Add new card
+                        </Button>
                     </div>
                     <TableContainer style={{marginTop: '20px'}} component={Paper}>
                         <PackTable labelRowsPerPage={'Cards per page'}/>

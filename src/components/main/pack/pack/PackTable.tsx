@@ -6,7 +6,7 @@ import React, {ChangeEvent, MouseEvent, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../../../bll/store';
 import {useStyles} from '../../styles';
-import {PackInitialStateType, setPackTC} from '../../../../bll/pack-reducer';
+import {deleteCardTC, editCardTC, PackInitialStateType, setPackTC} from '../../../../bll/pack-reducer';
 import {trimmedString} from '../../../../utils/trimmedString-util';
 import {updateDate} from '../../../../utils/updateDate-util';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,6 +15,8 @@ import {TablePaginationActions} from '../../commonComponents/TablePagination';
 import TableFooter from '@material-ui/core/TableFooter';
 import Table from '@material-ui/core/Table';
 import {useLocation} from 'react-router-dom';
+import {PackTableActions} from "./PackTableActions";
+import {EditCardRequestType} from "../../../../dal/cards-api";
 
 
 export const PackTable = React.memo((props: PackNameTableProps) => {
@@ -39,6 +41,13 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
 
     const handleChangePageCount = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         dispatch(setPackTC({cardsPack_id: packID, pageCount: parseInt(e.target.value, 10)}))
+    }
+
+    const deleteCardHandler = (cardId: string) => {
+        dispatch(deleteCardTC(pack.cardsPack_id, cardId))
+    }
+    const editCardHandler = (data: EditCardRequestType) => {
+        dispatch(editCardTC({...data}))
     }
 
     return (
@@ -66,18 +75,25 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
                             Grade
                         </Button>
                     </TableCell>
+                    <TableCell onClick={() => onClickSortHandler('grade')} align="right">
+                        ACTIONS
+                    </TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
                 {
-                    pack.cards.map((pack) => (
-                            <TableRow key={pack._id}>
-                                <TableCell component="th">{trimmedString(pack.question)}</TableCell>
-                                <TableCell align="right">{trimmedString(pack.answer)}</TableCell>
-                                <TableCell align="right">{updateDate(pack.updated)}</TableCell>
-                                <TableCell align="right">{pack.grade}</TableCell>
-                            </TableRow>
-                        )
+                    pack.cards.map((pack) =>
+                        <TableRow key={pack._id}>
+                            <TableCell component="th">{trimmedString(pack.question)}</TableCell>
+                            <TableCell align="right">{trimmedString(pack.answer)}</TableCell>
+                            <TableCell align="right">{updateDate(pack.updated)}</TableCell>
+                            <TableCell align="right">{pack.grade}</TableCell>
+                            <PackTableActions
+                                deleteCard={deleteCardHandler}
+                                editCard={editCardHandler}
+                                card={pack}
+                            />
+                        </TableRow>
                     )
                 }
             </TableBody>

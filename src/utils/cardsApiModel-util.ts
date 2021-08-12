@@ -1,4 +1,4 @@
-import {PacksRequestDataType, PackRequestType} from '../dal/cards-api';
+import {PacksRequestDataType, PackRequestType, CreateCardType, OnePackType} from '../dal/cards-api';
 import {CardsInitialStateType} from "../bll/packs-reducer";
 import {PackInitialStateType} from '../bll/pack-reducer';
 
@@ -28,3 +28,4 @@ export const packApiModel = (pack: PackInitialStateType, data: PackRequestType) 
     }
     return {...apiModel, ...data}
 }
+

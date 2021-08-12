@@ -1,7 +1,15 @@
 import {AppRootStateType, AppThunk} from './store';
 import {setAppErrorAC, setAppStatusAC} from './app-reducer';
-import {cardPacksApi, PackRequestType, PackResponseType, OnePackType} from '../dal/cards-api';
+import {
+    cardPacksApi,
+    PackRequestType,
+    PackResponseType,
+    OnePackType,
+    CreatePackRequestType,
+    CreateCardType, EditCardRequestType
+} from '../dal/cards-api';
 import {packApiModel} from '../utils/cardsApiModel-util';
+import {setCardPacksTC} from "./packs-reducer";
 
 
 const initialState = {
@@ -33,7 +41,6 @@ export type PackInitialStateType = PackResponseType & {
     currentPackName: string
 }
 
-
 export const packReducer = (state = initialState, action: PackActionsType): PackInitialStateType => {
 
     switch (action.type) {
@@ -53,6 +60,7 @@ export const packReducer = (state = initialState, action: PackActionsType): Pack
 //actions
 export const setPackAC = (data: PackResponseType & NewPackApiModelType) =>
     ({type: 'cards/SET-PACK', data} as const)
+
 
 
 //thunks
@@ -78,12 +86,50 @@ export const setPackTC = (data: PackRequestType): AppThunk =>
         }
     }
 
+export const createCardTC = (data: CreateCardType): AppThunk =>
+    async (dispatch) => {
+        dispatch(setAppStatusAC('loading'))
+        try {
+            await cardPacksApi.createCard({...data})
+            dispatch(setPackTC({cardsPack_id: data.cardsPack_id}))
+        } catch (err) {
+            dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
+        } finally {
+            dispatch(setAppStatusAC('succeeded'))
+        }
+    }
+export const deleteCardTC = (cardsPack_id: string, cardId: string): AppThunk =>
+    async (dispatch) => {
+        dispatch(setAppStatusAC('loading'))
+        try {
+            await cardPacksApi.deleteCard(cardId)
+            dispatch(setPackTC({cardsPack_id}))
+        } catch (err) {
+            dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
+        } finally {
+            dispatch(setAppStatusAC('succeeded'))
+        }
+    }
+export const editCardTC = (data: EditCardRequestType): AppThunk =>
+    async (dispatch) => {
+        dispatch(setAppStatusAC('loading'))
+        try {
+            await cardPacksApi.editCard({...data})
+            dispatch(setPackTC({cardsPack_id: data.cardsPack_id}))
+        } catch (err) {
+            dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
+        } finally {
+            dispatch(setAppStatusAC('succeeded'))
+        }
+    }
+
 //types
 export
 type SetPackActionType = ReturnType<typeof setPackAC>
 
 export type PackActionsType =
     | SetPackActionType
+
 
 type NewPackApiModelType = {
     cardAnswer: string

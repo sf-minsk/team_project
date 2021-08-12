@@ -66,10 +66,14 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     input: {
         height: '40px',
+        marginRight: '15px'
     },
     addNewPackButton: {
         width: '230px',
         marginLeft: '20px',
+    },
+    addNewCardButton: {
+        width: '300px',
     },
     packListHeading: {
         fontSize: '30px',
@@ -83,6 +87,10 @@ export const useStyles = makeStyles((theme: Theme) => ({
         display: 'flex',
         width: '224px',
         justifyContent: 'flex-end',
+    },
+    buttonEditCard:{
+        variant: "outlined",
+        color: "primary"
     },
     footerPage: {
         display: 'flex',

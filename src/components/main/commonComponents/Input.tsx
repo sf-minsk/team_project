@@ -11,7 +11,11 @@ import {useStyles} from '../styles';
 import {AppRootStateType} from '../../../bll/store';
 
 
-export const Input: React.FC = React.memo(() => {
+type InputSearchPropsType = {
+    placeholderValue?: string
+}
+
+export const Input  = React.memo(function(props: InputSearchPropsType){
 
     const classes = useStyles();
     const dispatch = useDispatch()
@@ -39,7 +43,7 @@ export const Input: React.FC = React.memo(() => {
     return (
         <TextField
             className={classes.input}
-            placeholder="Search"
+            placeholder={props.placeholderValue ? props.placeholderValue : "Search"}
             type="text"
             variant="outlined"
             fullWidth
