@@ -2,7 +2,7 @@ import {useStyles} from '../styles';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../../bll/store';
 import {CardsInitialStateType, createPackTC, setCardPacksTC} from '../../../bll/packs-reducer';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {saveState} from '../../../utils/localStorage-util';
 import Paper from '@material-ui/core/Paper';
 import {ProgressModalComponent} from '../commonComponents/modal/progressModalComponent/ProgressModalComponent';
@@ -49,11 +49,6 @@ export const PacksList: React.FC = React.memo(() => {
     }, [packs])
 
 
-    // const addNewPackHandler = useCallback(() => {
-    //     dispatch(createPackTC({cardsPack: {name: 'New pack'}}))
-    //     // setSearchText('')
-    // }, [dispatch])
-    //
     const [addPackModal, setAddPackModal] = useState<boolean>(false)
     const openAddPackModal = () => {
         setAddPackModal(true)

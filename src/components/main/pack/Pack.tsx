@@ -12,7 +12,7 @@ import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import {PackTable} from './pack/PackTable';
 import {useHistory, useLocation} from 'react-router-dom';
 import {AppRootStateType} from '../../../bll/store';
-import {CardsInitialStateType, setCardPacksTC} from '../../../bll/packs-reducer';
+import {CardsInitialStateType} from '../../../bll/packs-reducer';
 import {saveState} from "../../../utils/localStorage-util";
 import Button from "@material-ui/core/Button";
 import {AddCardModal} from "../commonComponents/modal/addCardModal/AddCardModal";
@@ -35,14 +35,14 @@ export const Pack: React.FC = React.memo(() => {
     }
 
     useEffect(() => {
-        dispatch(setPackTC({cardsPack_id: packID}))
+        dispatch(setPackTC({cardsPack_id: packID, page: 1}))
     }, [dispatch, packID])
 
     useEffect(() => {
         saveState({
             pack: {...pack, currentPackName: packName}
         })
-    }, [pack])
+    }, [packName, pack])
 
 
     const onClickHandler = useCallback(() => {
