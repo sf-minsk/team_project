@@ -99,12 +99,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
         marginLeft: '10px',
         alignItems: 'center',
     },
-    // modalComponentStyle: {
-    //     position: 'absolute',
-    //     left: '50%',
-    //     top: '50%',
-    //     width: '100%',
-    // },
     tableHead: {
         backgroundColor: 'lightblue',
     },
@@ -112,4 +106,29 @@ export const useStyles = makeStyles((theme: Theme) => ({
         textDecoration: 'none',
         color: 'black'
     },
+    learnCardsModalDarkWindow: {
+        position: 'fixed',
+        bottom: '0',
+        left: '0',
+        height: '100%',
+        width: '100%',
+        backgroundColor: `rgba(${0}, ${0}, ${0}, ${0.6})`,
+        zIndex: 10,
+    },
+    learnCardsModalWindowByQuestion: {
+        position: 'fixed',
+        left: `calc(50vw - 230px)`,
+        top: `calc(50vh - 164px)`,
+        width: '440px',
+        height: '250px',
+        border: '1px solid white',
+        borderRadius: '6px 6px 6px 6px',
+        backgroundColor: 'white',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: '20px 0 40px',
+        zIndex: 11,
+    },
+
 }))

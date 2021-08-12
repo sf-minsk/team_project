@@ -1,6 +1,6 @@
 import {AppRootStateType, AppThunk} from './store';
 import {setAppErrorAC, setAppStatusAC} from './app-reducer';
-import {cardPacksApi, GradeRequestType, GradeResponseType, OnePackType, PackRequestType} from '../dal/cards-api';
+import {cardPacksApi, GradeRequestType, OnePackType, PackRequestType} from '../dal/cards-api';
 
 
 const initialState = [] as OnePackType[]
@@ -13,13 +13,9 @@ export const cardsForLearnReducer = (state = initialState, action: CardsForLearn
 
         case 'cardsForLearn/SET-CARDS-OF-PACK':
             return [
-                ...state,
                 ...action.data,
             ]
-        case 'cardsForLearn/UPDATE-GRADE':
-            return [
-                ...state,
-            ]
+
         default:
             return state;
     }
@@ -28,9 +24,6 @@ export const cardsForLearnReducer = (state = initialState, action: CardsForLearn
 //actions
 export const setCardsOfPackAC = (data: OnePackType[]) =>
     ({type: 'cardsForLearn/SET-CARDS-OF-PACK', data} as const)
-
-export const updatedGradeAC = (data: GradeResponseType) =>
-    ({type: 'cardsForLearn/UPDATE-GRADE', data} as const)
 
 
 //thunks
@@ -68,8 +61,8 @@ export const updatedGradeTC = (data: GradeRequestType): AppThunk =>
 //types
 export
 type SetCardsOfPackActionType = ReturnType<typeof setCardsOfPackAC>
-type UpdatedGradeActionType = ReturnType<typeof updatedGradeAC>
+//type UpdatedGradeActionType = ReturnType<typeof updatedGradeAC>
 
 export type CardsForLearnActionsType =
     | SetCardsOfPackActionType
-    | UpdatedGradeActionType
+    //| UpdatedGradeActionType

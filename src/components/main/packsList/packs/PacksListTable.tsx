@@ -15,31 +15,32 @@ import TableBody from '@material-ui/core/TableBody';
 import TablePagination from '@material-ui/core/TablePagination';
 import {TablePaginationActions} from '../../commonComponents/TablePagination';
 import TableFooter from '@material-ui/core/TableFooter';
-import {LearnCardsModalQuestion} from '../../commonComponents/modal/learnCardsModal/LearnCardsModalQuestion';
+import {LearnCardsModal} from '../../commonComponents/modal/learnCardsModal/LearnCardsModal';
 import {OnePackType} from '../../../../dal/cards-api';
 import {CardsForLearnInitialStateType, fetchCardsOfPackTC} from '../../../../bll/learn-reducer';
 
 
 export const PacksListTable = React.memo((props: PacksListTableProps) => {
 
-    const classes = useStyles();
+    const classes = useStyles()
     const dispatch = useDispatch()
 
     const packs = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
-    const cardsForLearn = useSelector<AppRootStateType, CardsForLearnInitialStateType>(state => state.cardsForLearn)
+    const cardsForLearn = useSelector<AppRootStateType, CardsForLearnInitialStateType>(state => state.cardsForLearn) //103 карточки
     const id = useSelector<AppRootStateType, string>(state => state.profile._id)
 
-    const [learnCardsModal, setLearnCardsModal] = useState(false)
-    const [randomCard, setRandomCard] = useState({} as OnePackType)
-    const [name, setName] = useState<string>('')
+    const [learnCardsModal, setLearnCardsModal] = useState(false) //false
+    const [learnButtonClick, setLearnButtonClick] = useState(false) //false //true
+    const [randomCard, setRandomCard] = useState({} as OnePackType) //{}
+    const [name, setName] = useState<string>('') //interview1
 
 
     useEffect(() => {
-        if (cardsForLearn.length) {
+        if (cardsForLearn.length && learnButtonClick) {
             setRandomCard(getCard(cardsForLearn))
             setLearnCardsModal(true)
         }
-    }, [cardsForLearn])
+    }, [cardsForLearn, learnButtonClick])
 
 
     const onClickSortHandler = (sortValue: SortByType) => {
@@ -87,24 +88,26 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
     // }
     // console.log([getCard1([])]) //1 4 16
 
-
-
-    const openLearnCardsModal = (cardsPack_id: string, pageCount: number, name: string) => {
-        dispatch(fetchCardsOfPackTC({cardsPack_id, pageCount}))
+    const openLearnCardsModal = async (cardsPack_id: string, pageCount: number, name: string) => {
+        await dispatch(fetchCardsOfPackTC({cardsPack_id, pageCount}))
         setName(name)
+        setLearnButtonClick(true)
     }
     const closeLearnCardsModal = () => {
         setLearnCardsModal(false)
+        setLearnButtonClick(false)
+        setRandomCard({} as OnePackType)
     }
-    //console.log(newRandomCard)
+    console.log(randomCard) //1 - пустой
 
     return (
         <>
             {learnCardsModal &&
-            <LearnCardsModalQuestion
+            <LearnCardsModal
                 closeLearnCardsModal={closeLearnCardsModal}
                 question={randomCard.question}
                 answer={randomCard.answer}
+                card_id={randomCard._id}
                 packName={name}
             />
             }
@@ -144,12 +147,12 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
                                 <TableRow key={pack._id}>
                                     <TableCell component="th">
                                         <NavLink to={`/pack/${pack._id}`} className={classes.navLink}>
-                                            {trimmedString(pack.name)}
+                                            {trimmedString(pack.name, 20)}
                                         </NavLink>
                                     </TableCell>
                                     <TableCell align="right">{pack.cardsCount}</TableCell>
                                     <TableCell align="right">{updateDate(pack.updated)}</TableCell>
-                                    <TableCell align="right">{trimmedString(pack.user_name)}</TableCell>
+                                    <TableCell align="right">{trimmedString(pack.user_name, 20)}</TableCell>
                                     <TableCell align="right" style={{width: '224px'}}>
                                                     <span className={classes.buttonsOfActionsSection}>
                                                         {pack.user_id === id &&

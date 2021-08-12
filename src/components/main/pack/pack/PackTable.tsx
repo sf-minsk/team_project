@@ -93,8 +93,8 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
                 {
                     pack.cards.map((pack) =>
                         <TableRow key={pack._id}>
-                            <TableCell component="th">{trimmedString(pack.question)}</TableCell>
-                            <TableCell align="right">{trimmedString(pack.answer)}</TableCell>
+                            <TableCell component="th">{trimmedString(pack.question, 20)}</TableCell>
+                            <TableCell align="right">{trimmedString(pack.answer, 20)}</TableCell>
                             <TableCell align="right">{updateDate(pack.updated)}</TableCell>
                             <TableCell align="right">{pack.grade}</TableCell>
                             {pack.user_id === idUser ?
