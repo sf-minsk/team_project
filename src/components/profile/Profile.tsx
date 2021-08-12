@@ -10,7 +10,7 @@ export const Profile = () => {
         <div>
             <ErrorSnackbar/>
             Profile
-            <div>{`Your e-mail: ${profileData}`}</div>
+            <div>Your e-mail: {profileData}</div>
         </div>
     )
 }

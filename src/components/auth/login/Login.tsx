@@ -21,15 +21,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import * as Yup from 'yup';
 import {ErrorSnackbar} from '../../../features/errors/ErrorSnackbar';
 
-//
-// type FormikErrorType = {
-//     email?: string
-//     password?: string
-//     rememberMe?: boolean
-// }
 
 export const Login = () => {
-    console.log('login')
+
     const dispatch = useDispatch()
     const status = useSelector<AppRootStateType, AppStatusType>(state => state.app.status)
     const requestStatus = useSelector<AppRootStateType, AppStatusType>(state => state.app.status)
@@ -84,9 +78,6 @@ export const Login = () => {
         </div>
     }
 
-    // if (isLoggedIn) {
-    //     return <Redirect to={'/profile'}/>
-    // }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -160,6 +151,5 @@ export const Login = () => {
             </div>
             <ErrorSnackbar/>
         </Container>
-
     )
 }

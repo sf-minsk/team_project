@@ -37,7 +37,10 @@ export const cardPacksApi = {
         }
         const newURL = generateURL.slice(0, -1)
         return instance.get<PackResponseType>(`/cards/card${newURL}`)
-    }
+    },
+    updatedGrade(payload: GradeRequestType) {
+        return instance.put<GradeResponseType>(`/cards/grade`, payload)
+    },
 }
 // get packs type
 
@@ -106,7 +109,6 @@ export type PackRequestType = {
     page?: number
     pageCount?: number
 }
-
 export type PackResponseType = {
     cards: Array<OnePackType>
     cardsTotalCount: number
@@ -116,7 +118,6 @@ export type PackResponseType = {
     pageCount: number
     packUserId: string
 }
-
 export type OnePackType = {
     answer: string
     question: string
@@ -130,4 +131,21 @@ export type OnePackType = {
     updated: string
     __v: number
     _id: string
+}
+
+//update grade
+export type GradeRequestType = {
+    grade: number
+    card_id: string
+}
+export type GradeResponseType = {
+    updatedGrade: GradeDataType
+}
+export type GradeDataType = {
+    _id: string
+    cardsPack_id: string
+    card_id: string
+    user_id: string
+    grade: number
+    shots: number
 }
