@@ -5,11 +5,9 @@ import {
     PackRequestType,
     PackResponseType,
     OnePackType,
-    CreatePackRequestType,
     CreateCardType, EditCardRequestType
 } from '../dal/cards-api';
 import {packApiModel} from '../utils/cardsApiModel-util';
-import {setCardPacksTC} from "./packs-reducer";
 
 
 const initialState = {
