@@ -13,14 +13,14 @@ export const NavBar: React.FC = React.memo(() => {
     const classes = useStyles();
     const dispatch = useDispatch()
 
-    const cards = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
+    const packs = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
     const id = useSelector<AppRootStateType, string>(state => state.profile._id)
-    const [sliderValue, setSliderValue] = useState<number[]>([cards.min, cards.max])
+    const [sliderValue, setSliderValue] = useState<number[]>([packs.min, packs.max])
 
 
     const onMyButtonClick = () => {
         dispatch(setCardPacksTC({user_id: id, min: 0, page: 1}))
-        setSliderValue([0, cards.max])
+        setSliderValue([0, packs.max])
     }
 
     const onAllButtonClick = () => {
@@ -41,14 +41,14 @@ export const NavBar: React.FC = React.memo(() => {
             <span className={classes.showPacksCards}>Show packs cards</span>
             <ButtonGroup variant="contained" color="primary" className={classes.MyAllButtons}>
                 <Button onClick={onMyButtonClick}
-                        variant={cards.myPacks ? 'contained' : 'outlined'}>My</Button>
+                        variant={packs.myPacks ? 'contained' : 'outlined'}>My</Button>
                 <Button onClick={onAllButtonClick}
-                        variant={cards.myPacks ? 'outlined' : 'contained'}>All</Button>
+                        variant={packs.myPacks ? 'outlined' : 'contained'}>All</Button>
             </ButtonGroup>
             <Slider
                 className={classes.slider}
                 value={sliderValue}
-                max={cards.maxCardsCount}
+                max={packs.maxCardsCount}
                 onChange={changeSliderValue}
                 onChangeCommitted={changeSliderValueForPayload}
                 valueLabelDisplay="auto"

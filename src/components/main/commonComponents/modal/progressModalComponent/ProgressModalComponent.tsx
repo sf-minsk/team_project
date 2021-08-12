@@ -4,8 +4,8 @@ import {useSelector} from 'react-redux';
 import {AppRootStateType} from '../../../../../bll/store';
 import {AppStatusType} from '../../../../../bll/app-reducer';
 
-export const ProgressModalComponent: React.FC = React.memo(() => {
 
+export const ProgressModalComponent: React.FC = React.memo(() => {
 
     const appStatus = useSelector<AppRootStateType, AppStatusType>(state => state.app.status)
 
@@ -18,8 +18,6 @@ export const ProgressModalComponent: React.FC = React.memo(() => {
                 </div>
             </div>
             }
-
-
         </>
     )
 })

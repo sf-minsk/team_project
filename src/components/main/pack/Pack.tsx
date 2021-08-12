@@ -16,6 +16,8 @@ import {CardsInitialStateType} from '../../../bll/packs-reducer';
 import {saveState} from "../../../utils/localStorage-util";
 import Button from "@material-ui/core/Button";
 import {AddCardModal} from "../commonComponents/modal/addCardModal/AddCardModal";
+import {AppStatusType} from "../../../bll/app-reducer";
+import {CircularProgress} from "@material-ui/core";
 
 
 export const Pack: React.FC = React.memo(() => {
@@ -28,6 +30,8 @@ export const Pack: React.FC = React.memo(() => {
     const packs = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
     const packID = useLocation().pathname.substring(6)
     const cardsPack_id = useSelector<AppRootStateType, string>(state => state.pack.cardsPack_id)
+    const status = useSelector<AppRootStateType, AppStatusType>(state => state.app.status)
+    const idUser = useSelector<AppRootStateType, string>(state => state.profile._id)
 
     let packName = pack.currentPackName
     if (packs.cardPacks.length) {
@@ -61,6 +65,7 @@ export const Pack: React.FC = React.memo(() => {
         dispatch(createCardTC({cardsPack_id: cardsPack_id, question, answer}))
     }
 
+
     return (
         <Container className={classes.container}>
             {addPackModal && <AddCardModal
@@ -90,12 +95,17 @@ export const Pack: React.FC = React.memo(() => {
                             variant="contained"
                             color="primary"
                             onClick={openAddPackModal}
+                            disabled={pack.packUserId === idUser ? false: true}
                         >
                             Add new card
                         </Button>
                     </div>
                     <TableContainer style={{marginTop: '20px'}} component={Paper}>
-                        <PackTable labelRowsPerPage={'Cards per page'}/>
+                        {(status === 'loading') ?
+                             <div
+                            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+                            {/*<CircularProgress/>*/}
+                            </div>: <PackTable labelRowsPerPage={'Cards per page'}/>}
                     </TableContainer>
                 </Container>
             </Paper>
