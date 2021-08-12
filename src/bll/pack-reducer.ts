@@ -26,6 +26,8 @@ const initialState = {
     sortBy: 'grade',
     cardsPack_id: '',
     currentPackName: 'Pack name',
+    searchTextAnswer: '',
+    searchTexQuestion: '',
 } as PackInitialStateType
 
 export type PackInitialStateType = PackResponseType & {
@@ -37,6 +39,8 @@ export type PackInitialStateType = PackResponseType & {
     sortBy: string
     cardsPack_id: string
     currentPackName: string
+    searchTextAnswer: string
+    searchTexQuestion: string
 }
 
 export const packReducer = (state = initialState, action: PackActionsType): PackInitialStateType => {
@@ -49,6 +53,9 @@ export const packReducer = (state = initialState, action: PackActionsType): Pack
                 ...action.data,
                 sortBy: action.data.sortCards.slice(1),
                 sortCardDirection: Number(action.data.sortCards.substring(0, 1)),
+                searchTextAnswer: action.data.cardAnswer,
+                searchTexQuestion: action.data.cardQuestion
+
             }
         default:
             return state;
@@ -138,4 +145,6 @@ type NewPackApiModelType = {
     sortCards: string
     page: number
     pageCount: number
+
+
 }

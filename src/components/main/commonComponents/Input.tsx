@@ -9,10 +9,15 @@ import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useStyles} from '../styles';
 import {AppRootStateType} from '../../../bll/store';
+import {PackInitialStateType} from "../../../bll/pack-reducer";
 
 
 type InputSearchPropsType = {
     placeholderValue?: string
+    searchTextRequest: string
+    setTextTC: (searchText: string) => void
+    // setTextTC: (data: {[data: string]: string}) => void
+    // packName: string
 }
 
 export const Input  = React.memo(function(props: InputSearchPropsType){
@@ -20,8 +25,8 @@ export const Input  = React.memo(function(props: InputSearchPropsType){
     const classes = useStyles();
     const dispatch = useDispatch()
 
-    const packs = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
-    const [searchText, setSearchText] = useState(packs.searchText)
+    // const packs = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
+    const [searchText, setSearchText] = useState<string>(props.searchTextRequest)
 
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setSearchText(e.target.value)
@@ -31,7 +36,7 @@ export const Input  = React.memo(function(props: InputSearchPropsType){
     }
 
     const onSearchButtonHandler = () => {
-        dispatch(setCardPacksTC({packName: searchText}))
+        props.setTextTC(searchText)
     }
 
     const onClickIconButtonHandler = () => {
@@ -72,3 +77,60 @@ export const Input  = React.memo(function(props: InputSearchPropsType){
         />
     )
 })
+// export const Input  = React.memo(function(props: InputSearchPropsType){
+//
+//     const classes = useStyles();
+//     const dispatch = useDispatch()
+//
+//     const packs = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
+//     const [searchText, setSearchText] = useState(packs.searchText)
+//
+//
+//     const onChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setSearchText(e.target.value)
+//
+//     const onSearchKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+//         (e.key === 'Enter') && onSearchButtonHandler()
+//     }
+//
+//     const onSearchButtonHandler = () => {
+//         dispatch(setCardPacksTC({packName: searchText}))
+//     }
+//
+//     const onClickIconButtonHandler = () => {
+//         dispatch(setCardPacksTC({packName: ''}))
+//         setSearchText('')
+//     }
+//
+//
+//     return (
+//         <TextField
+//             className={classes.input}
+//             placeholder={props.placeholderValue ? props.placeholderValue : "Search"}
+//             type="text"
+//             variant="outlined"
+//             fullWidth
+//             size="small"
+//             onChange={onChangeHandler}
+//             onKeyPress={onSearchKeyPressHandler}
+//             value={searchText}
+//             InputProps={{
+//                 startAdornment: (
+//                     <InputAdornment position="start">
+//                         <Button onClick={onSearchButtonHandler}>
+//                             <SearchIcon/>
+//                         </Button>
+//                     </InputAdornment>
+//                 ),
+//                 endAdornment: searchText && (
+//                     <IconButton
+//                         style={{height: '40px'}}
+//                         aria-label="toggle password visibility"
+//                         onClick={onClickIconButtonHandler}
+//                     >
+//                         <CancelRoundedIcon/>
+//                     </IconButton>
+//                 )
+//             }}
+//         />
+//     )
+// })
