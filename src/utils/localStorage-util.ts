@@ -1,5 +1,4 @@
-import {OnePackType} from "../dal/cards-api";
-import {PackInitialStateType} from "../bll/pack-reducer";
+import {PackInitialStateType} from '../bll/pack-reducer';
 
 type PacksLocalStorageType = {
     packs: {

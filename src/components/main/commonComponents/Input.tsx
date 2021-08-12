@@ -16,8 +16,8 @@ export const Input: React.FC = React.memo(() => {
     const classes = useStyles();
     const dispatch = useDispatch()
 
-    const cards = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
-    const [searchText, setSearchText] = useState(cards.searchText)
+    const packs = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
+    const [searchText, setSearchText] = useState(packs.searchText)
 
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setSearchText(e.target.value)

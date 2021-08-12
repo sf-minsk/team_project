@@ -45,24 +45,27 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
         <Table className={classes.table} aria-label="custom pagination table">
             <TableHead className={classes.tableHead}>
                 <TableRow>
-                    <TableCell onClick={() => onClickSortHandler('question')}>
-                        <Button variant={pack.sortBy === 'question' ? 'outlined' : 'text'}>
+                    <TableCell>
+                        <Button onClick={() => onClickSortHandler('question')}
+                                variant={pack.sortBy === 'question' ? 'outlined' : 'text'}>
                             Question
                         </Button>
                     </TableCell>
-                    <TableCell onClick={() => onClickSortHandler('answer')}
-                               align="right">
-                        <Button variant={pack.sortBy === 'answer' ? 'outlined' : 'text'}>
+                    <TableCell align="right">
+                        <Button onClick={() => onClickSortHandler('answer')}
+                                variant={pack.sortBy === 'answer' ? 'outlined' : 'text'}>
                             Answer
                         </Button>
                     </TableCell>
-                    <TableCell onClick={() => onClickSortHandler('updated')} align="right">
-                        <Button variant={pack.sortBy === 'updated' ? 'outlined' : 'text'}>
+                    <TableCell align="right">
+                        <Button onClick={() => onClickSortHandler('updated')}
+                                variant={pack.sortBy === 'updated' ? 'outlined' : 'text'}>
                             Last Updated
                         </Button>
                     </TableCell>
-                    <TableCell onClick={() => onClickSortHandler('grade')} align="right">
-                        <Button variant={pack.sortBy === 'grade' ? 'outlined' : 'text'}>
+                    <TableCell align="right">
+                        <Button onClick={() => onClickSortHandler('grade')}
+                                variant={pack.sortBy === 'grade' ? 'outlined' : 'text'}>
                             Grade
                         </Button>
                     </TableCell>
@@ -75,7 +78,7 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
                                 <TableCell component="th">{trimmedString(pack.question)}</TableCell>
                                 <TableCell align="right">{trimmedString(pack.answer)}</TableCell>
                                 <TableCell align="right">{updateDate(pack.updated)}</TableCell>
-                                <TableCell align="right">{pack.grade}</TableCell>
+                                <TableCell align="right">{Math.round(pack.grade)}</TableCell>
                             </TableRow>
                         )
                     )

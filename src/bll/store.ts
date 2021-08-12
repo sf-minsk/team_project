@@ -9,6 +9,7 @@ import {setNewPasswordActionTypes, setNewPasswordReducer} from './setNewPassword
 import {PacksActionsType, packsReducer} from './packs-reducer';
 import {loadState} from '../utils/localStorage-util';
 import {PackActionsType, packReducer} from './pack-reducer';
+import {CardsForLearnActionsType, cardsForLearnReducer} from './learn-reducer';
 
 
 const rootReducers = combineReducers({
@@ -20,6 +21,7 @@ const rootReducers = combineReducers({
     profile: profileReducer,
     packs: packsReducer,
     pack: packReducer,
+    cardsForLearn: cardsForLearnReducer,
 });
 
 export const store = createStore(rootReducers, loadState(), applyMiddleware(thunk));
@@ -33,6 +35,7 @@ export type AppRootActionsType =
     | AppActionsType
     | PacksActionsType
     | PackActionsType
+    | CardsForLearnActionsType
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppRootStateType, unknown, AppRootActionsType>
 

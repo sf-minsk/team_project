@@ -74,6 +74,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     packListHeading: {
         fontSize: '30px',
         fontWeight: 'bold',
+        overflowWrap: 'break-word',
     },
     inputButtonSection: {
         display: 'flex',

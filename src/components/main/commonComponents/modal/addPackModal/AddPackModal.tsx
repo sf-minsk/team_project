@@ -32,7 +32,7 @@ export const AddPackModal = (props: AddPackModalPropsType) => {
              onClick={onBackgroundClick}>
         </div>
         <div style={{
-            position: 'absolute',
+            position: 'fixed',
             left: `calc(50vw - 200px)`,
             top: `calc(50vh - 150px)`,
             width: '400px',
@@ -43,7 +43,7 @@ export const AddPackModal = (props: AddPackModalPropsType) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: '20px 0 20px 0',
+            padding: '20px 0',
             zIndex: 11
         }}>
             <h2>Enter new pack name</h2>
