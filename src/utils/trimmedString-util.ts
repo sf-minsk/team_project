@@ -1,6 +1,6 @@
-export const trimmedString = (str: string) => {
-    if (str.length > 20) {
-        return str.substring(0, 20) + '...'
+export const trimmedString = (str: string, number: number) => {
+    if (str.length > number) {
+        return str.substring(0, number) + '...'
     } else {
         return str
     }
