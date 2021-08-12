@@ -17,7 +17,7 @@ import {saveState} from "../../../utils/localStorage-util";
 import Button from "@material-ui/core/Button";
 import {AddCardModal} from "../commonComponents/modal/addCardModal/AddCardModal";
 import {AppStatusType} from "../../../bll/app-reducer";
-import {CircularProgress} from "@material-ui/core";
+
 
 
 export const Pack: React.FC = React.memo(() => {
@@ -29,9 +29,11 @@ export const Pack: React.FC = React.memo(() => {
     const pack = useSelector<AppRootStateType, PackInitialStateType>(state => state.pack)
     const packs = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
     const packID = useLocation().pathname.substring(6)
-    const cardsPack_id = useSelector<AppRootStateType, string>(state => state.pack.cardsPack_id)
+    const cardsPack_id = pack.cardsPack_id
     const status = useSelector<AppRootStateType, AppStatusType>(state => state.app.status)
     const idUser = useSelector<AppRootStateType, string>(state => state.profile._id)
+    const searchAnswer = pack.searchTextAnswer
+    const searchQuestion = pack.cardQuestion
 
     let packName = pack.currentPackName
     if (packs.cardPacks.length) {
@@ -64,6 +66,12 @@ export const Pack: React.FC = React.memo(() => {
     const addNewCard = (question: string, answer: string) => {
         dispatch(createCardTC({cardsPack_id: cardsPack_id, question, answer}))
     }
+    const setSearchAnswerTextInput = (searchText: string) => {
+        dispatch(setPackTC({cardsPack_id: cardsPack_id, cardAnswer: searchText}))
+    }
+    const setSearchQuestionTextInput = (searchText: string) => {
+        dispatch(setPackTC({cardsPack_id: cardsPack_id, cardQuestion: searchText}))
+    }
 
 
     return (
@@ -81,15 +89,22 @@ export const Pack: React.FC = React.memo(() => {
                         <KeyboardBackspaceIcon/>
                         <div style={{marginLeft: '10px'}}>
                             <h3>Back to packs</h3>
-
                         </div>
-
                     </div>
 
                     <div className={classes.packListHeading}>{packName}</div>
                     <div className={classes.inputButtonSection}>
-                        <Input placeholderValue={'Search by questions'}/>
-                        <Input placeholderValue={'Search by answer'}/>
+                        <Input
+                            placeholderValue={'Search by questions'}
+                            searchTextRequest={searchQuestion}
+                            setTextTC={setSearchQuestionTextInput}
+
+                        />
+                        <Input
+                            placeholderValue={'Search by answer'}
+                            setTextTC={setSearchAnswerTextInput}
+                            searchTextRequest={searchAnswer}
+                        />
                         <Button
                             className={classes.addNewCardButton}
                             variant="contained"
