@@ -60,10 +60,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
     MyAllButtons: {
         marginTop: '20px',
     },
-    slider: {
-        marginTop: '50px',
-        width: '150px',
-    },
     input: {
         height: '40px',
         marginRight: '15px'

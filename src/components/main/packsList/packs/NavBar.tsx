@@ -45,8 +45,11 @@ export const NavBar: React.FC = React.memo(() => {
                 <Button onClick={onAllButtonClick}
                         variant={packs.myPacks ? 'outlined' : 'contained'}>All</Button>
             </ButtonGroup>
+            <div
+                style={{ marginTop: '50px',width: '150px',}}
+            >
             <Slider
-                className={classes.slider}
+
                 value={sliderValue}
                 max={packs.maxCardsCount}
                 onChange={changeSliderValue}
@@ -54,6 +57,7 @@ export const NavBar: React.FC = React.memo(() => {
                 valueLabelDisplay="auto"
                 aria-labelledby="range-slider"
             />
+            </div>
         </Grid>
     )
 })
