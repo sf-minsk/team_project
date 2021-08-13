@@ -20,7 +20,7 @@ export const PackTableActions = React.memo(function (props: PackTableActionsProp
     }
 
     return (
-        <TableCell align="right" style={{width: '166px'}}>
+        <TableCell align="right" style={{width: '166px', padding: '16px 0'}}>
             {editPackModal && <EditCardModal
                 closeAddPackModal={closeEditPackModal}
                 editCard={props.editCard}
@@ -34,6 +34,7 @@ export const PackTableActions = React.memo(function (props: PackTableActionsProp
                 onClick={() => props.deleteCard(props.card._id)}
             >DELETE</Button>
             <Button
+                style={{marginRight: '10px'}}
                 size={'small'}
                 variant="outlined"
                 color="primary"
