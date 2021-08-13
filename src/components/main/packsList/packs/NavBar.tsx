@@ -19,12 +19,12 @@ export const NavBar: React.FC = React.memo(() => {
 
 
     const onMyButtonClick = () => {
-        dispatch(setCardPacksTC({user_id: id, min: 0, page: 1}))
+        dispatch(setCardPacksTC({user_id: id, min: 0, page: 1, pageCount: 5}))
         setSliderValue([0, packs.max])
     }
 
     const onAllButtonClick = () => {
-        dispatch(setCardPacksTC({user_id: '', min: sliderValue[0], max: sliderValue[1], page: 1}))
+        dispatch(setCardPacksTC({user_id: '', min: sliderValue[0], max: sliderValue[1], page: 1, pageCount: 5}))
     }
 
     const changeSliderValue = (e: ChangeEvent<{}>, newValue: number | number[]) => {

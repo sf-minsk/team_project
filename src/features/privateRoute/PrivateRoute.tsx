@@ -9,7 +9,7 @@ type PropsType = {
     redirectTo: string
 }
 
-export const PrivateRoute: React.FC<PropsType> = ({render: Component, isLoggedIn, path, redirectTo, exact}) => {
+export const PrivateRoute: React.FC<PropsType> = ({render: Component, isLoggedIn, path, redirectTo}) => {
     return (
         <Route exact path={path} render={() => isLoggedIn
             ? <Component/>

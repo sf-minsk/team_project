@@ -2,11 +2,11 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import TableHead from '@material-ui/core/TableHead';
-import React, {ChangeEvent, MouseEvent, useCallback} from 'react';
+import React, {ChangeEvent, MouseEvent, useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../../../bll/store';
 import {useStyles} from '../../styles';
-import {deleteCardTC, editCardTC, PackInitialStateType, setPackTC} from '../../../../bll/pack-reducer';
+import {deleteCardTC, editCardTC, PackInitialStateType, resetPackAC, setPackTC} from '../../../../bll/pack-reducer';
 import {trimmedString} from '../../../../utils/trimmedString-util';
 import {updateDate} from '../../../../utils/updateDate-util';
 import TableBody from '@material-ui/core/TableBody';
@@ -17,8 +17,6 @@ import Table from '@material-ui/core/Table';
 import {useLocation} from 'react-router-dom';
 import {PackTableActions} from "./PackTableActions";
 import {EditCardRequestType} from "../../../../dal/cards-api";
-import {CircularProgress} from "@material-ui/core";
-import {AppStatusType} from "../../../../bll/app-reducer";
 
 
 export const PackTable = React.memo((props: PackNameTableProps) => {
@@ -30,7 +28,6 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
     const idUser = useSelector<AppRootStateType, string>(state => state.profile._id)
     const packID = useLocation().pathname.substring(6)
 
-
     const onClickSortHandler = (sortValue: SortByType) => {
         if (pack.sortCardDirection === 0) {
             dispatch(setPackTC({cardsPack_id: packID, sortCards: '1' + sortValue}))
@@ -38,6 +35,13 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
             dispatch(setPackTC({cardsPack_id: packID, sortCards: '0' + sortValue}))
         }
     }
+
+    useEffect(() => {
+        return function () {
+            dispatch(resetPackAC())
+        }
+    }, [dispatch])
+
 
     const handleChangePage = useCallback((e: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         dispatch(setPackTC({cardsPack_id: packID, page: newPage + 1}))
@@ -53,6 +57,7 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
     const editCardHandler = (data: EditCardRequestType) => {
         dispatch(editCardTC({...data}))
     }
+
 
     return (
         <Table className={classes.table} aria-label="custom pagination table">
@@ -98,14 +103,13 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
                             <TableCell align="right">{updateDate(pack.updated)}</TableCell>
                             <TableCell align="right">{pack.grade}</TableCell>
                             {pack.user_id === idUser ?
-                            <PackTableActions
-                                deleteCard={deleteCardHandler}
-                                editCard={editCardHandler}
-                                card={pack}
-                            />
-                            : <TableCell></TableCell>}
+                                <PackTableActions
+                                    deleteCard={deleteCardHandler}
+                                    editCard={editCardHandler}
+                                    card={pack}
+                                />
+                                : <TableCell/>}
                         </TableRow>
-
                     )}
             </TableBody>
             <TableFooter>

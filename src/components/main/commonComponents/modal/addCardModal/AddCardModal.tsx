@@ -31,45 +31,47 @@ export const AddCardModal = (props: AddPackModalPropsType) => {
             left: '0',
             height: '100%',
             width: '100%',
-            backgroundColor: `rgba(${0}, ${0}, ${0}, ${0.3})`,
+            backgroundColor: `rgba(${0}, ${0}, ${0}, ${0.2})`,
             zIndex: 10
         }}
              onClick={onBackgroundClick}>
         </div>
         <div style={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '400px',
-            height: '500px',
+            position: 'fixed',
+            left: `calc(50vw - 250px)`,
+            top: `calc(50vh - 171px)`,
+            width: '500px',
+            height: '300px',
             border: '1px solid white',
             borderRadius: '6px 6px 6px 6px',
             backgroundColor: 'white',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: '40px',
+            padding: '20px 0',
             zIndex: 11
         }}>
+            <h2>Create new card</h2>
             <TextField
+                style={{width: '450px'}}
                 label="Question"
-                style={{margin: '50px 0 50px 0', width: '400px'}}
                 margin="none"
+                variant="outlined"
                 autoFocus
                 value={question}
                 onChange={inputChangeHandlerQuestion}
             />
 
             <TextField
+                style={{width: '450px', marginTop: '30px'}}
                 label="Answer"
-                style={{margin: '50px 0 50px 0', width: '400px'}}
-                margin="none"
-                // autoFocus
+                margin="normal"
+                variant="outlined"
                 value={answer}
                 onChange={inputChangeHandlerAnswer}
             />
-            <Button style={{width: '150px', marginTop: '50px'}} color="primary" variant={'contained'} onClick={onButtonClickHandler}>Add new card</Button>
+            <Button style={{width: '150px', marginTop: '30px'}} color="primary" variant={'contained'}
+                    onClick={onButtonClickHandler}>Add new card</Button>
         </div>
 
     </>

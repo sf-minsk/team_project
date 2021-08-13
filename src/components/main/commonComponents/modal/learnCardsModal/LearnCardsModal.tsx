@@ -102,7 +102,7 @@ export const LearnCardsModal = ({
                 <div style={{
                     position: 'fixed',
                     left: `calc(50vw - 230px)`,
-                    top: `calc(50vh - 315px)`,
+                    top: `calc(50vh - 306px)`,
                     width: '440px',
                     height: '550px',
                     border: '1px solid white',

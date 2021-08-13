@@ -2,47 +2,53 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
-import {CardsInitialStateType, setCardPacksTC} from '../../../bll/packs-reducer';
+import {setCardPacksTC} from '../../../bll/packs-reducer';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 import TextField from '@material-ui/core/TextField';
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {useStyles} from '../styles';
-import {AppRootStateType} from '../../../bll/store';
-import {PackInitialStateType} from "../../../bll/pack-reducer";
 
 
 type InputSearchPropsType = {
-    placeholderValue?: string
-    searchTextRequest: string
-    setTextTC: (searchText: string) => void
+    // searchCallback: (value: string) => void
+    // searchTextRequest: string
+    // setTextTC: (searchText: string) => void
     // setTextTC: (data: {[data: string]: string}) => void
     // packName: string
+    placeholderValue: string
+    value: string
+    onChangeValue: (value: string) => void
+    dispatchHandler: (value: string) => void
 }
 
-export const Input  = React.memo(function(props: InputSearchPropsType){
-
+export const Input = React.memo(function (props: InputSearchPropsType) {
+    // const [value, setValue] = useState('')
     const classes = useStyles();
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
 
     // const packs = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
-    const [searchText, setSearchText] = useState<string>(props.searchTextRequest)
+    // const [searchText, setSearchText] = useState<string>(props.searchTextRequest)
 
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setSearchText(e.target.value)
-
-    const onSearchKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        (e.key === 'Enter') && onSearchButtonHandler()
+    const onChangeHandler = async (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        props.dispatchHandler(e.target.value)
     }
 
-    const onSearchButtonHandler = () => {
-        props.setTextTC(searchText)
-    }
 
-    const onClickIconButtonHandler = () => {
-        dispatch(setCardPacksTC({packName: ''}))
-        setSearchText('')
-    }
+
+    // const onSearchKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    //     (e.key === 'Enter') && onSearchButtonHandler()
+    // }
+
+    // const onSearchButtonHandler = () => {
+    //     props.setTextTC(searchText)
+    // }
+
+    // const onClickIconButtonHandler = () => {
+    //     dispatch(setCardPacksTC({packName: ''}))
+    //     setSearchText('')
+    // }
 
 
     return (
@@ -54,26 +60,26 @@ export const Input  = React.memo(function(props: InputSearchPropsType){
             fullWidth
             size="small"
             onChange={onChangeHandler}
-            onKeyPress={onSearchKeyPressHandler}
-            value={searchText}
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <Button onClick={onSearchButtonHandler}>
-                            <SearchIcon/>
-                        </Button>
-                    </InputAdornment>
-                ),
-                endAdornment: searchText && (
-                    <IconButton
-                        style={{height: '40px'}}
-                        aria-label="toggle password visibility"
-                        onClick={onClickIconButtonHandler}
-                    >
-                        <CancelRoundedIcon/>
-                    </IconButton>
-                )
-            }}
+            // onKeyPress={onSearchKeyPressHandler}
+            value={props.value}
+            // InputProps={{
+            //     startAdornment: (
+            //         <InputAdornment position="start">
+            //             <Button onClick={onSearchButtonHandler}>
+            //                 <SearchIcon/>
+            //             </Button>
+            //         </InputAdornment>
+            //     ),
+            //     endAdornment: searchText && (
+            //         <IconButton
+            //             style={{height: '40px'}}
+            //             aria-label="toggle password visibility"
+            //             onClick={onClickIconButtonHandler}
+            //         >
+            //             <CancelRoundedIcon/>
+            //         </IconButton>
+            //     )
+            // }}
         />
     )
 })

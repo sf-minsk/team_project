@@ -89,7 +89,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
         width: '224px',
         justifyContent: 'flex-end',
     },
-    buttonEditCard:{
+    buttonEditCard: {
         variant: "outlined",
         color: "primary"
     },
@@ -118,7 +118,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     learnCardsModalWindowByQuestion: {
         position: 'fixed',
         left: `calc(50vw - 230px)`,
-        top: `calc(50vh - 164px)`,
+        top: `calc(50vh - 156px)`,
         width: '440px',
         height: '250px',
         border: '1px solid white',

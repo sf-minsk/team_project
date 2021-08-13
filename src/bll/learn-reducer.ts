@@ -65,4 +65,4 @@ type SetCardsOfPackActionType = ReturnType<typeof setCardsOfPackAC>
 
 export type CardsForLearnActionsType =
     | SetCardsOfPackActionType
-    //| UpdatedGradeActionType
+//| UpdatedGradeActionType

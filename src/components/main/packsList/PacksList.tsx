@@ -14,7 +14,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import {PacksListTable} from './packs/PacksListTable';
 import {ErrorSnackbar} from '../../../features/errors/ErrorSnackbar';
 import {AddPackModal} from '../commonComponents/modal/addPackModal/AddPackModal';
-import {setPackTC} from "../../../bll/pack-reducer";
 
 export const PacksList: React.FC = React.memo(() => {
 
@@ -78,11 +77,11 @@ export const PacksList: React.FC = React.memo(() => {
                 <Container className={classes.body}>
                     <div className={classes.packListHeading}>Packs list</div>
                     <div className={classes.inputButtonSection}>
-                        <Input
-                            placeholderValue={'Search by pack'}
-                            searchTextRequest={packs.searchText}
-                            setTextTC={setSearchTextInput}
-                        />
+                        {/*<Input*/}
+                        {/*    placeholderValue={'Search by pack'}*/}
+                        {/*    searchTextRequest={packs.searchText}*/}
+                        {/*    setTextTC={setSearchTextInput}*/}
+                        {/*/>*/}
                         <Button
                             className={classes.addNewPackButton}
                             variant="contained"

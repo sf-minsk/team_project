@@ -23,6 +23,10 @@ export const cardPacksApi = {
     deletePack(id: string) {
         return instance.delete(`cards/pack?id=${id}`)
     },
+    updatePack(data: UpdatePackRequestType) {
+        return instance.put(`cards/pack`, {cardsPack: data})
+    },
+
     fetchPack(payload: PackRequestType) {
         let generateURL = '?'
         if (!!payload) {
@@ -40,9 +44,9 @@ export const cardPacksApi = {
     deleteCard(id: string) {
         return instance.delete(`cards/card?id=${id}`)
     },
-   editCard(data: EditCardRequestType) {
-       return instance.put(`cards/card`, {card: data})
-   },
+    editCard(data: EditCardRequestType) {
+        return instance.put(`cards/card`, {card: data})
+    },
     updatedGrade(payload: GradeRequestType) {
         return instance.put<GradeResponseType>(`/cards/grade`, payload)
     },
@@ -101,13 +105,19 @@ export type PackDataType = {
     private?: boolean
     type?: string
 }
+// update pack type
+
+export type UpdatePackRequestType = {
+    _id: string,
+    name?: string,
+}
 
 // get pack type
 
 export type PackRequestType = {
     cardAnswer?: string
     cardQuestion?: string
-    cardsPack_id: string
+    cardsPack_id?: string
     min?: number
     max?: number
     sortCards?: string
