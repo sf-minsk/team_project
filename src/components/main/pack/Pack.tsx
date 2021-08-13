@@ -24,42 +24,34 @@ export const Pack: React.FC = React.memo(() => {
     const classes = useStyles();
     const dispatch = useDispatch()
     const history = useHistory()
-
     const pack = useSelector<AppRootStateType, PackInitialStateType>(state => state.pack)
     const packs = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
     const packID = useLocation().pathname.substring(6)
     const cardsPack_id = pack.cardsPack_id
     const idUser = useSelector<AppRootStateType, string>(state => state.profile._id)
-    const searchAnswer = pack.searchTextAnswer
-    const searchQuestion = pack.cardQuestion
     const [cardQuestion, setCardQuestion] = useState<string>('')
     const [cardAnswer, setCardAnswer] = useState<string>('')
+    const [intervalID, setIntervalID] = useState<NodeJS.Timeout>()
 
-    let currentIntervalName: NodeJS.Timeout
-    // useEffect(() => {
-        // clearInterval(currentIntervalName)
-        // let newInterval = setTimeout(() => {
-        //     currentIntervalName = newInterval
-        //     dispatch(setPackTC({cardQuestion: cardQuestion, cardAnswer: cardAnswer}))
-        // }, 2000)
-    // }, [dispatch, cardQuestion, cardAnswer])
-
-    // const intArr: Array<NodeJS.Timeout> = []
     const searchQuestionHandler = (value: string) => {
-        if (currentIntervalName) {
-            clearInterval(currentIntervalName)
+        if (intervalID) {
+            clearInterval(intervalID)
         }
-
-        // if (intArr.length > 0) {
-        //     clearInterval(intArr[0])
-        // }
-        // intArr.map(el => clearInterval(el))
         setCardQuestion(value)
-        currentIntervalName = setTimeout(() => {
+        const newIntervalID = setTimeout(() => {
             dispatch(setPackTC({cardQuestion: value, cardAnswer: cardAnswer}))
-        }, 3000)
-        // intArr.push(questionInterval)
-        console.log(value)
+        }, 400)
+        setIntervalID(newIntervalID)
+    }
+    const searchAnswerHandler = (value: string) => {
+        if (intervalID) {
+            clearInterval(intervalID)
+        }
+        setCardAnswer(value)
+        const newIntervalID = setTimeout(() => {
+            dispatch(setPackTC({cardQuestion: cardQuestion, cardAnswer: value}))
+        }, 400)
+        setIntervalID(newIntervalID)
     }
 
     let packName = pack.currentPackName
@@ -93,12 +85,6 @@ export const Pack: React.FC = React.memo(() => {
     const addNewCard = (question: string, answer: string) => {
         dispatch(createCardTC({cardsPack_id: cardsPack_id, question, answer}))
     }
-    const setSearchAnswerTextInput = (searchText: string) => {
-        dispatch(setPackTC({cardsPack_id: cardsPack_id, cardAnswer: searchText}))
-    }
-    const setSearchQuestionTextInput = (searchText: string) => {
-        dispatch(setPackTC({cardsPack_id: cardsPack_id, cardQuestion: searchText}))
-    }
 
     return (
         <Container className={classes.container}>
@@ -120,18 +106,14 @@ export const Pack: React.FC = React.memo(() => {
                     <div className={classes.inputButtonSection}>
                         <Input
                             placeholderValue={'Search by questions'}
-                            // searchTextRequest={searchQuestion}
-                            // setTextTC={setSearchQuestionTextInput}
-                            // searchCallback={setCardQuestion}
                             value={cardQuestion}
-                            onChangeValue={setCardQuestion}
                             dispatchHandler={searchQuestionHandler}
                         />
-                        {/*<Input*/}
-                        {/*    placeholderValue={'Search by answer'}*/}
-                        {/*    setTextTC={setSearchAnswerTextInput}*/}
-                        {/*    searchTextRequest={searchAnswer}*/}
-                        {/*/>*/}
+                        <Input
+                            placeholderValue={'Search by answer'}
+                            value={cardAnswer}
+                            dispatchHandler={searchAnswerHandler}
+                        />
                         <Button
                             style={{width: '330px'}}
                             className={classes.addNewCardButton}
