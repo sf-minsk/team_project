@@ -112,7 +112,7 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
                             <TableCell component="th">{trimmedString(pack.question, 20)}</TableCell>
                             <TableCell align="right">{trimmedString(pack.answer, 20)}</TableCell>
                             <TableCell align="right">{updateDate(pack.updated)}</TableCell>
-                            <TableCell align="right">{pack.grade}</TableCell>
+                            <TableCell align="right">{Math.round(pack.grade)}</TableCell>
                             {pack.user_id === idUser ?
                                 <PackTableActions
                                     deleteCard={deleteCardHandler}

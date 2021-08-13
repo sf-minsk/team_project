@@ -94,7 +94,6 @@ export const createPackTC = (data: CreatePackRequestType): AppThunk =>
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         } finally {
-            dispatch(setAppStatusAC('succeeded'))
         }
     }
 
@@ -113,7 +112,6 @@ export const deletePackTC = (packId: string): AppThunk =>
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         } finally {
-            dispatch(setAppStatusAC('succeeded'))
         }
     }
 
@@ -126,7 +124,6 @@ export const updatePackTC = (packID: string, name?: string): AppThunk =>
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         } finally {
-            dispatch(setAppStatusAC('succeeded'))
         }
     }
 

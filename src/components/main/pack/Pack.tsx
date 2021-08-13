@@ -68,7 +68,7 @@ export const Pack: React.FC = React.memo(() => {
 
     useEffect(() => {
         saveState({
-            pack: {...pack, currentPackName: packName}
+            pack: {...pack, currentPackName: packName, cards: []}
         })
     }, [packName, pack])
 
