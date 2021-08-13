@@ -11,10 +11,10 @@ export const authApi = {
     login(data: LoginParamsType) {
         return instance.post<ResponseAuthType>(`auth/login`, data)
     },
-    me(){
+    me() {
         return instance.post<ResponseAuthType>(`auth/me`)
     },
-    logout(){
+    logout() {
         return instance.delete(`auth/me`)
     }
 }

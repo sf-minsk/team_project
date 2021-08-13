@@ -19,7 +19,6 @@ import {AddCardModal} from "../commonComponents/modal/addCardModal/AddCardModal"
 import {AppStatusType} from "../../../bll/app-reducer";
 
 
-
 export const Pack: React.FC = React.memo(() => {
 
     const classes = useStyles();
@@ -110,17 +109,17 @@ export const Pack: React.FC = React.memo(() => {
                             variant="contained"
                             color="primary"
                             onClick={openAddPackModal}
-                            disabled={pack.packUserId === idUser ? false: true}
+                            disabled={pack.packUserId !== idUser}
                         >
                             Add new card
                         </Button>
                     </div>
                     <TableContainer style={{marginTop: '20px'}} component={Paper}>
                         {(status === 'loading') ?
-                             <div
-                            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
-                            {/*<CircularProgress/>*/}
-                            </div>: <PackTable labelRowsPerPage={'Cards per page'}/>}
+                            <div
+                                style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+                                {/*<CircularProgress/>*/}
+                            </div> : <PackTable labelRowsPerPage={'Cards per page'}/>}
                     </TableContainer>
                 </Container>
             </Paper>

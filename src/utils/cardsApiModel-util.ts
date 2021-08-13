@@ -1,4 +1,4 @@
-import {PacksRequestDataType, PackRequestType, CreateCardType, OnePackType} from '../dal/cards-api';
+import {PackRequestType, PacksRequestDataType} from '../dal/cards-api';
 import {CardsInitialStateType} from "../bll/packs-reducer";
 import {PackInitialStateType} from '../bll/pack-reducer';
 

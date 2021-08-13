@@ -17,8 +17,6 @@ import Table from '@material-ui/core/Table';
 import {useLocation} from 'react-router-dom';
 import {PackTableActions} from "./PackTableActions";
 import {EditCardRequestType} from "../../../../dal/cards-api";
-import {CircularProgress} from "@material-ui/core";
-import {AppStatusType} from "../../../../bll/app-reducer";
 
 
 export const PackTable = React.memo((props: PackNameTableProps) => {
@@ -98,14 +96,13 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
                             <TableCell align="right">{updateDate(pack.updated)}</TableCell>
                             <TableCell align="right">{pack.grade}</TableCell>
                             {pack.user_id === idUser ?
-                            <PackTableActions
-                                deleteCard={deleteCardHandler}
-                                editCard={editCardHandler}
-                                card={pack}
-                            />
-                            : <TableCell></TableCell>}
+                                <PackTableActions
+                                    deleteCard={deleteCardHandler}
+                                    editCard={editCardHandler}
+                                    card={pack}
+                                />
+                                : <TableCell/>}
                         </TableRow>
-
                     )}
             </TableBody>
             <TableFooter>

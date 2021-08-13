@@ -40,9 +40,9 @@ export const cardPacksApi = {
     deleteCard(id: string) {
         return instance.delete(`cards/card?id=${id}`)
     },
-   editCard(data: EditCardRequestType) {
-       return instance.put(`cards/card`, {card: data})
-   },
+    editCard(data: EditCardRequestType) {
+        return instance.put(`cards/card`, {card: data})
+    },
     updatedGrade(payload: GradeRequestType) {
         return instance.put<GradeResponseType>(`/cards/grade`, payload)
     },

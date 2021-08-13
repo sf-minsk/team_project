@@ -29,7 +29,6 @@ export const Header = () => {
     }, [location, value])
 
 
-
     const onPacksClickHandler = () => {
         setValue(0)
         history.push('/')

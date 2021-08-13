@@ -5,12 +5,12 @@ import {EditCardModal} from "../../commonComponents/modal/editCardModal/EditCard
 import {EditCardRequestType, OnePackType} from "../../../../dal/cards-api";
 
 type PackTableActionsPropsType = {
-    deleteCard:(cardId: string) => void
-    editCard:(data: EditCardRequestType) => void
+    deleteCard: (cardId: string) => void
+    editCard: (data: EditCardRequestType) => void
     card: OnePackType
 }
 
-export const PackTableActions = React.memo(function(props: PackTableActionsPropsType) {
+export const PackTableActions = React.memo(function (props: PackTableActionsPropsType) {
     const [editPackModal, setEditPackModal] = useState<boolean>(false)
     const openEditPackModal = () => {
         setEditPackModal(true)
@@ -30,13 +30,13 @@ export const PackTableActions = React.memo(function(props: PackTableActionsProps
                 style={{marginRight: '10px'}}
                 variant="contained"
                 color="secondary"
-                onClick={()=> props.deleteCard(props.card._id)}
-                >DELETE</Button>
+                onClick={() => props.deleteCard(props.card._id)}
+            >DELETE</Button>
             <Button
                 variant="outlined"
                 color="primary"
                 onClick={openEditPackModal}
-                >EDIT</Button>
+            >EDIT</Button>
         </TableCell>
     )
 

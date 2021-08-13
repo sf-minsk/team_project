@@ -89,7 +89,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
         width: '224px',
         justifyContent: 'flex-end',
     },
-    buttonEditCard:{
+    buttonEditCard: {
         variant: "outlined",
         color: "primary"
     },
