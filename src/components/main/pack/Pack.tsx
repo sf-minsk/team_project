@@ -107,6 +107,7 @@ export const Pack: React.FC = React.memo(() => {
                             searchTextRequest={searchAnswer}
                         />
                         <Button
+                            style={{width: '330px'}}
                             className={classes.addNewCardButton}
                             variant="contained"
                             color="primary"

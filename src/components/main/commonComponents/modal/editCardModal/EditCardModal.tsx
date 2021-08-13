@@ -42,40 +42,40 @@ export const EditCardModal = (props: EditPackModalPropsType) => {
              onClick={onBackgroundClick}>
         </div>
         <div style={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '400px',
-            height: '450px',
+            position: 'fixed',
+            left: `calc(50vw - 250px)`,
+            top: `calc(50vh - 150px)`,
+            width: '500px',
+            height: '300px',
             border: '1px solid white',
             borderRadius: '6px 6px 6px 6px',
             backgroundColor: 'white',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: '40px',
+            padding: '20px 0',
             zIndex: 11
         }}>
+            <h2>Edit card</h2>
             <TextField
                 label="Question"
-                style={{margin: '50px 0 50px 0', width: '380px'}}
+                style={{width: '450px'}}
                 margin="none"
-                autoFocus
+                variant="outlined"
                 value={question}
                 onChange={inputChangeHandlerQuestion}
             />
 
             <TextField
                 label="Answer"
-                style={{margin: '50px 0 50px 0', width: '380px'}}
+                style={{width: '450px', marginTop: '30px'}}
                 margin="none"
-                autoFocus
+                variant="outlined"
                 value={answer}
                 onChange={inputChangeHandlerAnswer}
             />
             <Button
-                style={{width: '150px', marginTop: '50px'}}
+                style={{width: '150px', marginTop: '30px'}}
                 color="primary"
                 variant={'contained'}
                 onClick={onButtonClickHandler}>Save changes</Button>

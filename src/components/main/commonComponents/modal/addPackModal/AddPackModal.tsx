@@ -34,9 +34,9 @@ export const AddPackModal = (props: AddPackModalPropsType) => {
         <div style={{
             position: 'fixed',
             left: `calc(50vw - 200px)`,
-            top: `calc(50vh - 150px)`,
+            top: `calc(50vh - 140px)`,
             width: '400px',
-            height: '300px',
+            height: '280px',
             border: '1px solid white',
             borderRadius: '6px 6px 6px 6px',
             backgroundColor: 'white',
