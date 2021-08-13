@@ -1,6 +1,5 @@
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
-import Button from '@material-ui/core/Button';
 import TableHead from '@material-ui/core/TableHead';
 import React, {ChangeEvent, MouseEvent, useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -17,6 +16,7 @@ import Table from '@material-ui/core/Table';
 import {useLocation} from 'react-router-dom';
 import {PackTableActions} from "./PackTableActions";
 import {EditCardRequestType} from "../../../../dal/cards-api";
+import {TableSortLabel} from "@material-ui/core";
 
 
 export const PackTable = React.memo((props: PackNameTableProps) => {
@@ -64,36 +64,47 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
             <TableHead className={classes.tableHead}>
                 <TableRow>
                     <TableCell>
-                        <Button onClick={() => onClickSortHandler('question')}
-                                variant={pack.sortBy === 'question' ? 'outlined' : 'text'}>
+                        <TableSortLabel
+                            active={pack.sortBy === 'question'}
+                            direction={pack.sortCardDirection === 1 ? 'desc' : 'asc'}
+                            onClick={() => onClickSortHandler('question')}
+                        >
                             Question
-                        </Button>
+                        </TableSortLabel>
                     </TableCell>
                     <TableCell align="right">
-                        <Button onClick={() => onClickSortHandler('answer')}
-                                variant={pack.sortBy === 'answer' ? 'outlined' : 'text'}>
+                        <TableSortLabel
+                            active={pack.sortBy === 'answer'}
+                            direction={pack.sortCardDirection === 1 ? 'desc' : 'asc'}
+                            onClick={() => onClickSortHandler('answer')}
+                        >
                             Answer
-                        </Button>
+                        </TableSortLabel>
                     </TableCell>
                     <TableCell align="right">
-                        <Button onClick={() => onClickSortHandler('updated')}
-                                variant={pack.sortBy === 'updated' ? 'outlined' : 'text'}>
-                            Last Updated
-                        </Button>
-                    </TableCell>
-                    <TableCell align="right">
-                        <Button onClick={() => onClickSortHandler('grade')}
-                                variant={pack.sortBy === 'grade' ? 'outlined' : 'text'}>
-                            Grade
-                        </Button>
-                    </TableCell>
-                    <TableCell align="right">
-                        ACTIONS
-                    </TableCell>
 
+                        <TableSortLabel
+                            active={pack.sortBy === 'updated'}
+                            direction={pack.sortCardDirection === 1 ? 'desc' : 'asc'}
+                            onClick={() => onClickSortHandler('updated')}
+                        >
+                            Last Updated
+                        </TableSortLabel>
+                    </TableCell>
+                    <TableCell align="right">
+                        <TableSortLabel
+                            active={pack.sortBy === 'grade'}
+                            direction={pack.sortCardDirection === 1 ? 'desc' : 'asc'}
+                            onClick={() => onClickSortHandler('grade')}
+                        >
+                            Grade
+                        </TableSortLabel>
+                    </TableCell>
+                    <TableCell align="right">
+                        Actions
+                    </TableCell>
                 </TableRow>
             </TableHead>
-
             <TableBody>
                 {
                     pack.cards.map((pack) =>
@@ -101,7 +112,7 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
                             <TableCell component="th">{trimmedString(pack.question, 20)}</TableCell>
                             <TableCell align="right">{trimmedString(pack.answer, 20)}</TableCell>
                             <TableCell align="right">{updateDate(pack.updated)}</TableCell>
-                            <TableCell align="right">{pack.grade}</TableCell>
+                            <TableCell align="right">{Math.round(pack.grade)}</TableCell>
                             {pack.user_id === idUser ?
                                 <PackTableActions
                                     deleteCard={deleteCardHandler}

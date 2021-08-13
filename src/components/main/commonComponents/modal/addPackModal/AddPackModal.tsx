@@ -43,7 +43,7 @@ export const AddPackModal = (props: AddPackModalPropsType) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: '20px 0',
+            margin: '20px 0',
             zIndex: 11
         }}>
             <h2>Enter new pack name</h2>

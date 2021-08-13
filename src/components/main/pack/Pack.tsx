@@ -39,7 +39,7 @@ export const Pack: React.FC = React.memo(() => {
         }
         setCardQuestion(value)
         const newIntervalID = setTimeout(() => {
-            dispatch(setPackTC({cardQuestion: value, cardAnswer: cardAnswer}))
+            dispatch(setPackTC({cardQuestion: value, cardAnswer: cardAnswer, page: 1}))
         }, 400)
         setIntervalID(newIntervalID)
     }
@@ -49,7 +49,7 @@ export const Pack: React.FC = React.memo(() => {
         }
         setCardAnswer(value)
         const newIntervalID = setTimeout(() => {
-            dispatch(setPackTC({cardQuestion: cardQuestion, cardAnswer: value}))
+            dispatch(setPackTC({cardQuestion: cardQuestion, cardAnswer: value, page: 1}))
         }, 400)
         setIntervalID(newIntervalID)
     }
@@ -68,7 +68,7 @@ export const Pack: React.FC = React.memo(() => {
 
     useEffect(() => {
         saveState({
-            pack: {...pack, currentPackName: packName}
+            pack: {...pack, currentPackName: packName, cards: []}
         })
     }, [packName, pack])
 

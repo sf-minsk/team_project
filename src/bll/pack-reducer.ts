@@ -24,7 +24,7 @@ const initialState = {
     min: 0,
     max: 5,
     sortCardDirection: 0,
-    sortBy: 'grade',
+    sortBy: 'updated',
     cardsPack_id: '',
     currentPackName: 'Pack name',
     searchTextAnswer: '',
@@ -100,11 +100,10 @@ export const createCardTC = (data: CreateCardType): AppThunk =>
         dispatch(setAppStatusAC('loading'))
         try {
             await cardPacksApi.createCard({...data})
-            dispatch(setPackTC({cardsPack_id: data.cardsPack_id}))
+            dispatch(setPackTC({cardsPack_id: data.cardsPack_id, page:1, sortCards: '0updated', }))
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         } finally {
-            dispatch(setAppStatusAC('succeeded'))
         }
     }
 export const deleteCardTC = (cardsPack_id: string, cardId: string): AppThunk =>
@@ -116,7 +115,6 @@ export const deleteCardTC = (cardsPack_id: string, cardId: string): AppThunk =>
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         } finally {
-            dispatch(setAppStatusAC('succeeded'))
         }
     }
 export const editCardTC = (data: EditCardRequestType): AppThunk =>
@@ -128,7 +126,6 @@ export const editCardTC = (data: EditCardRequestType): AppThunk =>
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         } finally {
-            dispatch(setAppStatusAC('succeeded'))
         }
     }
 

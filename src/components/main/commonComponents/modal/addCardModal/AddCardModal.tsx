@@ -48,7 +48,7 @@ export const AddCardModal = (props: AddPackModalPropsType) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: '20px 0',
+            margin: '20px 0',
             zIndex: 11
         }}>
             <h2>Create new card</h2>
@@ -70,7 +70,7 @@ export const AddCardModal = (props: AddPackModalPropsType) => {
                 value={answer}
                 onChange={inputChangeHandlerAnswer}
             />
-            <Button style={{width: '150px', marginTop: '30px'}} color="primary" variant={'contained'}
+            <Button style={{width: '150px', marginTop: '20px'}} color="primary" variant={'contained'}
                     onClick={onButtonClickHandler}>Add new card</Button>
         </div>
 

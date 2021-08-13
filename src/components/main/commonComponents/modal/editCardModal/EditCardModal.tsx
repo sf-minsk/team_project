@@ -36,7 +36,7 @@ export const EditCardModal = (props: EditPackModalPropsType) => {
             left: '0',
             height: '100%',
             width: '100%',
-            backgroundColor: `rgba(${0}, ${0}, ${0}, ${0.3})`,
+            backgroundColor: `rgba(${0}, ${0}, ${0}, ${0.2})`,
             zIndex: 10
         }}
              onClick={onBackgroundClick}>
@@ -53,7 +53,7 @@ export const EditCardModal = (props: EditPackModalPropsType) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: '20px 0',
+            margin: '20px 0',
             zIndex: 11
         }}>
             <h2>Edit card</h2>
