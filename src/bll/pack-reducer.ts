@@ -2,10 +2,11 @@ import {AppRootStateType, AppThunk} from './store';
 import {setAppErrorAC, setAppStatusAC} from './app-reducer';
 import {
     cardPacksApi,
-    PackRequestType,
-    PackResponseType,
+    CreateCardType,
+    EditCardRequestType,
     OnePackType,
-    CreateCardType, EditCardRequestType
+    PackRequestType,
+    PackResponseType
 } from '../dal/cards-api';
 import {packApiModel} from '../utils/cardsApiModel-util';
 
@@ -54,8 +55,12 @@ export const packReducer = (state = initialState, action: PackActionsType): Pack
                 sortBy: action.data.sortCards.slice(1),
                 sortCardDirection: Number(action.data.sortCards.substring(0, 1)),
                 searchTextAnswer: action.data.cardAnswer,
-                searchTexQuestion: action.data.cardQuestion
-
+                searchTexQuestion: action.data.cardQuestion,
+            }
+        case 'cards/RESET-PACK':
+            return {
+                ...state,
+                cards: [],
             }
         default:
             return state;
@@ -65,7 +70,8 @@ export const packReducer = (state = initialState, action: PackActionsType): Pack
 //actions
 export const setPackAC = (data: PackResponseType & NewPackApiModelType) =>
     ({type: 'cards/SET-PACK', data} as const)
-
+export const resetPackAC = () =>
+    ({type: 'cards/RESET-PACK'} as const)
 
 
 //thunks
@@ -73,14 +79,12 @@ export const setPackTC = (data: PackRequestType): AppThunk =>
     async (dispatch, getState: () => AppRootStateType) => {
         dispatch(setAppStatusAC('loading'))
         const newPackApiModel = packApiModel(getState().pack, data)
-
         const pastPageCount = getState().pack.pageCount
         const currentPage = getState().pack.page
         const currentPageCount = newPackApiModel.pageCount
         const newPage = pastPageCount !== currentPageCount
             ? Math.floor(pastPageCount * (currentPage - 1) / currentPageCount) + 1
             : newPackApiModel.page
-
         try {
             const res = await cardPacksApi.fetchPack({...newPackApiModel, page: newPage})
             dispatch(setPackAC({...res.data, ...newPackApiModel, page: newPage}))
@@ -131,9 +135,11 @@ export const editCardTC = (data: EditCardRequestType): AppThunk =>
 //types
 export
 type SetPackActionType = ReturnType<typeof setPackAC>
+type resetPackActionType = ReturnType<typeof resetPackAC>
 
 export type PackActionsType =
     | SetPackActionType
+    | resetPackActionType
 
 
 type NewPackApiModelType = {

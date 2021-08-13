@@ -7,7 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import {ErrorSnackbar} from '../../../features/errors/ErrorSnackbar';
 import {useStyles} from '../styles';
 import {useDispatch, useSelector} from 'react-redux';
-import {createCardTC, PackInitialStateType, setPackTC} from '../../../bll/pack-reducer';
+import {createCardTC, PackInitialStateType, resetPackAC, setPackTC} from '../../../bll/pack-reducer';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import {PackTable} from './pack/PackTable';
 import {useHistory, useLocation} from 'react-router-dom';
@@ -16,7 +16,6 @@ import {CardsInitialStateType} from '../../../bll/packs-reducer';
 import {saveState} from "../../../utils/localStorage-util";
 import Button from "@material-ui/core/Button";
 import {AddCardModal} from "../commonComponents/modal/addCardModal/AddCardModal";
-import {AppStatusType} from "../../../bll/app-reducer";
 
 
 export const Pack: React.FC = React.memo(() => {
@@ -29,7 +28,6 @@ export const Pack: React.FC = React.memo(() => {
     const packs = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
     const packID = useLocation().pathname.substring(6)
     const cardsPack_id = pack.cardsPack_id
-    const status = useSelector<AppRootStateType, AppStatusType>(state => state.app.status)
     const idUser = useSelector<AppRootStateType, string>(state => state.profile._id)
     const searchAnswer = pack.searchTextAnswer
     const searchQuestion = pack.cardQuestion
@@ -40,8 +38,12 @@ export const Pack: React.FC = React.memo(() => {
     }
 
     useEffect(() => {
-        dispatch(setPackTC({cardsPack_id: packID, page: 1}))
+        dispatch(setPackTC({cardsPack_id: packID, page: 1, pageCount: 5}))
+        return function () {
+            dispatch(resetPackAC())
+        }
     }, [dispatch, packID])
+
 
     useEffect(() => {
         saveState({
@@ -115,11 +117,7 @@ export const Pack: React.FC = React.memo(() => {
                         </Button>
                     </div>
                     <TableContainer style={{marginTop: '20px'}} component={Paper}>
-                        {(status === 'loading') ?
-                            <div
-                                style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
-                                {/*<CircularProgress/>*/}
-                            </div> : <PackTable labelRowsPerPage={'Cards per page'}/>}
+                        <PackTable labelRowsPerPage={'Cards per page'}/>
                     </TableContainer>
                 </Container>
             </Paper>

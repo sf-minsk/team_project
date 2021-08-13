@@ -3,7 +3,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import TableHead from '@material-ui/core/TableHead';
 import React, {ChangeEvent, MouseEvent, useCallback, useEffect, useState} from 'react';
-import {CardsInitialStateType, deletePackTC, setCardPacksTC} from '../../../../bll/packs-reducer';
+import {CardsInitialStateType, deletePackTC, setCardPacksTC, updatePackTC} from '../../../../bll/packs-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../../../bll/store';
 import {useStyles} from '../../styles';
@@ -18,6 +18,7 @@ import TableFooter from '@material-ui/core/TableFooter';
 import {LearnCardsModal} from '../../commonComponents/modal/learnCardsModal/LearnCardsModal';
 import {OnePackType} from '../../../../dal/cards-api';
 import {CardsForLearnInitialStateType, fetchCardsOfPackTC} from '../../../../bll/learn-reducer';
+import {EditPackModal} from "../../commonComponents/modal/editPackModal/EditPackModal";
 
 
 export const PacksListTable = React.memo((props: PacksListTableProps) => {
@@ -29,6 +30,8 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
     const cardsForLearn = useSelector<AppRootStateType, CardsForLearnInitialStateType>(state => state.cardsForLearn) //103 карточки
     const id = useSelector<AppRootStateType, string>(state => state.profile._id)
 
+    const [editPackModal, setEditPackModal] = useState(false) //false
+    const [editPackData, setEditPackData] = useState({id: '', name: ''}) //false
     const [learnCardsModal, setLearnCardsModal] = useState(false) //false
     const [learnButtonClick, setLearnButtonClick] = useState(false) //false //true
     const [randomCard, setRandomCard] = useState({} as OnePackType) //{}
@@ -60,7 +63,7 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
     }, [dispatch])
 
     const handleChangePageCount = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        dispatch(setCardPacksTC({pageCount: parseInt(e.target.value, 10)}))
+        dispatch(setCardPacksTC({pageCount: parseInt(e.target.value)}))
     }
 
     const getCard = (cards: OnePackType[]) => {
@@ -98,7 +101,17 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
         setLearnButtonClick(false)
         setRandomCard({} as OnePackType)
     }
-    console.log(randomCard) //1 - пустой
+    const openEditPackModal = (id: string, name: string) => {
+        setEditPackData({id, name})
+        setEditPackModal(true)
+    }
+    const closeEditPackModal = () => {
+        setEditPackModal(false)
+    }
+    const updatePackName = (newName?: string) => {
+        dispatch(updatePackTC(editPackData.id, newName))
+    }
+
 
     return (
         <>
@@ -110,6 +123,14 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
                 card_id={randomCard._id}
                 packName={name}
             />
+            }
+            {
+                editPackModal &&
+                <EditPackModal
+                    oldName={editPackData.name}
+                    closeEditPackModal={closeEditPackModal}
+                    updatePackName={updatePackName}
+                />
             }
             <Table className={classes.table} aria-label="custom pagination table">
                 <TableHead className={classes.tableHead}>
@@ -161,7 +182,11 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
                                                                     size={'small'} color={'secondary'}
                                                                     variant={'outlined'}>Delete</Button>
                                                             <Button size={'small'} variant={'outlined'}
-                                                                    style={{margin: '0 10px'}}>Edit</Button>
+                                                                    style={{margin: '0 10px'}}
+                                                                    onClick={() => openEditPackModal(pack._id, pack.name)}
+                                                            >
+                                                                Edit
+                                                            </Button>
                                                         </span>
                                                         }
                                                         <Button size={'small'}

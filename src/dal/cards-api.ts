@@ -23,6 +23,10 @@ export const cardPacksApi = {
     deletePack(id: string) {
         return instance.delete(`cards/pack?id=${id}`)
     },
+    updatePack(data: UpdatePackRequestType) {
+        return instance.put(`cards/pack`, {cardsPack: data})
+    },
+
     fetchPack(payload: PackRequestType) {
         let generateURL = '?'
         if (!!payload) {
@@ -100,6 +104,12 @@ export type PackDataType = {
     deckCover?: string
     private?: boolean
     type?: string
+}
+// update pack type
+
+export type UpdatePackRequestType = {
+    _id: string,
+    name?: string,
 }
 
 // get pack type

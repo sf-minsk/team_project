@@ -3,21 +3,22 @@ import {Button} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 
 type AddPackModalPropsType = {
-    closeAddPackModal: () => void
-    addNewPack: (newPackName: string) => void
+    oldName: string
+    closeEditPackModal: () => void
+    updatePackName: (name?: string) => void
 }
 
-export const AddPackModal = (props: AddPackModalPropsType) => {
-    const [text, setText] = useState<string>('')
+export const EditPackModal = (props: AddPackModalPropsType) => {
+    const [newName, setNewName] = useState<string>('')
     const inputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setText(e.currentTarget.value)
+        setNewName(e.currentTarget.value)
     }
     const onButtonClickHandler = () => {
-        props.addNewPack(text)
-        props.closeAddPackModal()
+        props.updatePackName(newName)
+        props.closeEditPackModal()
     }
     const onBackgroundClick = () => {
-        props.closeAddPackModal()
+        props.closeEditPackModal()
     }
     return <>
         <div style={{
@@ -46,17 +47,18 @@ export const AddPackModal = (props: AddPackModalPropsType) => {
             padding: '20px 0',
             zIndex: 11
         }}>
-            <h2>Enter new pack name</h2>
+            <h2>Enter new name of pack</h2>
             <TextField
                 style={{margin: '30px 0 50px 0'}}
                 variant="outlined"
                 margin="none"
-                label="Name"
+                label="New name"
+                placeholder={`Old: ${props.oldName}`}
                 autoFocus
-                value={text}
+                value={newName}
                 onChange={inputChangeHandler}
             />
-            <Button color="primary" variant={'contained'} onClick={onButtonClickHandler}>Add new pack</Button>
+            <Button color="primary" variant={'contained'} onClick={onButtonClickHandler}>RENAME</Button>
         </div>
 
     </>

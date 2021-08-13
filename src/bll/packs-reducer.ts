@@ -2,10 +2,10 @@ import {AppRootStateType, AppThunk} from './store';
 import {setAppErrorAC, setAppStatusAC} from './app-reducer';
 import {
     cardPacksApi,
+    CreatePackRequestType,
     PacksRequestDataType,
     PacksResponseType,
-    PacksType,
-    CreatePackRequestType
+    PacksType
 } from '../dal/cards-api';
 import {packsApiModel} from '../utils/cardsApiModel-util';
 
@@ -52,7 +52,6 @@ export const packsReducer = (state = initialState, action: PacksActionsType): Ca
                 sortPacksDirection: Number(action.data.sortPacks.substring(0, 1)),
                 searchText: action.data.packName,
             }
-
         default:
             return state;
     }
@@ -91,7 +90,7 @@ export const createPackTC = (data: CreatePackRequestType): AppThunk =>
         dispatch(setAppStatusAC('loading'))
         try {
             await cardPacksApi.createPack(data)
-            dispatch(setCardPacksTC({packName: '', page: 1}))
+            dispatch(setCardPacksTC({packName: '', page: 1, sortPacks: '0updated'}))
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
         } finally {
@@ -118,10 +117,23 @@ export const deletePackTC = (packId: string): AppThunk =>
         }
     }
 
+export const updatePackTC = (packID: string, name?: string): AppThunk =>
+    async dispatch => {
+        dispatch(setAppStatusAC('loading'))
+        try {
+            await cardPacksApi.updatePack({_id: packID, name})
+            dispatch(setCardPacksTC({page: 1}))
+        } catch (err) {
+            dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
+        } finally {
+            dispatch(setAppStatusAC('succeeded'))
+        }
+    }
 
 //types
 export
 type SetCardPacksActionType = ReturnType<typeof setCardPacksAC>
+
 type NewCardsApiModelType = {
     packName: string
     min: number

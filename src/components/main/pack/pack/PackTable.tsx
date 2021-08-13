@@ -28,7 +28,6 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
     const idUser = useSelector<AppRootStateType, string>(state => state.profile._id)
     const packID = useLocation().pathname.substring(6)
 
-
     const onClickSortHandler = (sortValue: SortByType) => {
         if (pack.sortCardDirection === 0) {
             dispatch(setPackTC({cardsPack_id: packID, sortCards: '1' + sortValue}))
@@ -51,6 +50,7 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
     const editCardHandler = (data: EditCardRequestType) => {
         dispatch(editCardTC({...data}))
     }
+
 
     return (
         <Table className={classes.table} aria-label="custom pagination table">
