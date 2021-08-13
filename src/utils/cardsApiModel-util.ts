@@ -15,7 +15,7 @@ export const packsApiModel = (packs: CardsInitialStateType, data?: PacksRequestD
     return {...apiModel, ...data}
 }
 
-export const packApiModel = (pack: PackInitialStateType, data: PackRequestType) => {
+export const packApiModel = (pack: PackInitialStateType, data?: PackRequestType) => {
     const apiModel = {
         cardAnswer: pack.cardAnswer,
         cardQuestion: pack.cardQuestion,

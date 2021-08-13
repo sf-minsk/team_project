@@ -117,7 +117,7 @@ export type UpdatePackRequestType = {
 export type PackRequestType = {
     cardAnswer?: string
     cardQuestion?: string
-    cardsPack_id: string
+    cardsPack_id?: string
     min?: number
     max?: number
     sortCards?: string

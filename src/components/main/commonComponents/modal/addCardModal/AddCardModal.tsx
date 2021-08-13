@@ -39,7 +39,7 @@ export const AddCardModal = (props: AddPackModalPropsType) => {
         <div style={{
             position: 'fixed',
             left: `calc(50vw - 250px)`,
-            top: `calc(50vh - 150px)`,
+            top: `calc(50vh - 171px)`,
             width: '500px',
             height: '300px',
             border: '1px solid white',

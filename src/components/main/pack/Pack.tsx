@@ -7,7 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import {ErrorSnackbar} from '../../../features/errors/ErrorSnackbar';
 import {useStyles} from '../styles';
 import {useDispatch, useSelector} from 'react-redux';
-import {createCardTC, PackInitialStateType, resetPackAC, setPackTC} from '../../../bll/pack-reducer';
+import {createCardTC, PackInitialStateType, setPackTC} from '../../../bll/pack-reducer';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import {PackTable} from './pack/PackTable';
 import {useHistory, useLocation} from 'react-router-dom';
@@ -16,6 +16,7 @@ import {CardsInitialStateType} from '../../../bll/packs-reducer';
 import {saveState} from "../../../utils/localStorage-util";
 import Button from "@material-ui/core/Button";
 import {AddCardModal} from "../commonComponents/modal/addCardModal/AddCardModal";
+import {trimmedString} from "../../../utils/trimmedString-util";
 
 
 export const Pack: React.FC = React.memo(() => {
@@ -31,19 +32,47 @@ export const Pack: React.FC = React.memo(() => {
     const idUser = useSelector<AppRootStateType, string>(state => state.profile._id)
     const searchAnswer = pack.searchTextAnswer
     const searchQuestion = pack.cardQuestion
+    const [cardQuestion, setCardQuestion] = useState<string>('')
+    const [cardAnswer, setCardAnswer] = useState<string>('')
+
+    let currentIntervalName: NodeJS.Timeout
+    // useEffect(() => {
+        // clearInterval(currentIntervalName)
+        // let newInterval = setTimeout(() => {
+        //     currentIntervalName = newInterval
+        //     dispatch(setPackTC({cardQuestion: cardQuestion, cardAnswer: cardAnswer}))
+        // }, 2000)
+    // }, [dispatch, cardQuestion, cardAnswer])
+
+    // const intArr: Array<NodeJS.Timeout> = []
+    const searchQuestionHandler = (value: string) => {
+        if (currentIntervalName) {
+            clearInterval(currentIntervalName)
+        }
+
+        // if (intArr.length > 0) {
+        //     clearInterval(intArr[0])
+        // }
+        // intArr.map(el => clearInterval(el))
+        setCardQuestion(value)
+        currentIntervalName = setTimeout(() => {
+            dispatch(setPackTC({cardQuestion: value, cardAnswer: cardAnswer}))
+        }, 3000)
+        // intArr.push(questionInterval)
+        console.log(value)
+    }
 
     let packName = pack.currentPackName
     if (packs.cardPacks.length) {
         packName = packs.cardPacks.filter(card => card._id === packID)[0].name
     }
-
     useEffect(() => {
-        dispatch(setPackTC({cardsPack_id: packID, page: 1, pageCount: 5}))
+        dispatch(setPackTC({cardsPack_id: packID, page: 1, pageCount: 5, cardQuestion: '', cardAnswer: ''}))
         return function () {
-            dispatch(resetPackAC())
+            setCardQuestion('')
+            setCardAnswer('')
         }
     }, [dispatch, packID])
-
 
     useEffect(() => {
         saveState({
@@ -51,11 +80,9 @@ export const Pack: React.FC = React.memo(() => {
         })
     }, [packName, pack])
 
-
     const onClickHandler = useCallback(() => {
         history.goBack()
     }, [history])
-
     const [addPackModal, setAddPackModal] = useState<boolean>(false)
     const openAddPackModal = () => {
         setAddPackModal(true)
@@ -63,7 +90,6 @@ export const Pack: React.FC = React.memo(() => {
     const closeAddPackModal = () => {
         setAddPackModal(false)
     }
-
     const addNewCard = (question: string, answer: string) => {
         dispatch(createCardTC({cardsPack_id: cardsPack_id, question, answer}))
     }
@@ -74,7 +100,6 @@ export const Pack: React.FC = React.memo(() => {
         dispatch(setPackTC({cardsPack_id: cardsPack_id, cardQuestion: searchText}))
     }
 
-
     return (
         <Container className={classes.container}>
             {addPackModal && <AddCardModal
@@ -84,7 +109,6 @@ export const Pack: React.FC = React.memo(() => {
             <Paper className={classes.paper}>
                 <ProgressModalComponent/>
                 <Container className={classes.body}>
-
                     <div style={{display: 'inline-flex', alignItems: 'center', cursor: 'pointer'}}
                          onClick={onClickHandler}>
                         <KeyboardBackspaceIcon/>
@@ -92,20 +116,22 @@ export const Pack: React.FC = React.memo(() => {
                             <h3>Back to packs</h3>
                         </div>
                     </div>
-
-                    <div className={classes.packListHeading}>{packName}</div>
+                    <div className={classes.packListHeading}>{trimmedString(packName, 50)}</div>
                     <div className={classes.inputButtonSection}>
                         <Input
                             placeholderValue={'Search by questions'}
-                            searchTextRequest={searchQuestion}
-                            setTextTC={setSearchQuestionTextInput}
-
+                            // searchTextRequest={searchQuestion}
+                            // setTextTC={setSearchQuestionTextInput}
+                            // searchCallback={setCardQuestion}
+                            value={cardQuestion}
+                            onChangeValue={setCardQuestion}
+                            dispatchHandler={searchQuestionHandler}
                         />
-                        <Input
-                            placeholderValue={'Search by answer'}
-                            setTextTC={setSearchAnswerTextInput}
-                            searchTextRequest={searchAnswer}
-                        />
+                        {/*<Input*/}
+                        {/*    placeholderValue={'Search by answer'}*/}
+                        {/*    setTextTC={setSearchAnswerTextInput}*/}
+                        {/*    searchTextRequest={searchAnswer}*/}
+                        {/*/>*/}
                         <Button
                             style={{width: '330px'}}
                             className={classes.addNewCardButton}

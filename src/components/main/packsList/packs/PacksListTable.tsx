@@ -168,12 +168,12 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
                                 <TableRow key={pack._id}>
                                     <TableCell component="th">
                                         <NavLink to={`/pack/${pack._id}`} className={classes.navLink}>
-                                            {trimmedString(pack.name, 20)}
+                                            {trimmedString(pack.name, 10)}
                                         </NavLink>
                                     </TableCell>
                                     <TableCell align="right">{pack.cardsCount}</TableCell>
                                     <TableCell align="right">{updateDate(pack.updated)}</TableCell>
-                                    <TableCell align="right">{trimmedString(pack.user_name, 20)}</TableCell>
+                                    <TableCell align="right">{trimmedString(pack.user_name, 10)}</TableCell>
                                     <TableCell align="right" style={{width: '224px'}}>
                                                     <span className={classes.buttonsOfActionsSection}>
                                                         {pack.user_id === id &&

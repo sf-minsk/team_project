@@ -77,11 +77,11 @@ export const PacksList: React.FC = React.memo(() => {
                 <Container className={classes.body}>
                     <div className={classes.packListHeading}>Packs list</div>
                     <div className={classes.inputButtonSection}>
-                        <Input
-                            placeholderValue={'Search by pack'}
-                            searchTextRequest={packs.searchText}
-                            setTextTC={setSearchTextInput}
-                        />
+                        {/*<Input*/}
+                        {/*    placeholderValue={'Search by pack'}*/}
+                        {/*    searchTextRequest={packs.searchText}*/}
+                        {/*    setTextTC={setSearchTextInput}*/}
+                        {/*/>*/}
                         <Button
                             className={classes.addNewPackButton}
                             variant="contained"

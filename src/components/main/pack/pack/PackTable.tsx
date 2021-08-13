@@ -2,11 +2,11 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import TableHead from '@material-ui/core/TableHead';
-import React, {ChangeEvent, MouseEvent, useCallback} from 'react';
+import React, {ChangeEvent, MouseEvent, useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../../../bll/store';
 import {useStyles} from '../../styles';
-import {deleteCardTC, editCardTC, PackInitialStateType, setPackTC} from '../../../../bll/pack-reducer';
+import {deleteCardTC, editCardTC, PackInitialStateType, resetPackAC, setPackTC} from '../../../../bll/pack-reducer';
 import {trimmedString} from '../../../../utils/trimmedString-util';
 import {updateDate} from '../../../../utils/updateDate-util';
 import TableBody from '@material-ui/core/TableBody';
@@ -35,6 +35,13 @@ export const PackTable = React.memo((props: PackNameTableProps) => {
             dispatch(setPackTC({cardsPack_id: packID, sortCards: '0' + sortValue}))
         }
     }
+
+    useEffect(() => {
+        return function () {
+            dispatch(resetPackAC())
+        }
+    }, [dispatch])
+
 
     const handleChangePage = useCallback((e: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         dispatch(setPackTC({cardsPack_id: packID, page: newPage + 1}))
