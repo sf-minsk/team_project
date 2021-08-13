@@ -16,6 +16,9 @@ export const cardsForLearnReducer = (state = initialState, action: CardsForLearn
                 ...action.data,
             ]
 
+        case 'cardsForLearn/RESET-CARDS-OF-PACK':
+            return []
+
         default:
             return state;
     }
@@ -24,6 +27,9 @@ export const cardsForLearnReducer = (state = initialState, action: CardsForLearn
 //actions
 export const setCardsOfPackAC = (data: OnePackType[]) =>
     ({type: 'cardsForLearn/SET-CARDS-OF-PACK', data} as const)
+
+export const resetCardsOfPackAC = () =>
+    ({type: 'cardsForLearn/RESET-CARDS-OF-PACK'} as const)
 
 
 //thunks
@@ -45,24 +51,22 @@ export const fetchCardsOfPackTC = (data: PackRequestType): AppThunk =>
     }
 
 
-export const updatedGradeTC = (data: GradeRequestType): AppThunk =>
+export const updatedGradeTC = (data: GradeRequestType, pageCount: number): AppThunk =>
     async (dispatch, getState: () => AppRootStateType) => {
         dispatch(setAppStatusAC('loading'))
         try {
-            const res = cardPacksApi.updatedGrade(data)
-            //dispatch(updatedGradeAC(res))
+            const res = await cardPacksApi.updatedGrade(data)
+            dispatch(fetchCardsOfPackTC({cardsPack_id: res.data.updatedGrade.cardsPack_id, pageCount}))
         } catch (err) {
             dispatch(setAppErrorAC(err.response ? err.response.data.error : err.message))
-        } finally {
-            dispatch(setAppStatusAC('succeeded'))
         }
     }
 
 //types
 export
 type SetCardsOfPackActionType = ReturnType<typeof setCardsOfPackAC>
-//type UpdatedGradeActionType = ReturnType<typeof updatedGradeAC>
+type ResetCardsOfPackActionType = ReturnType<typeof resetCardsOfPackAC>
 
 export type CardsForLearnActionsType =
     | SetCardsOfPackActionType
-//| UpdatedGradeActionType
+    | ResetCardsOfPackActionType
