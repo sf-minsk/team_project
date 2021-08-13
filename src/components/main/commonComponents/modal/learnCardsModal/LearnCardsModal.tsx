@@ -74,7 +74,8 @@ export const LearnCardsModal = ({
                     <h2 style={{
                         maxWidth: '440px',
                         overflowWrap: 'break-word',
-                        margin: '10px auto',
+                        margin: '10px 30px',
+                        textAlign: 'center',
                     }}>
                         <b>Learn </b>"{trimmedString(packName, 40)}"
                     </h2>
@@ -117,7 +118,8 @@ export const LearnCardsModal = ({
                     <h2 style={{
                         maxWidth: '440px',
                         overflowWrap: 'break-word',
-                        margin: '10px auto',
+                        margin: '10px 30px',
+                        textAlign: 'center',
                     }}>
                         <b>Learn </b>"{trimmedString(packName, 40)}"
                     </h2>
