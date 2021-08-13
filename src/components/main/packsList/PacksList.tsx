@@ -17,7 +17,6 @@ import {AddPackModal} from '../commonComponents/modal/addPackModal/AddPackModal'
 
 export const PacksList: React.FC = React.memo(() => {
 
-    //const {searchText, setSearchText} = props
     const classes = useStyles();
     const dispatch = useDispatch()
 
@@ -48,6 +47,20 @@ export const PacksList: React.FC = React.memo(() => {
         })
     }, [packs])
 
+    const [searchText, setSearchText] = useState<string>(packs.searchText)
+    const [intervalID, setIntervalID] = useState<NodeJS.Timeout>()
+
+    const searchInputHandler = (value: string) => {
+        if (intervalID) {
+            clearInterval(intervalID)
+        }
+        setSearchText(value)
+        const newIntervalID = setTimeout(() => {
+            dispatch(setCardPacksTC({packName: value}))
+        }, 400)
+        setIntervalID(newIntervalID)
+    }
+
 
     const [addPackModal, setAddPackModal] = useState<boolean>(false)
     const openAddPackModal = () => {
@@ -58,10 +71,6 @@ export const PacksList: React.FC = React.memo(() => {
     }
     const addNewPack = (newPackName: string) => {
         dispatch(createPackTC({cardsPack: {name: newPackName}}))
-    }
-
-    const setSearchTextInput = (searchText: string) => {
-        dispatch(setCardPacksTC({packName: searchText}))
     }
 
 
@@ -77,11 +86,11 @@ export const PacksList: React.FC = React.memo(() => {
                 <Container className={classes.body}>
                     <div className={classes.packListHeading}>Packs list</div>
                     <div className={classes.inputButtonSection}>
-                        {/*<Input*/}
-                        {/*    placeholderValue={'Search by pack'}*/}
-                        {/*    searchTextRequest={packs.searchText}*/}
-                        {/*    setTextTC={setSearchTextInput}*/}
-                        {/*/>*/}
+                        <Input
+                            placeholderValue={'Search by questions'}
+                            value={searchText}
+                            dispatchHandler={searchInputHandler}
+                        />
                         <Button
                             className={classes.addNewPackButton}
                             variant="contained"
@@ -100,8 +109,3 @@ export const PacksList: React.FC = React.memo(() => {
         </Container>
     )
 })
-
-// type PacksListPropsType = {
-//     searchText: string
-//     setSearchText: (searchText: string) => void
-// }
