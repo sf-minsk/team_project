@@ -15,11 +15,17 @@ import TableBody from '@material-ui/core/TableBody';
 import TablePagination from '@material-ui/core/TablePagination';
 import {TablePaginationActions} from '../../commonComponents/TablePagination';
 import TableFooter from '@material-ui/core/TableFooter';
-import {LearnCardsModal} from '../../commonComponents/modal/learnCardsModal/LearnCardsModal';
+import {LearnCardsModalAnswer} from '../../commonComponents/modal/learnCardsModal/LearnCardsModalAnswer';
 import {OnePackType} from '../../../../dal/cards-api';
-import {CardsForLearnInitialStateType, fetchCardsOfPackTC} from '../../../../bll/learn-reducer';
-import {EditPackModal} from "../../commonComponents/modal/editPackModal/EditPackModal";
-import {TableSortLabel} from "@material-ui/core";
+import {
+    CardsForLearnInitialStateType,
+    fetchCardsOfPackTC,
+    resetCardsOfPackAC,
+    updatedGradeTC
+} from '../../../../bll/learn-reducer';
+import {EditPackModal} from '../../commonComponents/modal/editPackModal/EditPackModal';
+import {LearnCardsModalQuestion} from '../../commonComponents/modal/learnCardsModal/LearnCardsModalQuestion';
+import {TableSortLabel} from '@material-ui/core';
 
 
 export const PacksListTable = React.memo((props: PacksListTableProps) => {
@@ -28,23 +34,26 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
     const dispatch = useDispatch()
 
     const packs = useSelector<AppRootStateType, CardsInitialStateType>(state => state.packs)
-    const cardsForLearn = useSelector<AppRootStateType, CardsForLearnInitialStateType>(state => state.cardsForLearn) //103 карточки
     const id = useSelector<AppRootStateType, string>(state => state.profile._id)
+    const cardsForLearn = useSelector<AppRootStateType, CardsForLearnInitialStateType>(state => state.cardsForLearn)
 
-    const [editPackModal, setEditPackModal] = useState(false) //false
-    const [editPackData, setEditPackData] = useState({id: '', name: ''}) //false
-    const [learnCardsModal, setLearnCardsModal] = useState(false) //false
-    const [learnButtonClick, setLearnButtonClick] = useState(false) //false //true
-    const [randomCard, setRandomCard] = useState({} as OnePackType) //{}
-    const [name, setName] = useState<string>('') //interview1
+    const [editPackModal, setEditPackModal] = useState(false)
+    const [editPackData, setEditPackData] = useState({id: '', name: ''})
+    const [learnCardsModalQuestion, setLearnCardsModalQuestion] = useState(false)
+    const [learnCardsModalAnswer, setLearnCardsModalAnswer] = useState(false)
+
+    const [randomCard, setRandomCard] = useState({} as OnePackType)
+    const [name, setName] = useState('')
+    const [cardsCount, setCardsCount] = useState(0)
 
 
     useEffect(() => {
-        if (cardsForLearn.length && learnButtonClick) {
+        if (cardsForLearn.length) {
             setRandomCard(getCard(cardsForLearn))
-            setLearnCardsModal(true)
+            setLearnCardsModalAnswer(false)
+            setLearnCardsModalQuestion(true)
         }
-    }, [cardsForLearn, learnButtonClick])
+    }, [cardsForLearn])
 
 
     const onClickSortHandler = (sortValue: SortByType) => {
@@ -79,29 +88,12 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
         return cards[i - 1]
     }
 
-    // const getCard1 = (cards: number[]) => {
-    //     const sumOfRepeats = cards.map(card => (6 - card) ** 2).reduce((acc, el) => (acc + el), 0)
-    //     const random = Math.random() * sumOfRepeats //21
-    //     let sum = 0
-    //     let i = 0
-    //     do {
-    //         sum = sum + ((6 - cards[i]) ** 2) // |||||||||||||| ||| |
-    //         i++
-    //     } while (sum < random)
-    //     return i - 1
-    // }
-    // console.log([getCard1([])]) //1 4 16
-
-    const openLearnCardsModal = async (cardsPack_id: string, pageCount: number, name: string) => {
+    const startLearning = async (cardsPack_id: string, pageCount: number, name: string) => {
         await dispatch(fetchCardsOfPackTC({cardsPack_id, pageCount}))
         setName(name)
-        setLearnButtonClick(true)
+        setCardsCount(pageCount)
     }
-    const closeLearnCardsModal = () => {
-        setLearnCardsModal(false)
-        setLearnButtonClick(false)
-        setRandomCard({} as OnePackType)
-    }
+
     const openEditPackModal = (id: string, name: string) => {
         setEditPackData({id, name})
         setEditPackModal(true)
@@ -113,17 +105,40 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
         dispatch(updatePackTC(editPackData.id, newName))
     }
 
+    const closeAllModal = () => {
+        dispatch(resetCardsOfPackAC())
+        setLearnCardsModalQuestion(false)
+        setLearnCardsModalAnswer(false)
+    }
+    const fetchAnswerQuestion = () => {
+        setLearnCardsModalQuestion(false)
+        setLearnCardsModalAnswer(true)
+    }
+    const openNextRandomCard = (grade: number) => {
+        dispatch(updatedGradeTC({grade: grade === 0 ? 1 : grade, card_id: randomCard._id}, cardsCount))
+    }
+
 
     return (
         <>
-            {learnCardsModal &&
-            <LearnCardsModal
-                closeLearnCardsModal={closeLearnCardsModal}
-                question={randomCard.question}
-                answer={randomCard.answer}
-                card_id={randomCard._id}
-                packName={name}
-            />
+            {
+                learnCardsModalQuestion &&
+                <LearnCardsModalQuestion
+                    packName={name}
+                    question={randomCard.question}
+                    onAnswerButtonClick={fetchAnswerQuestion}
+                    closeAllModal={closeAllModal}
+                />
+            }
+            {
+                learnCardsModalAnswer &&
+                <LearnCardsModalAnswer
+                    packName={name}
+                    question={randomCard.question}
+                    answer={randomCard.answer}
+                    openNextRandomCard={openNextRandomCard}
+                    closeAllModal={closeAllModal}
+                />
             }
             {
                 editPackModal &&
@@ -204,7 +219,7 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
                                                         }
                                                         <Button size={'small'}
                                                                 variant={'outlined'}
-                                                                onClick={() => openLearnCardsModal(pack._id, pack.cardsCount, pack.name)}
+                                                                onClick={() => startLearning(pack._id, pack.cardsCount, pack.name)}
                                                                 disabled={pack.cardsCount === 0}
                                                         >
                                                             Learn

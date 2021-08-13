@@ -117,7 +117,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     learnCardsModalWindowByQuestion: {
         position: 'fixed',
-        left: `calc(50vw - 230px)`,
+        left: `calc(50vw - 220px)`,
         top: `calc(50vh - 156px)`,
         width: '440px',
         height: '250px',
