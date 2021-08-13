@@ -19,6 +19,7 @@ import {LearnCardsModal} from '../../commonComponents/modal/learnCardsModal/Lear
 import {OnePackType} from '../../../../dal/cards-api';
 import {CardsForLearnInitialStateType, fetchCardsOfPackTC} from '../../../../bll/learn-reducer';
 import {EditPackModal} from "../../commonComponents/modal/editPackModal/EditPackModal";
+import {TableSortLabel} from "@material-ui/core";
 
 
 export const PacksListTable = React.memo((props: PacksListTableProps) => {
@@ -136,30 +137,42 @@ export const PacksListTable = React.memo((props: PacksListTableProps) => {
                 <TableHead className={classes.tableHead}>
                     <TableRow>
                         <TableCell>
-                            <Button onClick={() => onClickSortHandler('name')}
-                                    variant={packs.sortBy === 'name' ? 'outlined' : 'text'}>
+                            <TableSortLabel
+                                active={packs.sortBy === 'name'}
+                                direction={packs.sortPacksDirection === 1 ? 'desc' : 'asc'}
+                                onClick={() => onClickSortHandler('name')}
+                            >
                                 Name
-                            </Button>
+                            </TableSortLabel>
                         </TableCell>
                         <TableCell align="right">
-                            <Button onClick={() => onClickSortHandler('cardsCount')}
-                                    variant={packs.sortBy === 'cardsCount' ? 'outlined' : 'text'}>
+                            <TableSortLabel
+                                active={packs.sortBy === 'cardsCount'}
+                                direction={packs.sortPacksDirection === 1 ? 'desc' : 'asc'}
+                                onClick={() => onClickSortHandler('cardsCount')}
+                            >
                                 Cards
-                            </Button>
+                            </TableSortLabel>
                         </TableCell>
                         <TableCell align="right">
-                            <Button onClick={() => onClickSortHandler('updated')}
-                                    variant={packs.sortBy === 'updated' ? 'outlined' : 'text'}>
+                            <TableSortLabel
+                                active={packs.sortBy === 'updated'}
+                                direction={packs.sortPacksDirection === 1 ? 'desc' : 'asc'}
+                                onClick={() => onClickSortHandler('updated')}
+                            >
                                 Last Updated
-                            </Button>
+                            </TableSortLabel>
                         </TableCell>
                         <TableCell align="right">
-                            <Button onClick={() => onClickSortHandler('created')}
-                                    variant={packs.sortBy === 'created' ? 'outlined' : 'text'}>
+                            <TableSortLabel
+                                active={packs.sortBy === 'created'}
+                                direction={packs.sortPacksDirection === 1 ? 'desc' : 'asc'}
+                                onClick={() => onClickSortHandler('created')}
+                            >
                                 Created By
-                            </Button>
+                            </TableSortLabel>
                         </TableCell>
-                        <TableCell align="right">ACTIONS</TableCell>
+                        <TableCell align="right">Actions</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
