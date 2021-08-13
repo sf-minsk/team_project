@@ -40,7 +40,7 @@ export const Pack: React.FC = React.memo(() => {
         setCardQuestion(value)
         const newIntervalID = setTimeout(() => {
             dispatch(setPackTC({cardQuestion: value, cardAnswer: cardAnswer, page: 1}))
-        }, 400)
+        }, 700)
         setIntervalID(newIntervalID)
     }
     const searchAnswerHandler = (value: string) => {
@@ -50,7 +50,7 @@ export const Pack: React.FC = React.memo(() => {
         setCardAnswer(value)
         const newIntervalID = setTimeout(() => {
             dispatch(setPackTC({cardQuestion: cardQuestion, cardAnswer: value, page: 1}))
-        }, 400)
+        }, 700)
         setIntervalID(newIntervalID)
     }
 

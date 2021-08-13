@@ -57,7 +57,7 @@ export const PacksList: React.FC = React.memo(() => {
         setSearchText(value)
         const newIntervalID = setTimeout(() => {
             dispatch(setCardPacksTC({packName: value, page: 1}))
-        }, 400)
+        }, 700)
         setIntervalID(newIntervalID)
     }
 
