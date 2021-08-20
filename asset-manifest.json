@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/card_training/static/css/main.7572f7a3.chunk.css",
-    "main.js": "/card_training/static/js/main.c15d18ab.chunk.js",
-    "main.js.map": "/card_training/static/js/main.c15d18ab.chunk.js.map",
-    "runtime-main.js": "/card_training/static/js/runtime-main.f5d410e8.js",
-    "runtime-main.js.map": "/card_training/static/js/runtime-main.f5d410e8.js.map",
-    "static/js/2.dcaad980.chunk.js": "/card_training/static/js/2.dcaad980.chunk.js",
-    "static/js/2.dcaad980.chunk.js.map": "/card_training/static/js/2.dcaad980.chunk.js.map",
-    "static/js/3.97ca7471.chunk.js": "/card_training/static/js/3.97ca7471.chunk.js",
-    "static/js/3.97ca7471.chunk.js.map": "/card_training/static/js/3.97ca7471.chunk.js.map",
-    "index.html": "/card_training/index.html",
-    "static/css/main.7572f7a3.chunk.css.map": "/card_training/static/css/main.7572f7a3.chunk.css.map",
-    "static/js/2.dcaad980.chunk.js.LICENSE.txt": "/card_training/static/js/2.dcaad980.chunk.js.LICENSE.txt",
-    "static/media/Error404.d9af2882.png": "/card_training/static/media/Error404.d9af2882.png"
+    "main.css": "/learning_cards/static/css/main.7572f7a3.chunk.css",
+    "main.js": "/learning_cards/static/js/main.c15d18ab.chunk.js",
+    "main.js.map": "/learning_cards/static/js/main.c15d18ab.chunk.js.map",
+    "runtime-main.js": "/learning_cards/static/js/runtime-main.1adea88f.js",
+    "runtime-main.js.map": "/learning_cards/static/js/runtime-main.1adea88f.js.map",
+    "static/js/2.dcaad980.chunk.js": "/learning_cards/static/js/2.dcaad980.chunk.js",
+    "static/js/2.dcaad980.chunk.js.map": "/learning_cards/static/js/2.dcaad980.chunk.js.map",
+    "static/js/3.97ca7471.chunk.js": "/learning_cards/static/js/3.97ca7471.chunk.js",
+    "static/js/3.97ca7471.chunk.js.map": "/learning_cards/static/js/3.97ca7471.chunk.js.map",
+    "index.html": "/learning_cards/index.html",
+    "static/css/main.7572f7a3.chunk.css.map": "/learning_cards/static/css/main.7572f7a3.chunk.css.map",
+    "static/js/2.dcaad980.chunk.js.LICENSE.txt": "/learning_cards/static/js/2.dcaad980.chunk.js.LICENSE.txt",
+    "static/media/Error404.d9af2882.png": "/learning_cards/static/media/Error404.d9af2882.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.f5d410e8.js",
+    "static/js/runtime-main.1adea88f.js",
     "static/js/2.dcaad980.chunk.js",
     "static/css/main.7572f7a3.chunk.css",
     "static/js/main.c15d18ab.chunk.js"
