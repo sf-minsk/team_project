@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/learning_cards/static/css/main.7572f7a3.chunk.css",
-    "main.js": "/learning_cards/static/js/main.c73d1658.chunk.js",
-    "main.js.map": "/learning_cards/static/js/main.c73d1658.chunk.js.map",
-    "runtime-main.js": "/learning_cards/static/js/runtime-main.54dfdb8a.js",
-    "runtime-main.js.map": "/learning_cards/static/js/runtime-main.54dfdb8a.js.map",
-    "static/js/2.1443430c.chunk.js": "/learning_cards/static/js/2.1443430c.chunk.js",
-    "static/js/2.1443430c.chunk.js.map": "/learning_cards/static/js/2.1443430c.chunk.js.map",
-    "static/js/3.7604da71.chunk.js": "/learning_cards/static/js/3.7604da71.chunk.js",
-    "static/js/3.7604da71.chunk.js.map": "/learning_cards/static/js/3.7604da71.chunk.js.map",
-    "index.html": "/learning_cards/index.html",
-    "static/css/main.7572f7a3.chunk.css.map": "/learning_cards/static/css/main.7572f7a3.chunk.css.map",
-    "static/js/2.1443430c.chunk.js.LICENSE.txt": "/learning_cards/static/js/2.1443430c.chunk.js.LICENSE.txt",
-    "static/media/Error404.d9af2882.png": "/learning_cards/static/media/Error404.d9af2882.png"
+    "main.css": "/team_project/static/css/main.9fa764be.chunk.css",
+    "main.js": "/team_project/static/js/main.38c106a9.chunk.js",
+    "main.js.map": "/team_project/static/js/main.38c106a9.chunk.js.map",
+    "runtime-main.js": "/team_project/static/js/runtime-main.a4d7cb9d.js",
+    "runtime-main.js.map": "/team_project/static/js/runtime-main.a4d7cb9d.js.map",
+    "static/js/2.7ef4a5eb.chunk.js": "/team_project/static/js/2.7ef4a5eb.chunk.js",
+    "static/js/2.7ef4a5eb.chunk.js.map": "/team_project/static/js/2.7ef4a5eb.chunk.js.map",
+    "static/js/3.c181b487.chunk.js": "/team_project/static/js/3.c181b487.chunk.js",
+    "static/js/3.c181b487.chunk.js.map": "/team_project/static/js/3.c181b487.chunk.js.map",
+    "index.html": "/team_project/index.html",
+    "static/css/main.9fa764be.chunk.css.map": "/team_project/static/css/main.9fa764be.chunk.css.map",
+    "static/js/2.7ef4a5eb.chunk.js.LICENSE.txt": "/team_project/static/js/2.7ef4a5eb.chunk.js.LICENSE.txt",
+    "static/media/Error404.d9af2882.png": "/team_project/static/media/Error404.d9af2882.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.54dfdb8a.js",
-    "static/js/2.1443430c.chunk.js",
-    "static/css/main.7572f7a3.chunk.css",
-    "static/js/main.c73d1658.chunk.js"
+    "static/js/runtime-main.a4d7cb9d.js",
+    "static/js/2.7ef4a5eb.chunk.js",
+    "static/css/main.9fa764be.chunk.css",
+    "static/js/main.38c106a9.chunk.js"
   ]
 }
