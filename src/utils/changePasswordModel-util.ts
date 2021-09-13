@@ -5,8 +5,8 @@ export const changePasswordModel = (email: string) => {
         message:
             `<div style="background-color: #9bf8d2; padding: 15px">
                     password recovery link:
-<!--                        <a href='http://localhost:3000/#/changepassword/newpassword/$token$'>click</a>-->
-                        <a href='https://sf-minsk.github.io/team_project/#/changepassword/newpassword/$token$'>click</a>
+                        <a href='http://localhost:3000/#/changepassword/newpassword/$token$'>click</a>
+<!--                        <a href='https://sf-minsk.github.io/team_project/#/changepassword/newpassword/$token$'>click</a>-->
                 </div>`,
     }
 }
